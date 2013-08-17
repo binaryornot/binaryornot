@@ -1,6 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
+
+PY3 = sys.version > '3'
+if not PY3:
+    import codecs
+
+
+def unicode_open(filename, *args, **kwargs):
+    """
+    Opens a file as usual on Python 3, and with UTF-8 encoding on Python 2.
+
+    :param filename: Name of file to open.
+    """
+    if PY3:
+        return open(filename, *args, **kwargs)
+    kwargs['encoding'] = "utf-8"
+    return codecs.open(filename, *args, **kwargs)
+
+
 def get_starting_chunk(filename):
     """
     :param filename: File to open and get the first little chunk of.
@@ -23,7 +42,7 @@ def is_binary_string(bytes_to_check):
     return bool(result)
 
 
-def is_binary(filename):
+def is_binary_alt(filename):
     """
     :param filename: File to check.
     :returns: True if it's a binary file, otherwise False.
@@ -31,3 +50,19 @@ def is_binary(filename):
     
     chunk = get_starting_chunk(filename)
     return is_binary_string(chunk)
+
+
+def is_binary(filename):
+    """
+    :param filename: File to check.
+    :returns: True if it's a binary file, otherwise False.
+    """
+    
+    # HACK: Works for now, but it would be nice to improve this
+    try:
+        with open(filename, 'rt') as f:
+            chunk = f.read(1024)
+        if not PY3:
+            return is_binary_string(chunk)
+    except UnicodeDecodeError:
+        return True
