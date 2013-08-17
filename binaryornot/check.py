@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 def get_starting_chunk(filename):
-    with(filename, 'r') as f:
-        chunk = open(filename).read(1024)
+    with open(filename, 'r') as f:
+        chunk = f.read(1024)
         return chunk
 
 
