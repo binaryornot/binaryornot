@@ -39,6 +39,9 @@ class TestIsBinary(unittest.TestCase):
     def test_txt(self):
         self.assertFalse(is_binary('tests/files/robots.txt'))
 
+    def test_txt_unicode(self):
+        self.assertFalse(is_binary('tests/files/unicode.txt'))
+
 
 if __name__ == '__main__':
     unittest.main()
