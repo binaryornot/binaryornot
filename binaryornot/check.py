@@ -60,8 +60,7 @@ def is_binary(filename):
     
     # HACK: Works for now, but it would be nice to improve this
     try:
-        with open(filename, 'rt') as f:
-            chunk = f.read(1024)
+        chunk = get_starting_chunk(filename)
         if not PY3:
             return is_binary_string(chunk)
     except UnicodeDecodeError:
