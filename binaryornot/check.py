@@ -2,6 +2,10 @@
 # -*- coding: utf-8 -*-
 
 def get_starting_chunk(filename):
+    """
+    :param filename: File to open and get the first little chunk of.
+    :returns: Starting chunk of bytes.
+    """
     with open(filename, 'r') as f:
         chunk = f.read(1024)
         return chunk
