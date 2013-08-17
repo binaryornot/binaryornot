@@ -20,7 +20,7 @@ Ultra-lightweight pure Python package to check if a file is binary or text.
 Status
 ------
 
-This doesn't work at all, and the code is terrible.
+It works, but the code could be seriously improved.
 
 As of now, it is based on these, but that will likely change:
 
