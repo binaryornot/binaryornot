@@ -17,6 +17,7 @@ def is_binary_string(bytes_to_check):
     :returns: True if appears to be a binary, otherwise False.
     """
     
+    # TODO: rewrite this sanely
     textchars = ''.join(map(chr, [7,8,9,10,12,13,27] + range(0x20, 0x100)))
     result = bytes_to_check.translate(None, textchars)
     return bool(result)
