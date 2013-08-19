@@ -21,6 +21,12 @@ class TestIsBinary(unittest.TestCase):
     def test_json(self):
         self.assertFalse(is_binary('tests/files/cookiecutter.json'))
 
+    def test_png(self):
+        self.assertTrue(is_binary('tests/files/logo.png'))
+
+    def test_ds_store(self):
+        self.assertTrue(is_binary('tests/files/.DS_Store'))
+
     def test_eot(self):
         self.assertTrue(is_binary('tests/files/glyphiconshalflings-regular.eot'))
 
