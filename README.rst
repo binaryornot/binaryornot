@@ -32,4 +32,7 @@ As of now, it is based on these, but that will likely change:
 Features
 --------
 
-* TODO
+Has tests for these file types:
+
+* Text: .css, .json, .txt, .svg
+* Binary: .eot, .otf, ttf, .woff, .png
