@@ -40,3 +40,9 @@ output/*/index.html
 
 # Sphinx
 docs/_build
+
+# Coverage
+htmlcov/
+
+# Profiling
+binaryornot_profile
