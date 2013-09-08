@@ -20,9 +20,10 @@ Ultra-lightweight pure Python package to check if a file is binary or text.
 Status
 ------
 
-It works, but the code could be seriously improved.
+It works, and I'm using this package in various places.
 
-As of now, it is based on these, but that will likely change:
+The code could be improved. Pull requests welcome! As of now, it is based on
+these snippets, but that may change:
 
 * http://stackoverflow.com/questions/898669/how-can-i-detect-if-a-file-is-binary-non-text-in-python
 * http://stackoverflow.com/questions/1446549/how-to-identify-binary-and-text-files-using-python
@@ -36,3 +37,11 @@ Has tests for these file types:
 
 * Text: .css, .json, .txt, .svg
 * Binary: .eot, .otf, ttf, .woff, .png
+
+Why?
+----
+
+You may be thinking, "I can write this in 2 lines of code?!"
+
+Sure, but this package saves you from having to write and thoroughly test
+those 2 lines of code with all sorts of weird file types.
