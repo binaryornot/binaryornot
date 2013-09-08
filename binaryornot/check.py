@@ -65,3 +65,28 @@ def is_binary(filename):
             return is_binary_string(chunk)
     except UnicodeDecodeError:
         return True
+
+
+def run_1000x():
+    for i in range(1000):
+        result = is_binary('tests/files/logo.png')
+        print("Try #{0}: {1}".format(i, result))
+
+if __name__ == '__main__':
+    
+    import profile
+    pr = profile.Profile()
+    for i in range(5):
+        print(pr.calibrate(10000))
+    
+    import cProfile
+    # result = cProfile.run("is_binary('tests/files/logo.png')", 'binaryornot_profile')
+    result = cProfile.run("run_1000x()")
+    # result = is_binary('tests/files/logo.png')
+    print(result)
+
+    import pstats
+    p = pstats.Stats('binaryornot_profile')
+    p.sort_stats('name')
+    p.print_stats()
+    
