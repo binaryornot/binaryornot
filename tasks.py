@@ -12,3 +12,12 @@ def docs():
 @task
 def flake8():
     run("flake8 binaryornot tests")
+
+@task
+def autopep8():
+    run("autopep8 --in-place --aggressive -r binaryornot")
+    run("autopep8 --in-place --aggressive -r tests")
+
+@task
+def test():
+    run("python setup.py test")
