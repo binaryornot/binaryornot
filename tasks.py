@@ -21,3 +21,10 @@ def autopep8():
 @task
 def test():
     run("python setup.py test")
+
+@task
+def coverage():
+	run("coverage run --source binaryornot setup.py test")
+	run("coverage report -m")
+	run("coverage html")
+	run("open htmlcov/index.html")
