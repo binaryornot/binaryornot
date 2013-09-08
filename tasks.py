@@ -28,3 +28,24 @@ def coverage():
 	run("coverage report -m")
 	run("coverage html")
 	run("open htmlcov/index.html")
+
+@task
+def clean_build():
+	run("rm -fr build/")
+	run("rm -fr dist/")
+	run("rm -fr *.egg-info")
+
+@task
+def clean_pyc():
+    run("find . -name '*.pyc' -exec rm -f {} +")
+    run("find . -name '*.pyo' -exec rm -f {} +")
+    run("find . -name '*~' -exec rm -f {} +")
+
+@task('clean_build', 'clean_pyc')
+def sdist():
+    run("python setup.py sdist")
+	run("ls -l dist")
+
+@task('sdist')
+def release():
+    run("python setup.py upload")
