@@ -8,3 +8,7 @@ def clean_docs():
 def docs():
     run("sphinx-build docs docs/_build")
     run("open docs/_build/index.html")
+
+@task
+def flake8():
+    run("flake8 binaryornot tests")
