@@ -24,6 +24,18 @@ class TestIsBinary(unittest.TestCase):
     def test_png(self):
         self.assertTrue(is_binary('tests/files/logo.png'))
 
+    def test_gif(self):
+        self.assertTrue(is_binary('tests/files/lena.gif'))
+
+    def test_jpg(self):
+        self.assertTrue(is_binary('tests/files/lena.jpg'))
+
+    def test_tiff(self):
+        self.assertTrue(is_binary('tests/files/palette-1c-8b.tiff'))
+
+    def test_bmp(self):
+        self.assertTrue(is_binary('tests/files/rgb-3c-8b.bmp'))
+
     def test_ds_store(self):
         self.assertTrue(is_binary('tests/files/.DS_Store'))
 

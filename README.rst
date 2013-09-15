@@ -36,7 +36,7 @@ Features
 Has tests for these file types:
 
 * Text: .css, .json, .txt, .svg
-* Binary: .eot, .otf, ttf, .woff, .png
+* Binary: .eot, .otf, ttf, .woff, .png, .jpg, .tiff, .bmp
 
 Why?
 ----
@@ -44,4 +44,4 @@ Why?
 You may be thinking, "I can write this in 2 lines of code?!"
 
 Sure, but this package saves you from having to write and thoroughly test
-those 2 lines of code with all sorts of weird file types.
+those 2 lines of code with all sorts of weird file types, cross-platform.
