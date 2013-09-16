@@ -8,10 +8,12 @@ test_binaryornot
 Tests for `binaryornot` module.
 """
 
+import logging
 import unittest
 
 from binaryornot.check import is_binary
 
+logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
 class TestIsBinary(unittest.TestCase):
 

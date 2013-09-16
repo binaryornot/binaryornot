@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import logging
 import sys
 
 PY3 = sys.version > '3'
@@ -29,6 +30,13 @@ def get_starting_chunk(filename):
         chunk = f.read(1024)
         return chunk
 
+def print_as_hex(s):
+    """
+    Print a string as hex bytes.
+    """
+
+    print(":".join("{0:x}".format(ord(c)) for c in s))
+
 
 def is_binary_string(bytes_to_check):
     """
@@ -36,12 +44,11 @@ def is_binary_string(bytes_to_check):
     :returns: True if appears to be a binary, otherwise False.
     """
 
-    # TODO: rewrite this sanely
+    # Use file(1)'s choices for what's text and what's not.
     textchars = ''.join(
         map(chr, [7, 8, 9, 10, 12, 13, 27] + range(0x20, 0x100)))
-    result = bytes_to_check.translate(None, textchars)
-    return bool(result)
-
+    result = bool(bytes_to_check.translate(None, textchars))        
+    return result
 
 def is_binary_alt(filename):
     """
@@ -59,6 +66,11 @@ def is_binary(filename):
     :returns: True if it's a binary file, otherwise False.
     """
 
+    # PNGs start with bytes that appear to be text
+    # See PNG Specification, section 12.11 http://www.w3.org/TR/PNG-Rationale.html
+    if filename.endswith('png'):
+        return True
+
     # HACK: Works for now, but it would be nice to improve this
     try:
         chunk = get_starting_chunk(filename)
@@ -66,3 +78,4 @@ def is_binary(filename):
             return is_binary_string(chunk)
     except UnicodeDecodeError:
         return True
+
