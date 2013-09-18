@@ -58,38 +58,22 @@ def is_binary_string(bytes_to_check):
     """
 
     text_ascii_codes = range(32, 256)
-    # text_char_list = [six.int2byte(i) for i in text_ascii_codes]
     textchars = b''.join([six.int2byte(i) for i in text_ascii_codes]) + b'\n\r\t\f\b'
 
-    if six.PY2:
-        # Create a translation table
-        delete_chars = dict.fromkeys(bytearray(textchars))
-        # Remove the non-text chars from the bytes
-        nontext = bytes_to_check.translate(delete_chars)
-        logging.debug("nontext:")
-        logging.debug(nontext)
-        # Binary if non-text chars are > 30% of the string
-        logging.debug("len(nontext):")
-        logging.debug(len(nontext))
-        logging.debug("len(bytes_to_check):")
-        logging.debug(len(bytes_to_check))
-        nontext_ratio = float(len(nontext)) / float(len(bytes_to_check))
-        logging.debug(nontext_ratio)
-        return nontext_ratio > 0.3
-
-    if six.PY3:
-        # Count the text chars
-        textchar_count = sum([bytes(c, "utf-8") in textchars for c in bytes_to_check])
-        logging.debug("textchar_count:")
-        logging.debug(textchar_count)
-        logging.debug("bytes_to_check:")
-        logging.debug(bytes_to_check)
-        logging.debug("len(bytes_to_check):")
-        logging.debug(len(bytes_to_check))
-        # Binary if text chars are <= 30% of the string
-        text_ratio = textchar_count / len(bytes_to_check)
-        logging.debug(text_ratio)
-        return text_ratio <= 0.3
+    # Create a translation table
+    delete_chars = dict.fromkeys(bytearray(textchars))
+    # Remove the non-text chars from the bytes
+    nontext = bytes_to_check.translate(delete_chars)
+    logging.debug("nontext:")
+    logging.debug(nontext)
+    # Binary if non-text chars are > 30% of the string
+    logging.debug("len(nontext):")
+    logging.debug(len(nontext))
+    logging.debug("len(bytes_to_check):")
+    logging.debug(len(bytes_to_check))
+    nontext_ratio = float(len(nontext)) / float(len(bytes_to_check))
+    logging.debug(nontext_ratio)
+    return nontext_ratio > 0.3
 
 
 def is_binary(filename):
