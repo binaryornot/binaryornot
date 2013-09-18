@@ -1,12 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
 import logging
+import six
 import sys
 
-PY3 = sys.version > '3'
-if not PY3:
+if six.PY2:
     import codecs
+
+
+class FileNotReadableAsText(Exception):
+    """
+    The opened file could not be read as a text file.
+    """
 
 
 def unicode_open(filename, *args, **kwargs):
@@ -15,9 +22,9 @@ def unicode_open(filename, *args, **kwargs):
 
     :param filename: Name of file to open.
     """
-    if PY3:
-        return open(filename, *args, **kwargs)
     kwargs['encoding'] = "utf-8"
+    if six.PY3:
+        return open(filename, *args, **kwargs)
     return codecs.open(filename, *args, **kwargs)
 
 
@@ -26,9 +33,15 @@ def get_starting_chunk(filename):
     :param filename: File to open and get the first little chunk of.
     :returns: Starting chunk of bytes.
     """
-    with open(filename, 'r') as f:
-        chunk = f.read(1024)
-        return chunk
+    try:
+        with unicode_open(filename, 'r') as f:
+            chunk = f.read(1024)
+            return chunk
+    except UnicodeDecodeError as e:
+        logging.debug("get_starting_chunk() couldn't read the file")
+        logging.debug(e)
+        raise FileNotReadableAsText
+
 
 def print_as_hex(s):
     """
@@ -44,20 +57,32 @@ def is_binary_string(bytes_to_check):
     :returns: True if appears to be a binary, otherwise False.
     """
 
-    # Use file(1)'s choices for what's text and what's not.
-    textchars = ''.join(
-        map(chr, [7, 8, 9, 10, 12, 13, 27] + range(0x20, 0x100)))
-    result = bool(bytes_to_check.translate(None, textchars))        
-    return result
+    text_ascii_codes = range(32, 256)
+    textchars = b''.join([six.int2byte(i) for i in text_ascii_codes]) + b'\n\r\t\f\b'
 
-def is_binary_alt(filename):
-    """
-    :param filename: File to check.
-    :returns: True if it's a binary file, otherwise False.
-    """
+    if six.PY2:
+        # Remove the non-text chars from the bytes
+        nontext = bytes_to_check.translate(None, textchars)
+        logging.debug("nontext:")
+        logging.debug(nontext)
+        # Binary if non-text chars are > 30% of the string
+        nontext_ratio = len(nontext) // len(bytes_to_check)
+        logging.debug(nontext_ratio)
+        return nontext_ratio > 0.3
 
-    chunk = get_starting_chunk(filename)
-    return is_binary_string(chunk)
+    if six.PY3:
+        # Count the text chars
+        textchar_count = sum([bytes(c, "utf-8") in textchars for c in bytes_to_check])
+        logging.debug("textchar_count:")
+        logging.debug(textchar_count)
+        logging.debug("bytes_to_check:")
+        logging.debug(bytes_to_check)
+        logging.debug("len(bytes_to_check):")
+        logging.debug(len(bytes_to_check))
+        # Binary if text chars are <= 30% of the string
+        text_ratio = textchar_count / len(bytes_to_check)
+        logging.debug(text_ratio)
+        return text_ratio <= 0.3
 
 
 def is_binary(filename):
@@ -71,11 +96,9 @@ def is_binary(filename):
     if filename.endswith('png'):
         return True
 
-    # HACK: Works for now, but it would be nice to improve this
     try:
         chunk = get_starting_chunk(filename)
-        if not PY3:
-            return is_binary_string(chunk)
-    except UnicodeDecodeError:
+        return is_binary_string(chunk)
+    except FileNotReadableAsText:
         return True
 
