@@ -6,26 +6,13 @@ import logging
 import six
 import sys
 
-if six.PY2:
-    import codecs
+from helpers import unicode_open
 
 
 class FileNotReadableAsText(Exception):
     """
     The opened file could not be read as a text file.
     """
-
-
-def unicode_open(filename, *args, **kwargs):
-    """
-    Opens a file as usual on Python 3, and with UTF-8 encoding on Python 2.
-
-    :param filename: Name of file to open.
-    """
-    kwargs['encoding'] = "utf-8"
-    if six.PY3:
-        return open(filename, *args, **kwargs)
-    return codecs.open(filename, *args, **kwargs)
 
 
 def get_starting_chunk(filename):
@@ -43,14 +30,6 @@ def get_starting_chunk(filename):
         raise FileNotReadableAsText
 
 
-def print_as_hex(s):
-    """
-    Print a string as hex bytes.
-    """
-
-    print(":".join("{0:x}".format(ord(c)) for c in s))
-
-
 def is_binary_string(bytes_to_check):
     """
     :param bytes: A chunk of bytes to check.
@@ -62,10 +41,12 @@ def is_binary_string(bytes_to_check):
 
     # Create a translation table
     delete_chars = dict.fromkeys(bytearray(textchars))
+
     # Remove the non-text chars from the bytes
     nontext = bytes_to_check.translate(delete_chars)
     logging.debug("nontext:")
     logging.debug(nontext)
+
     # Binary if non-text chars are > 30% of the string
     logging.debug("len(nontext):")
     logging.debug(len(nontext))
@@ -87,4 +68,3 @@ def is_binary(filename):
         return is_binary_string(chunk)
     except FileNotReadableAsText:
         return True
-
