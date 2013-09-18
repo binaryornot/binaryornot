@@ -82,11 +82,6 @@ def is_binary(filename):
     :returns: True if it's a binary file, otherwise False.
     """
 
-    # PNGs start with bytes that appear to be text
-    # See PNG Specification, section 12.11 http://www.w3.org/TR/PNG-Rationale.html
-    if filename.endswith('png'):
-        return True
-
     try:
         chunk = get_starting_chunk(filename)
         return is_binary_string(chunk)
