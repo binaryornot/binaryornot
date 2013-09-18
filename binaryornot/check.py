@@ -6,7 +6,7 @@ import logging
 import six
 import sys
 
-from helpers import unicode_open
+from .helpers import unicode_open
 
 
 class FileNotReadableAsText(Exception):
