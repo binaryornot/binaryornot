@@ -11,7 +11,7 @@ if six.PY2:
 
 def unicode_open(filename, *args, **kwargs):
     """
-    Opens a file as usual on Python 3, and with UTF-8 encoding on Python 2.
+    Opens a file with UTF-8 encoding, in a Python 2- and 3-compatible way.
 
     :param filename: Name of file to open.
     :param *args: Optional args to be passed on to `open()`.
