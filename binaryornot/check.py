@@ -25,8 +25,6 @@ def get_starting_chunk(filename):
             chunk = f.read(1024)
             return chunk
     except UnicodeDecodeError as e:
-        logging.debug("get_starting_chunk() couldn't read the file")
-        logging.debug(e)
         raise FileNotReadableAsText
 
 
@@ -44,16 +42,9 @@ def is_binary_string(bytes_to_check):
 
     # Remove the non-text chars from the bytes
     nontext = bytes_to_check.translate(delete_chars)
-    logging.debug("nontext:")
-    logging.debug(nontext)
 
     # Binary if non-text chars are > 30% of the string
-    logging.debug("len(nontext):")
-    logging.debug(len(nontext))
-    logging.debug("len(bytes_to_check):")
-    logging.debug(len(bytes_to_check))
     nontext_ratio = float(len(nontext)) / float(len(bytes_to_check))
-    logging.debug(nontext_ratio)
     return nontext_ratio > 0.3
 
 
