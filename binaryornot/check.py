@@ -2,14 +2,13 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-import logging
 import six
-import sys
 
 from .helpers import unicode_open
 
 
 class FileNotReadableAsText(Exception):
+
     """
     The opened file could not be read as a text file.
     """
@@ -24,7 +23,7 @@ def get_starting_chunk(filename):
         with unicode_open(filename, 'r') as f:
             chunk = f.read(1024)
             return chunk
-    except UnicodeDecodeError as e:
+    except UnicodeDecodeError:
         raise FileNotReadableAsText
 
 
@@ -35,7 +34,8 @@ def is_binary_string(bytes_to_check):
     """
 
     text_ascii_codes = range(32, 256)
-    textchars = b''.join([six.int2byte(i) for i in text_ascii_codes]) + b'\n\r\t\f\b'
+    textchars = b''.join([six.int2byte(i)
+                         for i in text_ascii_codes]) + b'\n\r\t\f\b'
 
     # Create a translation table
     delete_chars = dict.fromkeys(bytearray(textchars))

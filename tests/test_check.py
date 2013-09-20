@@ -15,6 +15,7 @@ from binaryornot.check import is_binary
 
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
+
 class TestIsBinary(unittest.TestCase):
 
     def test_css(self):
