@@ -44,7 +44,7 @@ def clean_pyc():
 @task('clean_build', 'clean_pyc')
 def sdist():
     run("python setup.py sdist")
-	run("ls -l dist")
+    run("ls -l dist")
 
 @task('sdist')
 def release():
