@@ -13,7 +13,7 @@ Contents:
 
    readme
    installation
-   usage
+   quickstart
    contributing
    authors
    history
