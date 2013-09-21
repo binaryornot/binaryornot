@@ -1,6 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+binaryornot.check
+-----------------
+
+Main code for checking if a file is binary or text.
+"""
+
 from __future__ import unicode_literals
 import six
 

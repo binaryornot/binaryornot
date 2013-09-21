@@ -1,6 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+binaryornot.helpers
+-------------------
+
+Helper utilities used by BinaryOrNot.
+"""
+
 from __future__ import unicode_literals
 
 import six
