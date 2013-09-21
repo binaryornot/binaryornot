@@ -3,9 +3,12 @@ from invoke import task, run
 @task
 def clean_docs():
     run("rm -rf docs/_build")
+    run("rm -rf docs/binaryornot.rst")
+    run("rm -rf docs/modules.rst")
 
 @task('clean_docs')
 def docs():
+    run("sphinx-apidoc -o docs/ binaryornot/")
     run("sphinx-build docs docs/_build")
     run("open docs/_build/index.html")
 
