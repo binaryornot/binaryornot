@@ -9,7 +9,6 @@ Main code for checking if a file is binary or text.
 """
 
 from __future__ import unicode_literals
-import six
 
 from .helpers import get_starting_chunk, is_binary_string, FileNotReadableAsText
 
