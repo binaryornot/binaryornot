@@ -8,11 +8,7 @@ binaryornot.check
 Main code for checking if a file is binary or text.
 """
 
-from __future__ import unicode_literals
-
-from .helpers import (
-    get_starting_chunk, is_binary_string, FileNotReadableAsText
-)
+from .helpers import get_starting_chunk, is_binary_string
 
 
 def is_binary(filename):
@@ -20,9 +16,5 @@ def is_binary(filename):
     :param filename: File to check.
     :returns: True if it's a binary file, otherwise False.
     """
-
-    try:
-        chunk = get_starting_chunk(filename)
-        return is_binary_string(chunk)
-    except FileNotReadableAsText:
-        return True
+    chunk = get_starting_chunk(filename)
+    return is_binary_string(chunk)
