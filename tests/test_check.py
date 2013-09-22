@@ -18,6 +18,9 @@ logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
 class TestIsBinary(unittest.TestCase):
 
+    def test_empty(self):
+        self.assertFalse(is_binary('tests/files/empty.txt'))
+
     def test_css(self):
         self.assertFalse(is_binary('tests/files/bootstrap-glyphicons.css'))
 
