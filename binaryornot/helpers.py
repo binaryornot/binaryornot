@@ -7,53 +7,6 @@ binaryornot.helpers
 
 Helper utilities used by BinaryOrNot.
 """
-
-from __future__ import unicode_literals
-
-import sys
-
-PY3 = sys.version > '3'
-if not PY3:
-    import codecs
-
-
-class FileNotReadableAsText(Exception):
-
-    """
-    The opened file could not be read as a text file.
-    """
-
-
-def unicode_open(filename, *args, **kwargs):
-    """
-    Opens a file with UTF-8 encoding, in a Python 2- and 3-compatible way.
-
-    :param filename: Name of file to open.
-    :param *args: Optional args to be passed on to `open()`.
-    :param **kwargs: Optional kwargs to be passed on to `open()`.
-    """
-
-    kwargs['encoding'] = "utf-8"
-    if PY3:
-        return open(filename, *args, **kwargs)
-    return codecs.open(filename, *args, **kwargs)
-
-
-def int2byte(i):
-    """
-    Int-to-byte conversion.
-
-    :param i: Integer in the 8-bit range and returns
-    :returns: a single-character byte object in py3 / a single-character string
-        in py2.
-    """
-
-    if PY3:
-        return bytes((i,))
-    else:
-        return chr(i)
-
-
 def print_as_hex(s):
     """
     Print a string as hex bytes.
@@ -67,12 +20,10 @@ def get_starting_chunk(filename):
     :param filename: File to open and get the first little chunk of.
     :returns: Starting chunk of bytes.
     """
-    try:
-        with unicode_open(filename, 'r') as f:
-            chunk = f.read(1024)
-            return chunk
-    except UnicodeDecodeError:
-        raise FileNotReadableAsText
+    # Ensure we open the file in binary mode
+    with open(filename, 'rb') as f:
+        chunk = f.read(1024)
+        return chunk
 
 
 def is_binary_string(bytes_to_check):
@@ -80,17 +31,32 @@ def is_binary_string(bytes_to_check):
     :param bytes: A chunk of bytes to check.
     :returns: True if appears to be a binary, otherwise False.
     """
+    # Uses a simplified version of the Perl detection algorithm,
+    # based roughly on Eli Bendersky's translation to Python:
+    # http://eli.thegreenplace.net/2011/10/19/perls-guess-if-file-is-text-or-binary-implemented-in-python/
 
-    text_ascii_codes = range(32, 256)
-    textchars = b''.join([int2byte(i)
-                         for i in text_ascii_codes]) + b'\n\r\t\f\b'
+    # This is biased slightly more in favour of deeming files as text
+    # files than the Perl algorithm, since all ASCII compatible character
+    # sets are accepted as text, not just utf-8
 
-    # Create a translation table
-    delete_chars = dict.fromkeys(bytearray(textchars))
+    # Empty files are considered text files
+    if not bytes_to_check:
+        return False
 
-    # Remove the non-text chars from the bytes
-    nontext = bytes_to_check.translate(delete_chars)
+    # Check for NUL bytes first
+    if b'\x00' in bytes_to_check:
+        return True
 
-    # Binary if non-text chars are > 30% of the string
-    nontext_ratio = float(len(nontext)) / float(len(bytes_to_check))
+    # Now check for a high percentage of ASCII control characters
+    printable_extended_ascii = b'\n\r\t\f\b'
+    if bytes is str:
+        # Python 2 means we need to invoke chr() explicitly
+        printable_extended_ascii += b''.join(map(chr, range(32, 256)))
+    else:
+        # Python 3 means bytes accepts integer input directly
+        printable_extended_ascii += bytes(range(32, 256))
+
+    # Binary if control chars are > 30% of the string
+    control_chars = bytes_to_check.translate(None, printable_extended_ascii)
+    nontext_ratio = float(len(control_chars)) / float(len(bytes_to_check))
     return nontext_ratio > 0.3
