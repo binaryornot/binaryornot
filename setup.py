@@ -19,7 +19,7 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 setup(
     name='binaryornot',
-    version='0.1.1',
+    version='0.2.0',
     description='Ultra-lightweight pure Python package to check if a file is binary or text.',
     long_description=readme + '\n\n' + history,
     author='Audrey Roy',
@@ -36,7 +36,7 @@ setup(
     zip_safe=False,
     keywords='binaryornot',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
