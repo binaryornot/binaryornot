@@ -31,7 +31,6 @@ setup(
     package_dir={'binaryornot': 'binaryornot'},
     include_package_data=True,
     install_requires=[
-        'six',
     ],
     license="BSD",
     zip_safe=False,

@@ -10,9 +10,10 @@ Helper utilities used by BinaryOrNot.
 
 from __future__ import unicode_literals
 
-import six
+import sys
 
-if six.PY2:
+PY3 = sys.version > '3'
+if not PY3:
     import codecs
 
 
@@ -33,9 +34,24 @@ def unicode_open(filename, *args, **kwargs):
     """
 
     kwargs['encoding'] = "utf-8"
-    if six.PY3:
+    if PY3:
         return open(filename, *args, **kwargs)
     return codecs.open(filename, *args, **kwargs)
+
+
+def int2byte(i):
+    """
+    Int-to-byte conversion.
+
+    :param i: Integer in the 8-bit range and returns
+    :returns: a single-character byte object in py3 / a single-character string
+        in py2.
+    """
+
+    if PY3:
+        return bytes((i,))
+    else:
+        return chr(i)
 
 
 def print_as_hex(s):
@@ -66,7 +82,7 @@ def is_binary_string(bytes_to_check):
     """
 
     text_ascii_codes = range(32, 256)
-    textchars = b''.join([six.int2byte(i)
+    textchars = b''.join([int2byte(i)
                          for i in text_ascii_codes]) + b'\n\r\t\f\b'
 
     # Create a translation table
