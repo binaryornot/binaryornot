@@ -5,9 +5,12 @@ Credits
 Development Lead
 ----------------
 
-* Audrey Roy <audreyr@gmail.com>
+* Audrey Roy (`@audreyr`_)
 
 Contributors
 ------------
 
-None yet. Why not be the first?
+* Nick Coghlan (`@ncoghlan`_)
+
+.. _`@audreyr`: https://github.com/audreyr
+.. _`@ncoghlan`: https://github.com/ncoghlan
