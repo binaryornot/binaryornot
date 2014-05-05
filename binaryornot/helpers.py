@@ -14,16 +14,25 @@ def print_as_hex(s):
     print(":".join("{0:x}".format(ord(c)) for c in s))
 
 
-def get_starting_chunk(filename):
+def get_starting_chunk(filename, length=1024):
     """
     :param filename: File to open and get the first little chunk of.
+    :param length: Number of bytes to read, default 1024.
     :returns: Starting chunk of bytes.
     """
     # Ensure we open the file in binary mode
     with open(filename, 'rb') as f:
-        chunk = f.read(1024)
+        chunk = f.read(length)
         return chunk
 
+
+_printable_extended_ascii = b'\n\r\t\f\b'
+if bytes is str:
+    # Python 2 means we need to invoke chr() explicitly
+    _printable_extended_ascii += b''.join(map(chr, range(32, 256)))
+else:
+    # Python 3 means bytes accepts integer input directly
+    _printable_extended_ascii += bytes(range(32, 256))
 
 def is_binary_string(bytes_to_check):
     """
@@ -47,15 +56,7 @@ def is_binary_string(bytes_to_check):
         return True
 
     # Now check for a high percentage of ASCII control characters
-    printable_extended_ascii = b'\n\r\t\f\b'
-    if bytes is str:
-        # Python 2 means we need to invoke chr() explicitly
-        printable_extended_ascii += b''.join(map(chr, range(32, 256)))
-    else:
-        # Python 3 means bytes accepts integer input directly
-        printable_extended_ascii += bytes(range(32, 256))
-
     # Binary if control chars are > 30% of the string
-    control_chars = bytes_to_check.translate(None, printable_extended_ascii)
+    control_chars = bytes_to_check.translate(None, _printable_extended_ascii)
     nontext_ratio = float(len(control_chars)) / float(len(bytes_to_check))
     return nontext_ratio > 0.3
