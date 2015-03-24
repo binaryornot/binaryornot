@@ -4,7 +4,7 @@ BinaryOrNot
 
 .. image:: https://badge.fury.io/py/binaryornot.png
     :target: http://badge.fury.io/py/binaryornot
-    
+
 .. image:: https://travis-ci.org/audreyr/binaryornot.png?branch=master
         :target: https://travis-ci.org/audreyr/binaryornot
 
@@ -53,4 +53,4 @@ Credits
 -------
 
 * Special thanks to Eli Bendersky (@eliben) for his writeup explaining the heuristic and his implementation, which this is largely based on.
-* Source code from Perl's `pp_fttext`: https://github.com/mirrors/perl/blob/blead/pp_sys.c#L3287
+* Source code from Perl's `pp_fttext`: https://github.com/perl/perl5/blob/blead/pp_sys.c#L3375
