@@ -1,11 +1,20 @@
 # -*- coding: utf-8 -*-
 
+
 """
 binaryornot.helpers
 -------------------
 
 Helper utilities used by BinaryOrNot.
 """
+
+import chardet
+import logging
+
+
+logger = logging.getLogger(__name__)
+
+
 def print_as_hex(s):
     """
     Print a string as hex bytes.
@@ -54,14 +63,12 @@ def is_binary_string(bytes_to_check):
     if not bytes_to_check:
         return False
 
-    # Check for NUL bytes first
-    if b'\x00' in bytes_to_check:
-        return True
 
     # Now check for a high percentage of ASCII control characters
     # Binary if control chars are > 30% of the string
     low_chars = bytes_to_check.translate(None, _printable_ascii)
     nontext_ratio1 = float(len(low_chars)) / float(len(bytes_to_check))
+    logger.debug('nontext_ratio1: %(nontext_ratio1)r' % locals())
 
     # and check for a low percentage of high ASCII characters:
     # Binary if high ASCII chars are < 5% of the string
@@ -73,5 +80,41 @@ def is_binary_string(bytes_to_check):
 
     high_chars = bytes_to_check.translate(None, _printable_high_ascii)
     nontext_ratio2 = float(len(high_chars)) / float(len(bytes_to_check))
+    logger.debug('nontext_ratio2: %(nontext_ratio2)r' % locals())
 
-    return nontext_ratio1 > 0.3 and nontext_ratio2 < 0.05
+    is_likely_binary = (
+        (nontext_ratio1 > 0.3 and nontext_ratio2 < 0.05)
+        or
+        (nontext_ratio1 > 0.8 and nontext_ratio2 > 0.8)
+    )
+
+    logger.debug('is_likely_binary: %(is_likely_binary)r' % locals())
+    # then still check for binary for possible encoding detection with chardet
+    detected_encoding = chardet.detect(bytes_to_check)
+    logger.debug('detected_encoding: %(detected_encoding)r' % locals())
+    if detected_encoding['confidence'] > 0.9 and detected_encoding['encoding'] != 'ascii':
+        try:
+            unicode(bytes_to_check, encoding=detected_encoding['encoding'])
+            decodable_as_unicode = True
+            logger.debug('success: decodable_as_unicode: %(decodable_as_unicode)r' % locals())
+        except UnicodeDecodeError:
+            logger.debug('failure: decodable_as_unicode: %(decodable_as_unicode)r' % locals())
+            decodable_as_unicode = False
+    else:
+        decodable_as_unicode = False
+
+    logger.debug('failure: decodable_as_unicode: %(decodable_as_unicode)r' % locals())
+    if is_likely_binary:
+        if decodable_as_unicode:
+            return False
+        else:
+            return True
+    else:
+        if decodable_as_unicode:
+            return False
+        else:
+            if b'\x00' in bytes_to_check or b'\xff' in bytes_to_check:
+                # Check for NUL bytes last
+                logger.debug('has nulls:' + repr(b'\x00' in bytes_to_check))
+                return True
+        return False

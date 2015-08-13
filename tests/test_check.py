@@ -14,7 +14,7 @@ import unittest
 from binaryornot.check import is_binary
 from unittest.case import expectedFailure
 
-logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
+#logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
 
 class TestIsBinary(unittest.TestCase):
@@ -43,6 +43,7 @@ class TestIsBinary(unittest.TestCase):
     def test_bmp(self):
         self.assertTrue(is_binary('tests/files/rgb-3c-8b.bmp'))
 
+    # @expectedFailure
     def test_ds_store(self):
         self.assertTrue(is_binary('tests/files/.DS_Store'))
 
@@ -97,19 +98,15 @@ class TestIsBinary(unittest.TestCase):
     def test_is_binary_exe2(self):
         self.assertTrue(is_binary('tests/isBinaryFile/grep'))
 
-    @expectedFailure
     def test_is_binary_utf16(self):
         self.assertFalse(is_binary('tests/isBinaryFile/encodings/bom_utf-16.txt'))
 
-    @expectedFailure
     def test_is_binary_utf16le(self):
         self.assertFalse(is_binary('tests/isBinaryFile/encodings/bom_utf-16le.txt'))
 
-    @expectedFailure
     def test_is_binary_utf16be(self):
         self.assertFalse(is_binary('tests/isBinaryFile/encodings/test-utf16be.txt'))
 
-    @expectedFailure
     def test_is_binary_utf32le(self):
         self.assertFalse(is_binary('tests/isBinaryFile/encodings/bom_utf-32le.txt'))
 
@@ -131,7 +128,6 @@ class TestIsBinary(unittest.TestCase):
     def test_is_binary_gb(self):
         self.assertFalse(is_binary('tests/isBinaryFile/encodings/test-gb.txt'))
 
-    @expectedFailure
     def test_is_binary_utf32(self):
         self.assertFalse(is_binary('tests/isBinaryFile/encodings/bom_utf-32.txt'))
 

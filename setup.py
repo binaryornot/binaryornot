@@ -31,6 +31,7 @@ setup(
     package_dir={'binaryornot': 'binaryornot'},
     include_package_data=True,
     install_requires=[
+        'chardet>=2.0.0',
     ],
     license="BSD",
     zip_safe=False,
