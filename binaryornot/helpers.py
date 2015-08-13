@@ -26,13 +26,16 @@ def get_starting_chunk(filename, length=1024):
         return chunk
 
 
-_printable_extended_ascii = b'\n\r\t\f\b'
+_control_chars = b'\n\r\t\f\b'
 if bytes is str:
     # Python 2 means we need to invoke chr() explicitly
-    _printable_extended_ascii += b''.join(map(chr, range(32, 256)))
+    _printable_ascii = _control_chars + b''.join(map(chr, range(32, 127)))
+    _printable_high_ascii = b''.join(map(chr, range(127, 256)))
 else:
     # Python 3 means bytes accepts integer input directly
-    _printable_extended_ascii += bytes(range(32, 256))
+    _printable_ascii = _control_chars + bytes(range(32, 127))
+    _printable_high_ascii += bytes(range(127, 256))
+
 
 def is_binary_string(bytes_to_check):
     """
@@ -57,6 +60,18 @@ def is_binary_string(bytes_to_check):
 
     # Now check for a high percentage of ASCII control characters
     # Binary if control chars are > 30% of the string
-    control_chars = bytes_to_check.translate(None, _printable_extended_ascii)
-    nontext_ratio = float(len(control_chars)) / float(len(bytes_to_check))
-    return nontext_ratio > 0.3
+    low_chars = bytes_to_check.translate(None, _printable_ascii)
+    nontext_ratio1 = float(len(low_chars)) / float(len(bytes_to_check))
+
+    # and check for a low percentage of high ASCII characters:
+    # Binary if high ASCII chars are < 5% of the string
+    # From: https://en.wikipedia.org/wiki/UTF-8
+    # If the bytes are random, the chances of a byte with the high bit set starting a
+    # valid UTF-8 character is only 6.64%. The chances of finding 7 of these without
+    # finding an invalid sequence is actually lower than the chance of the first three
+    # bytes randomly being the UTF-8 BOM.
+
+    high_chars = bytes_to_check.translate(None, _printable_high_ascii)
+    nontext_ratio2 = float(len(high_chars)) / float(len(bytes_to_check))
+
+    return nontext_ratio1 > 0.3 and nontext_ratio2 < 0.05
