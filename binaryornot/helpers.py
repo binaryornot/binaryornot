@@ -19,7 +19,6 @@ def print_as_hex(s):
     """
     Print a string as hex bytes.
     """
-
     print(":".join("{0:x}".format(ord(c)) for c in s))
 
 
@@ -63,7 +62,6 @@ def is_binary_string(bytes_to_check):
     if not bytes_to_check:
         return False
 
-
     # Now check for a high percentage of ASCII control characters
     # Binary if control chars are > 30% of the string
     low_chars = bytes_to_check.translate(None, _printable_ascii)
@@ -73,10 +71,10 @@ def is_binary_string(bytes_to_check):
     # and check for a low percentage of high ASCII characters:
     # Binary if high ASCII chars are < 5% of the string
     # From: https://en.wikipedia.org/wiki/UTF-8
-    # If the bytes are random, the chances of a byte with the high bit set starting a
-    # valid UTF-8 character is only 6.64%. The chances of finding 7 of these without
-    # finding an invalid sequence is actually lower than the chance of the first three
-    # bytes randomly being the UTF-8 BOM.
+    # If the bytes are random, the chances of a byte with the high bit set
+    # starting a valid UTF-8 character is only 6.64%. The chances of finding 7
+    # of these without finding an invalid sequence is actually lower than the
+    # chance of the first three bytes randomly being the UTF-8 BOM.
 
     high_chars = bytes_to_check.translate(None, _printable_high_ascii)
     nontext_ratio2 = float(len(high_chars)) / float(len(bytes_to_check))
@@ -87,23 +85,29 @@ def is_binary_string(bytes_to_check):
         or
         (nontext_ratio1 > 0.8 and nontext_ratio2 > 0.8)
     )
-
     logger.debug('is_likely_binary: %(is_likely_binary)r' % locals())
-    # then still check for binary for possible encoding detection with chardet
+
+    # then check for binary for possible encoding detection with chardet
     detected_encoding = chardet.detect(bytes_to_check)
     logger.debug('detected_encoding: %(detected_encoding)r' % locals())
-    if detected_encoding['confidence'] > 0.9 and detected_encoding['encoding'] != 'ascii':
+
+    # finally use all the check to decide binary or text
+    if (detected_encoding['confidence'] > 0.9
+        and detected_encoding['encoding'] != 'ascii'):
         try:
             unicode(bytes_to_check, encoding=detected_encoding['encoding'])
             decodable_as_unicode = True
-            logger.debug('success: decodable_as_unicode: %(decodable_as_unicode)r' % locals())
+            logger.debug('success: decodable_as_unicode: '
+                         '%(decodable_as_unicode)r' % locals())
         except UnicodeDecodeError:
-            logger.debug('failure: decodable_as_unicode: %(decodable_as_unicode)r' % locals())
+            logger.debug('failure: decodable_as_unicode: '
+                         '%(decodable_as_unicode)r' % locals())
             decodable_as_unicode = False
     else:
         decodable_as_unicode = False
 
-    logger.debug('failure: decodable_as_unicode: %(decodable_as_unicode)r' % locals())
+    logger.debug('failure: decodable_as_unicode: '
+                 '%(decodable_as_unicode)r' % locals())
     if is_likely_binary:
         if decodable_as_unicode:
             return False
@@ -114,7 +118,7 @@ def is_binary_string(bytes_to_check):
             return False
         else:
             if b'\x00' in bytes_to_check or b'\xff' in bytes_to_check:
-                # Check for NUL bytes last
+                # Check for NULL bytes last
                 logger.debug('has nulls:' + repr(b'\x00' in bytes_to_check))
                 return True
         return False
