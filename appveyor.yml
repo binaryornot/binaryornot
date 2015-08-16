@@ -26,7 +26,7 @@ install:
 build: false  # Not a C# project, build stuff at the test step instead.
 
 test_script:
-  - "%PYTHON%/python python setup.py test"
+  - "%PYTHON%/python setup.py test"
 
 after_test:
   - "%PYTHON%/python setup.py bdist_wheel"
