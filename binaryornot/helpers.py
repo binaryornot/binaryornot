@@ -42,7 +42,7 @@ if bytes is str:
 else:
     # Python 3 means bytes accepts integer input directly
     _printable_ascii = _control_chars + bytes(range(32, 127))
-    _printable_high_ascii += bytes(range(127, 256))
+    _printable_high_ascii = bytes(range(127, 256))
 
 
 def is_binary_string(bytes_to_check):
