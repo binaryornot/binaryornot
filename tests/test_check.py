@@ -9,10 +9,15 @@ Tests for `binaryornot` module.
 """
 
 import logging
-import unittest
+try:
+    from unittest.case import expectedFailure
+    import unittest
+except ImportError:
+    from unittest2.case import expectedFailure
+    import unittest2 as unittest
 
 from binaryornot.check import is_binary
-from unittest.case import expectedFailure
+
 
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 

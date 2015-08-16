@@ -10,6 +10,14 @@ try:
 except ImportError:
     from distutils.core import setup
 
+
+# Python 2.6 does not have expectedFailre, unittest2 is a backport
+tests_require = []
+try:
+    from unittest.case import expectedFailure
+except ImportError:
+    tests_require = ['unittest2']
+
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
@@ -33,6 +41,7 @@ setup(
     install_requires=[
         'chardet>=2.0.0',
     ],
+    tests_require = tests_require,
     license="BSD",
     zip_safe=False,
     keywords='binaryornot',
