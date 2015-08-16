@@ -53,4 +53,4 @@ Credits
 -------
 
 * Special thanks to Eli Bendersky (@eliben) for his writeup explaining the heuristic and his implementation, which this is largely based on.
-* Source code from Perl's `pp_fttext`: https://github.com/mirrors/perl/blob/blead/pp_sys.c#L3287
+* Source code from the portion of Perl's `pp_fttext` that checks for textiness: https://github.com/Perl/perl5/blob/v5.23.1/pp_sys.c#L3527-L3587
