@@ -9,11 +9,17 @@ Tests for `binaryornot` module.
 """
 
 import logging
-import unittest
+try:
+    from unittest.case import expectedFailure
+    import unittest
+except ImportError:
+    from unittest2.case import expectedFailure
+    import unittest2 as unittest
 
 from binaryornot.check import is_binary
 
-logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
+
+logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
 
 class TestIsBinary(unittest.TestCase):
@@ -70,6 +76,79 @@ class TestIsBinary(unittest.TestCase):
 
     def test_txt_unicode(self):
         self.assertFalse(is_binary('tests/files/unicode.txt'))
+
+    def test_text_js(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/index.js'))
+
+    def test_binary_gif2(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/null_file.gif'))
+
+    def test_binary_gif3(self):
+        self.assertTrue(is_binary('tests/isBinaryFile/trunks.gif'))
+
+    def test_text_lua(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/no.lua'))
+
+    @expectedFailure
+    def test_binary_pdf2(self):
+        self.assertTrue(is_binary('tests/isBinaryFile/pdf.pdf'))
+
+    def test_text_perl2(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/perl_script'))
+
+    def test_text_russian2(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/russian_file.rst'))
+
+    def test_binary_exe2(self):
+        self.assertTrue(is_binary('tests/isBinaryFile/grep'))
+
+    def test_text_utf16(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/encodings/bom_utf-16.txt'))
+
+    def test_text_utf16le(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/encodings/bom_utf-16le.txt'))
+
+    def test_text_utf16be(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/encodings/test-utf16be.txt'))
+
+    def test_text_utf32le(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/encodings/bom_utf-32le.txt'))
+
+    def test_text_utf82(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/encodings/utf_8.txt'))
+
+    def test_text_gb2(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/encodings/test-gb2.txt'))
+
+    def test_text_kr(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/encodings/test-kr.txt'))
+
+    def test_text_latin(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/encodings/test-latin.txt'))
+
+    def test_text_big5(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/encodings/big5.txt'))
+
+    def test_text_gb(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/encodings/test-gb.txt'))
+
+    def test_text_utf32(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/encodings/bom_utf-32.txt'))
+
+    def test_text_utf8(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/encodings/bom_utf-8.txt'))
+
+    def test_text_big5b(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/encodings/big5_B.txt'))
+
+    def test_text_shishi(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/encodings/test-shishi.txt'))
+
+    def test_text_utfcn(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/encodings/utf8cn.txt'))
+
+    def test_binary_rgb_stream(self):
+        self.assertTrue(is_binary('tests/files/pixelstream.rgb'))
 
 
 if __name__ == '__main__':
