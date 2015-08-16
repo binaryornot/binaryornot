@@ -3,6 +3,18 @@
 History
 -------
 
+0.4.0 (2015-08-16)
+~~~~~~~~~~~~~~~~~~
+
+* Enhanced detection for some binary streams and UTF texts. Thanks `@pombredanne`_.
+* Set up Appveyor for continuous testing on Windows. Thanks `@pydanny`_.
+* Update link to Perl source implementation. Thanks `@asmeurer`_ `@pombredanne`_ `@audreyr`_.
+
+.. _`@pombredanne`: https://github.com/pombredanne
+.. _`@pydanny`: https://github.com/pydanny
+.. _`@asmeurer`: https://github.com/asmeurer
+.. _`@audreyr`: https://github.com/audreyr
+
 0.3.0 (2014-05-05)
 ~~~~~~~~~~~~~~~~~~
 
