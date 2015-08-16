@@ -95,7 +95,11 @@ def is_binary_string(bytes_to_check):
     if (detected_encoding['confidence'] > 0.9
         and detected_encoding['encoding'] != 'ascii'):
         try:
-            bytes_to_check.decode(encoding=detected_encoding['encoding'])
+            try:
+                bytes_to_check.decode(encoding=detected_encoding['encoding'])
+            except TypeError:
+                # happens only on Python 2.6
+                unicode(bytes_to_check, encoding=detected_encoding['encoding'])
             decodable_as_unicode = True
             logger.debug('success: decodable_as_unicode: '
                          '%(decodable_as_unicode)r' % locals())
