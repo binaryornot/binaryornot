@@ -33,6 +33,9 @@ class TestIsBinary(unittest.TestCase):
     def test_json(self):
         self.assertFalse(is_binary('tests/files/cookiecutter.json'))
 
+    def test_triggers_decoding_error(self):
+        self.assertTrue(is_binary('tests/files/decoding-error'))
+
     def test_png(self):
         self.assertTrue(is_binary('tests/files/logo.png'))
 
