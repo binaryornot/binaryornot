@@ -8,9 +8,6 @@ BinaryOrNot
 .. image:: https://travis-ci.org/audreyr/binaryornot.png?branch=master
         :target: https://travis-ci.org/audreyr/binaryornot
 
-.. image:: https://pypip.in/d/binaryornot/badge.png
-        :target: https://crate.io/packages/binaryornot?version=latest
-
 
 Ultra-lightweight pure Python package to guess whether a file is binary or text,
 using a heuristic similar to Perl's `pp_fttext` and its analysis by @eliben.
