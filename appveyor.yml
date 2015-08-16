@@ -1,12 +1,12 @@
 environment:
   matrix:
     - PYTHON: "C:\\Python27"
-      PYTHON_VERSION: "2.7.10"
+      PYTHON_VERSION: "2.7.9"
       PYTHON_ARCH: "32"
       TOX_ENV: "py27"
 
     - PYTHON: "C:\\Python33"
-      PYTHON_VERSION: "3.3.6"
+      PYTHON_VERSION: "3.3.5"
       PYTHON_ARCH: "32"
       TOX_ENV: "py33"
 
