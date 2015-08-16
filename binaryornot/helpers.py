@@ -92,6 +92,7 @@ def is_binary_string(bytes_to_check):
     logger.debug('detected_encoding: %(detected_encoding)r' % locals())
 
     # finally use all the check to decide binary or text
+    decodable_as_unicode = False
     if (detected_encoding['confidence'] > 0.9
         and detected_encoding['encoding'] != 'ascii'):
         try:
@@ -106,9 +107,6 @@ def is_binary_string(bytes_to_check):
         except UnicodeDecodeError:
             logger.debug('failure: decodable_as_unicode: '
                          '%(decodable_as_unicode)r' % locals())
-            decodable_as_unicode = False
-    else:
-        decodable_as_unicode = False
 
     logger.debug('failure: decodable_as_unicode: '
                  '%(decodable_as_unicode)r' % locals())
