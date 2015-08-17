@@ -104,6 +104,9 @@ def is_binary_string(bytes_to_check):
             decodable_as_unicode = True
             logger.debug('success: decodable_as_unicode: '
                          '%(decodable_as_unicode)r' % locals())
+        except LookupError:
+            logger.debug('failure: could not look up encoding %(encoding)s' %
+                         detected_encoding)
         except UnicodeDecodeError:
             logger.debug('failure: decodable_as_unicode: '
                          '%(decodable_as_unicode)r' % locals())

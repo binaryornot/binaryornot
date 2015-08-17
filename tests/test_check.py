@@ -36,6 +36,9 @@ class TestIsBinary(unittest.TestCase):
     def test_triggers_decoding_error(self):
         self.assertTrue(is_binary('tests/files/decoding-error'))
 
+    def test_triggers_lookup_error(self):
+        self.assertTrue(is_binary('tests/files/lookup-error'))
+
     def test_png(self):
         self.assertTrue(is_binary('tests/files/logo.png'))
 
