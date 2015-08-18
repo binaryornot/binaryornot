@@ -82,6 +82,7 @@ function main () {
     InstallPackage $env:PYTHON tox
     InstallPackage $env:PYTHON wheel
     InstallPackage $env:PYTHON setuptools
+    InstallPackage $env:PYTHON hypothesis
 }
 
 main
