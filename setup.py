@@ -12,11 +12,11 @@ except ImportError:
 
 
 # Python 2.6 does not have expectedFailre, unittest2 is a backport
-tests_require = []
+tests_require = ['hypothesis']
 try:
     from unittest.case import expectedFailure
 except ImportError:
-    tests_require = ['unittest2']
+    tests_require.append('unittest2')
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')

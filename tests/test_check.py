@@ -16,6 +16,13 @@ except ImportError:
     from unittest2.case import expectedFailure
     import unittest2 as unittest
 
+import os
+from contextlib import contextmanager
+from tempfile import mkstemp
+
+from hypothesis import given
+from hypothesis.strategies import binary
+
 from binaryornot.check import is_binary
 
 
@@ -152,6 +159,24 @@ class TestIsBinary(unittest.TestCase):
 
     def test_binary_rgb_stream(self):
         self.assertTrue(is_binary('tests/files/pixelstream.rgb'))
+
+
+@contextmanager
+def bytes_in_file(data):
+    o, f = mkstemp()
+    try:
+        os.write(o, data)
+        os.close(o)
+        yield f
+    finally:
+        os.unlink(f)
+
+
+class TestDetectionProperties(unittest.TestCase):
+    @given(binary(average_size=512))
+    def test_never_crashes(self, data):
+        with bytes_in_file(data) as f:
+            is_binary(f)
 
 
 if __name__ == '__main__':
