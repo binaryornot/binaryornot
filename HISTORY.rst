@@ -3,17 +3,26 @@
 History
 -------
 
-0.4.0 (2015-08-16)
+0.4.0 (2015-08-21)
 ~~~~~~~~~~~~~~~~~~
 
-* Enhanced detection for some binary streams and UTF texts. Thanks `@pombredanne`_.
+* Enhanced detection for some binary streams and UTF texts. (#10, 11) Thanks `@pombredanne`_.
 * Set up Appveyor for continuous testing on Windows. Thanks `@pydanny`_.
-* Update link to Perl source implementation. Thanks `@asmeurer`_ `@pombredanne`_ `@audreyr`_.
+* Update link to Perl source implementation. (#9) Thanks `@asmeurer`_ `@pombredanne`_ `@audreyr`_.
+* Handle UnicodeDecodeError in check. (#12) Thanks `@DRMacIver`_.
+* Add very simple Hypothesis based tests. (#13) Thanks `@DRMacIver`_.
+* Use setup to determine requirements and remove redundant requirements.txt. (#14) Thanks `@hackebrot`_.
+* Add documentation status badge to README.rst. (#15) Thanks `@hackebrot`_.
+* Run tox in travis.yml. Add pypy and Python 3.4 to tox enviroments. (#16) Thanks `@hackebrot`_ `@pydanny`_.
+* Handle LookupError when detecting encoding. (#17) Thanks `@DRMacIver`_.
+
 
 .. _`@pombredanne`: https://github.com/pombredanne
 .. _`@pydanny`: https://github.com/pydanny
 .. _`@asmeurer`: https://github.com/asmeurer
 .. _`@audreyr`: https://github.com/audreyr
+.. _`@DRMacIver`: https://github.com/DRMacIver
+.. _`@hackebrot`: https://github.com/hackebrot
 
 0.3.0 (2014-05-05)
 ~~~~~~~~~~~~~~~~~~
