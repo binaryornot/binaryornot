@@ -17,6 +17,7 @@ develop-eggs
 .installed.cfg
 lib
 lib64
+.eggs
 
 # Installer logs
 pip-log.txt
@@ -46,3 +47,6 @@ htmlcov/
 
 # Profiling
 binaryornot_profile
+
+# Hypothesis
+.hypothesis
