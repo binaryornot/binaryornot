@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 
-import os
-import sys
-
-import binaryornot
 
 try:
     from setuptools import setup
