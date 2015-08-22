@@ -18,16 +18,12 @@ try:
 except ImportError:
     tests_require.append('unittest2')
 
-if sys.argv[-1] == 'publish':
-    os.system('python setup.py sdist upload')
-    sys.exit()
-
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 setup(
     name='binaryornot',
-    version='0.3.0',
+    version='0.4.0',
     description='Ultra-lightweight pure Python package to check if a file is binary or text.',
     long_description=readme + '\n\n' + history,
     author='Audrey Roy',
