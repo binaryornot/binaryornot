@@ -22,7 +22,7 @@ using a heuristic similar to Perl's `pp_fttext` and its analysis by @eliben.
 Status
 ------
 
-It works, and I'm using this package in various places. But it doesn't cover all edge cases yet.
+It works, and people are using this package in various places. But it doesn't cover all edge cases yet.
 
 The code could be improved. Pull requests welcome! As of now, it is based on these snippets, but that may change:
 
@@ -36,8 +36,10 @@ Features
 
 Has tests for these file types:
 
-* Text: .css, .json, .txt, .svg
-* Binary: .eot, .otf, ttf, .woff, .png, .jpg, .tiff, .bmp
+* Text: .txt, .css, .json, .svg, .js, .lua, .pl, .rst
+* Binary: .png, .gif, .jpg, .tiff, .bmp, .DS_Store, .eot, .otf, .ttf, .woff, .rgb
+
+Has tests for numerous encodings.
 
 Why?
 ----
@@ -47,8 +49,11 @@ You may be thinking, "I can write this in 2 lines of code?!"
 It's actually not that easy. Here's a great article about how *perldoc*'s
 heuristic to guess file types works: http://eli.thegreenplace.net/2011/10/19/perls-guess-if-file-is-text-or-binary-implemented-in-python/
 
+And that's just where we started. Over time, we've found more edge cases and
+our heuristic has gotten more complex.
+
 Also, this package saves you from having to write and thoroughly test
-those 2 lines of code with all sorts of weird file types, cross-platform.
+your code with all sorts of weird file types and encodings, cross-platform.
 
 Credits
 -------
