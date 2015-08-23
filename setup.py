@@ -7,13 +7,6 @@ except ImportError:
     from distutils.core import setup
 
 
-# Python 2.6 does not have expectedFailre, unittest2 is a backport
-tests_require = ['hypothesis']
-try:
-    from unittest.case import expectedFailure
-except ImportError:
-    tests_require.append('unittest2')
-
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
@@ -36,7 +29,6 @@ setup(
     install_requires=[
         'chardet>=2.0.0',
     ],
-    tests_require = tests_require,
     license="BSD",
     zip_safe=False,
     keywords='binaryornot',
