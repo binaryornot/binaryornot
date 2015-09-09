@@ -66,7 +66,7 @@ def is_binary_string(bytes_to_check):
     # Binary if control chars are > 30% of the string
     low_chars = bytes_to_check.translate(None, _printable_ascii)
     nontext_ratio1 = float(len(low_chars)) / float(len(bytes_to_check))
-    logger.debug('nontext_ratio1: %(nontext_ratio1)r' % locals())
+    logger.debug('nontext_ratio1: %(nontext_ratio1)r', locals())
 
     # and check for a low percentage of high ASCII characters:
     # Binary if high ASCII chars are < 5% of the string
@@ -78,18 +78,18 @@ def is_binary_string(bytes_to_check):
 
     high_chars = bytes_to_check.translate(None, _printable_high_ascii)
     nontext_ratio2 = float(len(high_chars)) / float(len(bytes_to_check))
-    logger.debug('nontext_ratio2: %(nontext_ratio2)r' % locals())
+    logger.debug('nontext_ratio2: %(nontext_ratio2)r', locals())
 
     is_likely_binary = (
         (nontext_ratio1 > 0.3 and nontext_ratio2 < 0.05)
         or
         (nontext_ratio1 > 0.8 and nontext_ratio2 > 0.8)
     )
-    logger.debug('is_likely_binary: %(is_likely_binary)r' % locals())
+    logger.debug('is_likely_binary: %(is_likely_binary)r', locals())
 
     # then check for binary for possible encoding detection with chardet
     detected_encoding = chardet.detect(bytes_to_check)
-    logger.debug('detected_encoding: %(detected_encoding)r' % locals())
+    logger.debug('detected_encoding: %(detected_encoding)r', locals())
 
     # finally use all the check to decide binary or text
     decodable_as_unicode = False
@@ -103,16 +103,16 @@ def is_binary_string(bytes_to_check):
                 unicode(bytes_to_check, encoding=detected_encoding['encoding'])
             decodable_as_unicode = True
             logger.debug('success: decodable_as_unicode: '
-                         '%(decodable_as_unicode)r' % locals())
+                         '%(decodable_as_unicode)r', locals())
         except LookupError:
-            logger.debug('failure: could not look up encoding %(encoding)s' %
+            logger.debug('failure: could not look up encoding %(encoding)s',
                          detected_encoding)
         except UnicodeDecodeError:
             logger.debug('failure: decodable_as_unicode: '
-                         '%(decodable_as_unicode)r' % locals())
+                         '%(decodable_as_unicode)r', locals())
 
     logger.debug('failure: decodable_as_unicode: '
-                 '%(decodable_as_unicode)r' % locals())
+                 '%(decodable_as_unicode)r', locals())
     if is_likely_binary:
         if decodable_as_unicode:
             return False
