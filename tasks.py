@@ -27,16 +27,16 @@ def test():
 
 @task
 def coverage():
-	run("coverage run --source binaryornot setup.py test")
-	run("coverage report -m")
-	run("coverage html")
-	run("open htmlcov/index.html")
+    run("coverage run --source binaryornot setup.py test")
+    run("coverage report -m")
+    run("coverage html")
+    run("open htmlcov/index.html")
 
 @task
 def clean_build():
-	run("rm -fr build/")
-	run("rm -fr dist/")
-	run("rm -fr *.egg-info")
+    run("rm -fr build/")
+    run("rm -fr dist/")
+    run("rm -fr *.egg-info")
 
 @task
 def clean_pyc():
