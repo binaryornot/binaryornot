@@ -81,8 +81,7 @@ def is_binary_string(bytes_to_check):
     logger.debug('nontext_ratio2: %(nontext_ratio2)r', locals())
 
     is_likely_binary = (
-        (nontext_ratio1 > 0.3 and nontext_ratio2 < 0.05)
-        or
+        (nontext_ratio1 > 0.3 and nontext_ratio2 < 0.05) or
         (nontext_ratio1 > 0.8 and nontext_ratio2 > 0.8)
     )
     logger.debug('is_likely_binary: %(is_likely_binary)r', locals())
@@ -93,8 +92,8 @@ def is_binary_string(bytes_to_check):
 
     # finally use all the check to decide binary or text
     decodable_as_unicode = False
-    if (detected_encoding['confidence'] > 0.9
-        and detected_encoding['encoding'] != 'ascii'):
+    if (detected_encoding['confidence'] > 0.9 and
+            detected_encoding['encoding'] != 'ascii'):
         try:
             try:
                 bytes_to_check.decode(encoding=detected_encoding['encoding'])
