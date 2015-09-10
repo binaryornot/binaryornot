@@ -99,7 +99,7 @@ def is_binary_string(bytes_to_check):
                 bytes_to_check.decode(encoding=detected_encoding['encoding'])
             except TypeError:
                 # happens only on Python 2.6
-                unicode(bytes_to_check, encoding=detected_encoding['encoding']) # noqa
+                unicode(bytes_to_check, encoding=detected_encoding['encoding'])  # noqa
             decodable_as_unicode = True
             logger.debug('success: decodable_as_unicode: '
                          '%(decodable_as_unicode)r', locals())
