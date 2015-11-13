@@ -163,6 +163,9 @@ class TestIsBinary(unittest.TestCase):
     def test_binary_rgb_stream(self):
         self.assertTrue(is_binary('tests/files/pixelstream.rgb'))
 
+    def test_binary_pyc(self):
+        self.assertTrue(is_binary('tests/files/hello_world.pyc'))
+
 
 @contextmanager
 def bytes_in_file(data):
