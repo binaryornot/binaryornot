@@ -18,6 +18,7 @@ Contributors
 * Aaron Meurer (`@asmeurer`_)
 * David R. MacIver (`@DRMacIver`_)
 * Raphael Pierzina (`@hackebrot`_)
+* Johannes (`@johtso`_)
 
 .. _`@audreyr`: https://github.com/audreyr
 .. _`@ncoghlan`: https://github.com/ncoghlan
@@ -28,3 +29,4 @@ Contributors
 .. _`@asmeurer`: https://github.com/asmeurer
 .. _`@DRMacIver`: https://github.com/DRMacIver
 .. _`@hackebrot`: https://github.com/hackebrot
+.. _`@johtso`: https://github.com/johtso
