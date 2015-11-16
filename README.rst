@@ -2,9 +2,9 @@
 BinaryOrNot
 =============================
 
-.. image:: https://badge.fury.io/py/binaryornot.png
-    :target: http://badge.fury.io/py/binaryornot
-    
+.. image:: https://img.shields.io/pypi/v/binaryornot.svg?style=flat
+        :target: https://pypi.python.org/pypi/binaryornot
+
 .. image:: https://travis-ci.org/audreyr/binaryornot.png?branch=master
         :target: https://travis-ci.org/audreyr/binaryornot
 
