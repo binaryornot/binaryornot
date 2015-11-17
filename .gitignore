@@ -1,5 +1,7 @@
 *.py[cod]
 !hello_world.pyc
+!empty.pyc
+!troublesome.pyc
 
 # C extensions
 *.so
