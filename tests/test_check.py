@@ -166,6 +166,12 @@ class TestIsBinary(unittest.TestCase):
     def test_binary_pyc(self):
         self.assertTrue(is_binary('tests/files/hello_world.pyc'))
 
+    def test_binary_empty_pyc(self):
+        self.assertTrue(is_binary('tests/files/empty.pyc'))
+
+    def test_binary_troublesome_pyc(self):
+        self.assertTrue(is_binary('tests/files/troublesome.pyc'))
+
 
 @contextmanager
 def bytes_in_file(data):
