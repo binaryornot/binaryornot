@@ -47,16 +47,17 @@ else:
 
 def is_binary_string(bytes_to_check):
     """
+    Uses a simplified version of the Perl detection algorithm,
+    based roughly on Eli Bendersky's translation to Python:
+    http://eli.thegreenplace.net/2011/10/19/perls-guess-if-file-is-text-or-binary-implemented-in-python/
+
+    This is biased slightly more in favour of deeming files as text
+    files than the Perl algorithm, since all ASCII compatible character
+    sets are accepted as text, not just utf-8.
+
     :param bytes: A chunk of bytes to check.
     :returns: True if appears to be a binary, otherwise False.
     """
-    # Uses a simplified version of the Perl detection algorithm,
-    # based roughly on Eli Bendersky's translation to Python:
-    # http://eli.thegreenplace.net/2011/10/19/perls-guess-if-file-is-text-or-binary-implemented-in-python/
-
-    # This is biased slightly more in favour of deeming files as text
-    # files than the Perl algorithm, since all ASCII compatible character
-    # sets are accepted as text, not just utf-8
 
     # Empty files are considered text files
     if not bytes_to_check:
