@@ -30,21 +30,59 @@ logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
 
 class TestIsBinary(unittest.TestCase):
+    """Test is_binary() with various files."""
 
     def test_empty(self):
         self.assertFalse(is_binary('tests/files/empty.txt'))
-
-    def test_css(self):
-        self.assertFalse(is_binary('tests/files/bootstrap-glyphicons.css'))
-
-    def test_json(self):
-        self.assertFalse(is_binary('tests/files/cookiecutter.json'))
 
     def test_triggers_decoding_error(self):
         self.assertTrue(is_binary('tests/files/decoding-error'))
 
     def test_triggers_lookup_error(self):
         self.assertTrue(is_binary('tests/files/lookup-error'))
+
+    def test_ds_store(self):
+        self.assertTrue(is_binary('tests/files/.DS_Store'))
+
+    def test_txt(self):
+        self.assertFalse(is_binary('tests/files/robots.txt'))
+
+    def test_txt_unicode(self):
+        self.assertFalse(is_binary('tests/files/unicode.txt'))
+
+    @expectedFailure
+    def test_binary_pdf2(self):
+        self.assertTrue(is_binary('tests/isBinaryFile/pdf.pdf'))
+
+    def test_text_russian2(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/russian_file.rst'))
+
+    def test_binary_exe2(self):
+        self.assertTrue(is_binary('tests/isBinaryFile/grep'))
+
+
+class TestFontFiles(unittest.TestCase):
+    """Test is_binary() with various font file types."""
+
+    def test_eot(self):
+        self.assertTrue(
+            is_binary('tests/files/glyphiconshalflings-regular.eot'))
+
+    def test_otf(self):
+        self.assertTrue(
+            is_binary('tests/files/glyphiconshalflings-regular.otf'))
+
+    def test_ttf(self):
+        self.assertTrue(
+            is_binary('tests/files/glyphiconshalflings-regular.ttf'))
+
+    def test_woff(self):
+        self.assertTrue(
+            is_binary('tests/files/glyphiconshalflings-regular.woff'))
+
+
+class TestImageFiles(unittest.TestCase):
+    """Test is_binary() with various image file types."""
 
     def test_png(self):
         self.assertTrue(is_binary('tests/files/logo.png'))
@@ -61,37 +99,8 @@ class TestIsBinary(unittest.TestCase):
     def test_bmp(self):
         self.assertTrue(is_binary('tests/files/rgb-3c-8b.bmp'))
 
-    def test_ds_store(self):
-        self.assertTrue(is_binary('tests/files/.DS_Store'))
-
-    def test_eot(self):
-        self.assertTrue(
-            is_binary('tests/files/glyphiconshalflings-regular.eot'))
-
-    def test_otf(self):
-        self.assertTrue(
-            is_binary('tests/files/glyphiconshalflings-regular.otf'))
-
-    def test_svg(self):
-        self.assertFalse(
-            is_binary('tests/files/glyphiconshalflings-regular.svg'))
-
-    def test_ttf(self):
-        self.assertTrue(
-            is_binary('tests/files/glyphiconshalflings-regular.ttf'))
-
-    def test_woff(self):
-        self.assertTrue(
-            is_binary('tests/files/glyphiconshalflings-regular.woff'))
-
-    def test_txt(self):
-        self.assertFalse(is_binary('tests/files/robots.txt'))
-
-    def test_txt_unicode(self):
-        self.assertFalse(is_binary('tests/files/unicode.txt'))
-
-    def test_text_js(self):
-        self.assertFalse(is_binary('tests/isBinaryFile/index.js'))
+    def test_binary_rgb_stream(self):
+        self.assertTrue(is_binary('tests/files/pixelstream.rgb'))
 
     def test_binary_gif2(self):
         self.assertFalse(is_binary('tests/isBinaryFile/null_file.gif'))
@@ -99,21 +108,13 @@ class TestIsBinary(unittest.TestCase):
     def test_binary_gif3(self):
         self.assertTrue(is_binary('tests/isBinaryFile/trunks.gif'))
 
-    def test_text_lua(self):
-        self.assertFalse(is_binary('tests/isBinaryFile/no.lua'))
+    def test_svg(self):
+        self.assertFalse(
+            is_binary('tests/files/glyphiconshalflings-regular.svg'))
 
-    @expectedFailure
-    def test_binary_pdf2(self):
-        self.assertTrue(is_binary('tests/isBinaryFile/pdf.pdf'))
 
-    def test_text_perl2(self):
-        self.assertFalse(is_binary('tests/isBinaryFile/perl_script'))
-
-    def test_text_russian2(self):
-        self.assertFalse(is_binary('tests/isBinaryFile/russian_file.rst'))
-
-    def test_binary_exe2(self):
-        self.assertTrue(is_binary('tests/isBinaryFile/grep'))
+class TestEncodings(unittest.TestCase):
+    """Test is_binary() with files containing various encodings."""
 
     def test_text_utf16(self):
         self.assertFalse(is_binary('tests/isBinaryFile/encodings/bom_utf-16.txt'))
@@ -160,8 +161,28 @@ class TestIsBinary(unittest.TestCase):
     def test_text_utfcn(self):
         self.assertFalse(is_binary('tests/isBinaryFile/encodings/utf8cn.txt'))
 
-    def test_binary_rgb_stream(self):
-        self.assertTrue(is_binary('tests/files/pixelstream.rgb'))
+class TestCodeFiles(unittest.TestCase):
+    """Test is_binary() with various code file types."""
+
+    def test_css(self):
+        self.assertFalse(is_binary('tests/files/bootstrap-glyphicons.css'))
+
+    def test_json(self):
+        self.assertFalse(is_binary('tests/files/cookiecutter.json'))
+
+    def test_text_perl2(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/perl_script'))
+
+    def test_text_js(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/index.js'))
+
+    def test_text_lua(self):
+        self.assertFalse(is_binary('tests/isBinaryFile/no.lua'))
+
+
+class TestProgrammingArtifacts(unittest.TestCase):
+    """Test is_binary() with various leftover byproducts from running or
+    building programs."""
 
     def test_binary_pyc(self):
         self.assertTrue(is_binary('tests/files/hello_world.pyc'))
