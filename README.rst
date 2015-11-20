@@ -5,7 +5,7 @@ BinaryOrNot
 .. image:: https://img.shields.io/pypi/v/binaryornot.svg?style=flat
         :target: https://pypi.python.org/pypi/binaryornot
 
-.. image:: https://travis-ci.org/audreyr/binaryornot.png?branch=master
+.. image:: https://img.shields.io/travis/audreyr/binaryornot/master.svg
         :target: https://travis-ci.org/audreyr/binaryornot
 
 .. image:: https://readthedocs.org/projects/binaryornot/badge/?version=latest
