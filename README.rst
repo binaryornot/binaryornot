@@ -5,13 +5,9 @@ BinaryOrNot
 .. image:: https://img.shields.io/pypi/v/binaryornot.svg?style=flat
         :target: https://pypi.python.org/pypi/binaryornot
 
-.. image:: https://img.shields.io/travis/audreyr/binaryornot/master.svg
-        :target: https://travis-ci.org/audreyr/binaryornot
-
 .. image:: https://readthedocs.org/projects/binaryornot/badge/?version=latest
         :target: https://readthedocs.org/projects/binaryornot/?badge=latest
         :alt: Documentation Status
-
 
 Ultra-lightweight pure Python package to guess whether a file is binary or text,
 using a heuristic similar to Perl's `pp_fttext` and its analysis by @eliben.
@@ -54,6 +50,19 @@ our heuristic has gotten more complex.
 
 Also, this package saves you from having to write and thoroughly test
 your code with all sorts of weird file types and encodings, cross-platform.
+
+Builds
+------
+
+Linux (Ubuntu 12.04 LTS Server Edition 64 bit):
+
+.. image:: https://img.shields.io/travis/audreyr/binaryornot/master.svg
+        :target: https://travis-ci.org/audreyr/binaryornot
+
+Windows (Windows Server 2012 R2 (x64)):
+
+.. image:: https://img.shields.io/appveyor/ci/audreyr/binaryornot/master.svg
+        :target: https://ci.appveyor.com/project/audreyr/binaryornot
 
 Credits
 -------
