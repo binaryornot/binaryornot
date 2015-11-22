@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-
 try:
     from setuptools import setup
 except ImportError:
@@ -18,8 +17,8 @@ setup(
         'if a file is binary or text.'
     ),
     long_description=readme + '\n\n' + history,
-    author='Audrey Roy',
-    author_email='audreyr@gmail.com',
+    author='Audrey Roy Greenfeld',
+    author_email='aroy@alum.mit.edu',
     url='https://github.com/audreyr/binaryornot',
     packages=[
         'binaryornot',
@@ -33,7 +32,7 @@ setup(
     zip_safe=False,
     keywords='binaryornot',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
@@ -43,6 +42,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
     ],
     test_suite='tests',
 )
