@@ -117,28 +117,34 @@ class TestEncodings(unittest.TestCase):
     """Test is_binary() with files containing various encodings."""
 
     def test_text_utf16(self):
-        self.assertFalse(is_binary('tests/isBinaryFile/encodings/bom_utf-16.txt'))
+        self.assertFalse(
+            is_binary('tests/isBinaryFile/encodings/bom_utf-16.txt'))
 
     def test_text_utf16le(self):
-        self.assertFalse(is_binary('tests/isBinaryFile/encodings/bom_utf-16le.txt'))
+        self.assertFalse(
+            is_binary('tests/isBinaryFile/encodings/bom_utf-16le.txt'))
 
     def test_text_utf16be(self):
-        self.assertFalse(is_binary('tests/isBinaryFile/encodings/test-utf16be.txt'))
+        self.assertFalse(
+            is_binary('tests/isBinaryFile/encodings/test-utf16be.txt'))
 
     def test_text_utf32le(self):
-        self.assertFalse(is_binary('tests/isBinaryFile/encodings/bom_utf-32le.txt'))
+        self.assertFalse(
+            is_binary('tests/isBinaryFile/encodings/bom_utf-32le.txt'))
 
     def test_text_utf82(self):
         self.assertFalse(is_binary('tests/isBinaryFile/encodings/utf_8.txt'))
 
     def test_text_gb2(self):
-        self.assertFalse(is_binary('tests/isBinaryFile/encodings/test-gb2.txt'))
+        self.assertFalse(
+            is_binary('tests/isBinaryFile/encodings/test-gb2.txt'))
 
     def test_text_kr(self):
         self.assertFalse(is_binary('tests/isBinaryFile/encodings/test-kr.txt'))
 
     def test_text_latin(self):
-        self.assertFalse(is_binary('tests/isBinaryFile/encodings/test-latin.txt'))
+        self.assertFalse(
+            is_binary('tests/isBinaryFile/encodings/test-latin.txt'))
 
     def test_text_big5(self):
         self.assertFalse(is_binary('tests/isBinaryFile/encodings/big5.txt'))
@@ -147,19 +153,23 @@ class TestEncodings(unittest.TestCase):
         self.assertFalse(is_binary('tests/isBinaryFile/encodings/test-gb.txt'))
 
     def test_text_utf32(self):
-        self.assertFalse(is_binary('tests/isBinaryFile/encodings/bom_utf-32.txt'))
+        self.assertFalse(
+            is_binary('tests/isBinaryFile/encodings/bom_utf-32.txt'))
 
     def test_text_utf8(self):
-        self.assertFalse(is_binary('tests/isBinaryFile/encodings/bom_utf-8.txt'))
+        self.assertFalse(
+            is_binary('tests/isBinaryFile/encodings/bom_utf-8.txt'))
 
     def test_text_big5b(self):
         self.assertFalse(is_binary('tests/isBinaryFile/encodings/big5_B.txt'))
 
     def test_text_shishi(self):
-        self.assertFalse(is_binary('tests/isBinaryFile/encodings/test-shishi.txt'))
+        self.assertFalse(
+            is_binary('tests/isBinaryFile/encodings/test-shishi.txt'))
 
     def test_text_utfcn(self):
         self.assertFalse(is_binary('tests/isBinaryFile/encodings/utf8cn.txt'))
+
 
 class TestCodeFiles(unittest.TestCase):
     """Test is_binary() with various code file types."""
