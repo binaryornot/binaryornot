@@ -13,7 +13,7 @@ Ultra-lightweight pure Python package to guess whether a file is binary or text,
 using a heuristic similar to Perl's `pp_fttext` and its analysis by @eliben.
 
 * Free software: BSD license
-* Documentation: http://binaryornot.readthedocs.org
+* Documentation: https://binaryornot.readthedocs.io
 
 Status
 ------
