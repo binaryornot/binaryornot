@@ -14,7 +14,7 @@ with open('HISTORY.rst') as history_file:
 
 setup(
     name='binaryornot',
-    version='0.4.0',
+    version='0.4.1',
     description=(
         'Ultra-lightweight pure Python package to check '
         'if a file is binary or text.'
@@ -46,6 +46,7 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
     test_suite='tests',
 )
