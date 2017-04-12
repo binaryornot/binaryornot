@@ -3,7 +3,7 @@
 History
 -------
 
-0.4.1 (2017-04-12)
+0.4.2 (2017-04-12)
 ~~~~~~~~~~~~~~~~~~
 
 * Restricted chardet to anything under 3.0 due to https://github.com/chardet/chardet/issues/113
