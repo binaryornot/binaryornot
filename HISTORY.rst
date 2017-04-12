@@ -3,6 +3,13 @@
 History
 -------
 
+0.4.1 (2017-04-12)
+~~~~~~~~~~~~~~~~~~
+
+* Restricted chardet to anything under 3.0 due to https://github.com/chardet/chardet/issues/113
+* Added pyup badge
+* Added utilities for pushing new versions up
+
 0.4.0 (2015-08-21)
 ~~~~~~~~~~~~~~~~~~
 

@@ -12,9 +12,15 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read().replace('.. :changelog:', '')
 
+if sys.argv[-1] == 'publish':
+    os.system('python setup.py sdist bdist_wheel upload')
+    os.system("git tag -a %s -m 'version %s'" % (__version__, __version__))
+    os.system("git push --tags")
+    sys.exit()
+
 setup(
     name='binaryornot',
-    version='0.5.0',
+    version='0.4.1',
     description=(
         'Ultra-lightweight pure Python package to check '
         'if a file is binary or text.'
@@ -29,7 +35,7 @@ setup(
     package_dir={'binaryornot': 'binaryornot'},
     include_package_data=True,
     install_requires=[
-        'chardet>=2.0.0',
+        'chardet<3.0.0',
     ],
     license="BSD",
     zip_safe=False,
