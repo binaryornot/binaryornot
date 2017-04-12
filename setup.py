@@ -7,22 +7,23 @@ try:
 except ImportError:
     from distutils.core import setup
 
-
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
 with open('HISTORY.rst') as history_file:
     history = history_file.read().replace('.. :changelog:', '')
 
+version = '0.4.1'
+
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist bdist_wheel upload')
-    os.system("git tag -a %s -m 'version %s'" % (__version__, __version__))
+    os.system("git tag -a %s -m 'version %s'" % (version, version))
     os.system("git push --tags")
     sys.exit()
 
 setup(
     name='binaryornot',
-    version='0.4.1',
+    version=version,
     description=(
         'Ultra-lightweight pure Python package to check '
         'if a file is binary or text.'
