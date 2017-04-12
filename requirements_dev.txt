@@ -1,5 +1,5 @@
 # The following are for local development
-invoke
+invoke==0.15.0
 flake8
 autopep8
 Sphinx
