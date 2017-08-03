@@ -19,6 +19,7 @@ Contributors
 * David R. MacIver (`@DRMacIver`_)
 * Raphael Pierzina (`@hackebrot`_)
 * Johannes (`@johtso`_)
+* Luke Hinds (`@lukehinds`_)
 
 .. _`@audreyr`: https://github.com/audreyr
 .. _`@ncoghlan`: https://github.com/ncoghlan
@@ -30,3 +31,4 @@ Contributors
 .. _`@DRMacIver`: https://github.com/DRMacIver
 .. _`@hackebrot`: https://github.com/hackebrot
 .. _`@johtso`: https://github.com/johtso
+.. _`@lukehinds`: https://github.com/lukehinds
