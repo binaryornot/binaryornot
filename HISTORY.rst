@@ -3,6 +3,12 @@
 History
 -------
 
+0.4.4 (2017-04-13)
+~~~~~~~~~~~~~~~~~~
+
+* Notify users for file i/o issues. Thanks @lukehinds!
+
+
 0.4.3 (2017-04-13)
 ~~~~~~~~~~~~~~~~~~
 
