@@ -29,9 +29,12 @@ def get_starting_chunk(filename, length=1024):
     :returns: Starting chunk of bytes.
     """
     # Ensure we open the file in binary mode
-    with open(filename, 'rb') as f:
-        chunk = f.read(length)
-        return chunk
+    try:
+        with open(filename, 'rb') as f:
+            chunk = f.read(length)
+            return chunk
+    except IOError as e:
+        print(e)
 
 
 _control_chars = b'\n\r\t\f\b'
