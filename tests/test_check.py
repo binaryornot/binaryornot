@@ -203,6 +203,19 @@ class TestProgrammingArtifacts(unittest.TestCase):
     def test_binary_troublesome_pyc(self):
         self.assertTrue(is_binary('tests/files/troublesome.pyc'))
 
+class TestSymlinks(unittest.TestCase):
+    """Test that is_binary() doesn't crash when seeing symlinks"""
+    def setUp(self):
+        import tempfile
+        self.directory = tempfile.mkdtemp(prefix='binaryornot-',suffix='')
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(self.directory,True)
+    if hasattr(os,'symlink'):
+        def test_dangling_symlink(self):
+            target,symlink = os.path.join(self.directory,'missing'),os.path.join(self.directory,'link')
+            os.symlink('./missing',symlink)
+            self.assertTrue(is_binary(symlink))
 
 @contextmanager
 def bytes_in_file(data):
