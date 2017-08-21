@@ -9,6 +9,7 @@ Main code for checking if a file is binary or text.
 
 import logging
 
+import os
 from .helpers import get_starting_chunk, is_binary_string
 
 
@@ -29,5 +30,13 @@ def is_binary(filename):
             return True
 
     # Check if the starting chunk is a binary string
-    chunk = get_starting_chunk(filename)
-    return is_binary_string(chunk)
+    try:
+        if os.path.islink(filename) and not os.path.exists(filename):
+            return True
+        chunk = get_starting_chunk(filename)
+    except (OSError,IOError,ValueError,TypeError):
+        # rationale here is: we couldn't load the initial bit of content,
+        # so we'll have to treat this file as a binary file
+        return True 
+    else:
+        return is_binary_string(chunk)
