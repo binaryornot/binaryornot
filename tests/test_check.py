@@ -216,7 +216,7 @@ def bytes_in_file(data):
 
 
 class TestDetectionProperties(unittest.TestCase):
-    @given(binary(average_size=512))
+    @given(binary())
     def test_never_crashes(self, data):
         with bytes_in_file(data) as f:
             is_binary(f)
