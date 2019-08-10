@@ -2,10 +2,11 @@
 Credits
 =======
 
-Development Lead
-----------------
+Development Leads
+-----------------
 
 * Audrey Roy Greenfeld (`@audreyr`_)
+* Daniel Roy Greenfeld (`@pydanny`_)
 
 Contributors
 ------------
@@ -13,7 +14,6 @@ Contributors
 * Nick Coghlan (`@ncoghlan`_)
 * Ville Skyttä (`@scop`_)
 * Vincent Bernat (`@vincentbernat`_)
-* Daniel Roy Greenfeld (`@pydanny`_)
 * Philippe Ombredanne (`@pombredanne`_)
 * Aaron Meurer (`@asmeurer`_)
 * David R. MacIver (`@DRMacIver`_)
@@ -21,6 +21,7 @@ Contributors
 * Johannes (`@johtso`_)
 * Luke Hinds (`@lukehinds`_)
 * Oke Agi-Tuedor (@alcuin2)
+* Emmanuel Awotunde (@olaoluwa-98)
 
 .. _`@audreyr`: https://github.com/audreyr
 .. _`@ncoghlan`: https://github.com/ncoghlan
@@ -33,3 +34,4 @@ Contributors
 .. _`@hackebrot`: https://github.com/hackebrot
 .. _`@johtso`: https://github.com/johtso
 .. _`@lukehinds`: https://github.com/lukehinds
+
