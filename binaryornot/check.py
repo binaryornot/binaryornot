@@ -22,7 +22,6 @@ def is_binary(filename):
     :returns: True if it's a binary file, otherwise False.
     """
     logger.debug('is_binary: %(filename)r', locals())
-
     # Check if the file extension is in a list of known binary types
 #     binary_extensions = ['.pyc', ]
 #     for ext in binary_extensions:
@@ -32,6 +31,15 @@ def is_binary(filename):
     # Check if the starting chunk is a binary string
     chunk = get_starting_chunk(filename)
     return is_binary_string(chunk)
+
+def file_type(filename):
+    chunk = get_starting_chunk(filename)
+    image_data = chunk
+    header_byte = image_data[0:3].hex().lower()
+    types = {'474946': 'image/gif', '89504e': 'image/png', 'ffd8ff': 'image/jpeg',
+             '667479':' video/mp4', '494433':'audio/mp3', '4d4d00': 'tiff', '424d00':' bmp',
+             '01da01': 'rgb', 'd0cf11':'file/doc', '255044':'filepdf', '53514c':'file/db'}
+    return types.get(header_byte, "Binary file")
 
 
 def main():
