@@ -23,10 +23,10 @@ def is_binary(filename):
     logger.debug('is_binary: %(filename)r', locals())
 
     # Check if the file extension is in a list of known binary types
-    binary_extensions = ['.pyc', ]
-    for ext in binary_extensions:
-        if filename.endswith(ext):
-            return True
+#     binary_extensions = ['.pyc', ]
+#     for ext in binary_extensions:
+#         if filename.endswith(ext):
+#             return True
 
     # Check if the starting chunk is a binary string
     chunk = get_starting_chunk(filename)
