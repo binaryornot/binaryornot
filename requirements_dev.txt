@@ -4,6 +4,7 @@ flake8
 autopep8
 Sphinx
 coverage
+certifi
 tox
 hypothesis
 argparse

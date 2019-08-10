@@ -11,7 +11,10 @@ Helper utilities used by BinaryOrNot.
 import chardet
 import logging
 import re
+import urllib.request
+from urllib.error import URLError
 
+import certifi
 
 logger = logging.getLogger(__name__)
 
@@ -132,6 +135,7 @@ def is_binary_string(bytes_to_check):
                 return True
         return False
 
+
 def is_url(url):
     schemes = ['http', 'https', 'ftp', 'ftps']
     scheme = url.split('://')[0].lower()
@@ -141,11 +145,22 @@ def is_url(url):
         url = 'http://{}'.format(url)
 
     regex = re.compile(
-        r'^(?:http|ftp)s?://' # http:// or https://
-        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
-        r'localhost|' #localhost...
-        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
-        r'(?::\d+)?' # optional port
+        r'^(?:http|ftp)s?://'  # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+'
+        r'(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
+        r'localhost|'  # localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+        r'(?::\d+)?'  # optional port
         r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
     return re.match(regex, url)
+
+
+def is_binary_url(url):
+    try:
+        with urllib.request.urlopen(url, cafile=certifi.where()) as response:
+            chunk = response.read()
+            return is_binary_string(chunk)
+    except URLError as e:
+        logger.error('Connection Failed: %s.', e)
+        return False

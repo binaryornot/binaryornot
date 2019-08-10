@@ -10,9 +10,9 @@ Main code for checking if a file is binary or text.
 import logging
 import argparse
 
-from binaryornot.helpers import get_starting_chunk, is_binary_string
+from .helpers import (get_starting_chunk, is_binary_string,
+                      is_url, is_binary_url)
 
-import requests
 
 logger = logging.getLogger(__name__)
 
@@ -22,20 +22,19 @@ def is_binary(path):
     :param path: File or Url to check.
     :returns: True if it's a binary file, otherwise False.
     """
-    logger.debug('is_binary: %(path)r', locals())
+    logger.debug("is_binary: %(path)r", locals())
 
     # Check if the file extension is in a list of known binary types
-#     binary_extensions = ['.pyc', ]
-#     for ext in binary_extensions:
-#         if filename.endswith(ext):
-#             return True
+    #     binary_extensions = ['.pyc', ]
+    #     for ext in binary_extensions:
+    #         if filename.endswith(ext):
+    #             return True
 
     url_check = is_url(path)
 
     # get online file content
     if url_check:
-        resp = requests.get(url_check.group(0), verify=False)
-        chunk = resp.content
+        return is_binary_url(url_check.group(0))
     else:
         # Check if the starting chunk is a binary string
         chunk = get_starting_chunk(path)

@@ -59,7 +59,7 @@ class TestIsBinary(unittest.TestCase):
 
     def test_binary_exe2(self):
         self.assertTrue(is_binary('tests/isBinaryFile/grep'))
-    
+
     @expectedFailure
     def test_negative_binary(self):
         self.assertTrue(is_binary('tests/isBinaryFile/this_is_not_a_bin.pyc'))
