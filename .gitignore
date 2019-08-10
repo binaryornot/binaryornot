@@ -37,6 +37,8 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+.vscode
+venv
 
 # Complexity
 output/*.html

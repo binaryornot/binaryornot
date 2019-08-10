@@ -74,3 +74,11 @@ Credits
 
 * Special thanks to Eli Bendersky (@eliben) for his writeup explaining the heuristic and his implementation, which this is largely based on.
 * Source code from the portion of Perl's `pp_fttext` that checks for textiness: https://github.com/Perl/perl5/blob/v5.23.1/pp_sys.c#L3527-L3587
+
+Example Usage
+-------
+```
+from binaryornot.check import is_binary
+is_binary('url')
+is_binary('path_to_file')
+```
