@@ -20,6 +20,7 @@ Contributors
 * Raphael Pierzina (`@hackebrot`_)
 * Johannes (`@johtso`_)
 * Luke Hinds (`@lukehinds`_)
+* Oke Agi-Tuedor (_`@alcuin2`)
 
 .. _`@audreyr`: https://github.com/audreyr
 .. _`@ncoghlan`: https://github.com/ncoghlan
@@ -32,3 +33,4 @@ Contributors
 .. _`@hackebrot`: https://github.com/hackebrot
 .. _`@johtso`: https://github.com/johtso
 .. _`@lukehinds`: https://github.com/lukehinds
+.. _`@alcuin2`: https://github.com/Alcuin2
