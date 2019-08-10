@@ -6,3 +6,4 @@ Sphinx
 coverage
 tox
 hypothesis
+argparse
