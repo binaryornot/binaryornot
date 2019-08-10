@@ -136,7 +136,7 @@ def is_url(url):
     schemes = ['http', 'https', 'ftp', 'ftps']
     scheme = url.split('://')[0].lower()
 
-    # prepend http if scheme has no protocol
+    # check if url has a scheme; if not prepend http
     if scheme not in schemes:
         url = 'http://{}'.format(url)
 
