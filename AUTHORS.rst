@@ -22,6 +22,7 @@ Contributors
 * Luke Hinds (`@lukehinds`_)
 * Oke Agi-Tuedor (@alcuin2)
 * Emmanuel Awotunde (@olaoluwa-98)
+* Oluwole Majiyagbe (@moluwole)
 
 .. _`@audreyr`: https://github.com/audreyr
 .. _`@ncoghlan`: https://github.com/ncoghlan
