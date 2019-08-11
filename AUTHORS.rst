@@ -24,6 +24,7 @@ Contributors
 * Emmanuel Awotunde (@olaoluwa-98)
 * Oluwole Majiyagbe (@moluwole)
 * Petr Viktorin (@encukou)
+* Philippe Ombredanne (@pombredanne)
 
 .. _`@audreyr`: https://github.com/audreyr
 .. _`@ncoghlan`: https://github.com/ncoghlan
