@@ -39,6 +39,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'chardet>=3.0.2',
+        'certifi==2019.6.16'
     ],
     license="BSD",
     zip_safe=False,
