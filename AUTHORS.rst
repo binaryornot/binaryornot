@@ -23,6 +23,7 @@ Contributors
 * Oke Agi-Tuedor (@alcuin2)
 * Emmanuel Awotunde (@olaoluwa-98)
 * Oluwole Majiyagbe (@moluwole)
+* Petr Viktorin (@encukou)
 
 .. _`@audreyr`: https://github.com/audreyr
 .. _`@ncoghlan`: https://github.com/ncoghlan
