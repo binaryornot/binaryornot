@@ -10,7 +10,7 @@ Main code for checking if a file is binary or text.
 import logging
 import argparse
 
-from .helpers import (get_starting_chunk, is_binary_string,
+from binaryornot.helpers import (get_starting_chunk, is_binary_string,
                       is_url, is_binary_url)
 
 
