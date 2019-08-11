@@ -84,6 +84,9 @@ def is_binary_string(bytes_to_check):
     nontext_ratio2 = float(len(high_chars)) / float(len(bytes_to_check))
     logger.debug('nontext_ratio2: %(nontext_ratio2)r', locals())
 
+    if nontext_ratio1 > 0.90 and nontext_ratio2 > 0.90:
+        return True
+
     is_likely_binary = (
         (nontext_ratio1 > 0.3 and nontext_ratio2 < 0.05) or
         (nontext_ratio1 > 0.8 and nontext_ratio2 > 0.8)
