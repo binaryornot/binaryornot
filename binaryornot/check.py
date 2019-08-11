@@ -46,7 +46,7 @@ def main():
                                                  "file passed as argument is "
                                                  "binary or not")
 
-    parser.add_argument("filename", help="File name to check for. If "
+    parser.add_argument("path", help="File name to check for. If "
                                          "the file is not in the same folder, "
                                          "include full path")
 
