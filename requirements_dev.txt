@@ -6,4 +6,4 @@ Sphinx
 coverage
 tox
 hypothesis
-argparse
+argparse==1.4.0
