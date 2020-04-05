@@ -1,7 +1,7 @@
 # The following are for local development
 invoke
 flake8
-autopep8
+autopep8==1.5.1
 Sphinx
 coverage
 tox
