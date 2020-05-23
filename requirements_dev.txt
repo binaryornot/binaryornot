@@ -1,6 +1,6 @@
 # The following are for local development
 invoke
-flake8
+flake8==3.8.2
 autopep8
 Sphinx
 coverage
