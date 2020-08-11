@@ -16,9 +16,10 @@ from binaryornot.helpers import get_starting_chunk, is_binary_string
 logger = logging.getLogger(__name__)
 
 
-def is_binary(filename):
+def is_binary(filename, bytes_to_read=1024):
     """
     :param filename: File to check.
+    :param bytes_to_read: Number of bytes to read from file to perform check.
     :returns: True if it's a binary file, otherwise False.
     """
     logger.debug('is_binary: %(filename)r', locals())
@@ -30,7 +31,7 @@ def is_binary(filename):
 #             return True
 
     # Check if the starting chunk is a binary string
-    chunk = get_starting_chunk(filename)
+    chunk = get_starting_chunk(filename, length=bytes_to_read)
     return is_binary_string(chunk)
 
 
