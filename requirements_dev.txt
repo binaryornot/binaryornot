@@ -2,7 +2,7 @@
 invoke
 flake8
 autopep8
-Sphinx
+Sphinx==3.2.1
 coverage
 tox
 hypothesis
