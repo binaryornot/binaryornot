@@ -1,9 +1,9 @@
 # Config file for automatic testing at travis-ci.org
 sudo: false
 language: python
-arch: 
-      - ppc64le
-      - amd64
+arch: amd64
+      
+      
 matrix:
     include:
       - python: 2.7
