@@ -17,8 +17,8 @@ matrix:
         env: TOX_ENV=py36
       - python: 3.7
         env: TOX_ENV=py37
-      
-script: tox -e $TOX_ENV
+        
+        script: tox -e $TOX_ENV
 
 install:
     - pip install tox
