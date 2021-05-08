@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 def is_binary(filename, err_out=True):
     """
     :param filename: File to check.
+    :param err_out: Enable exception print
     :returns: True if it's a binary file, otherwise False.
     """
     logger.debug('is_binary: %(filename)r', locals())

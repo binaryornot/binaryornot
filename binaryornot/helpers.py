@@ -26,6 +26,7 @@ def get_starting_chunk(filename, length=1024, output=True):
     """
     :param filename: File to open and get the first little chunk of.
     :param length: Number of bytes to read, default 1024.
+    :param output: Enable to print out the IOError
     :returns: Starting chunk of bytes.
     """
     # Ensure we open the file in binary mode
