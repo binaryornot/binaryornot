@@ -4,6 +4,6 @@ flake8
 autopep8
 Sphinx
 coverage
-tox
+tox==3.24.3
 hypothesis
 argparse
