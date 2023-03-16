@@ -3,7 +3,7 @@ invoke
 flake8
 autopep8
 Sphinx
-coverage
+coverage==7.2.2
 tox
 hypothesis
 argparse
