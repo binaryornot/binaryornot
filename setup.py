@@ -40,6 +40,9 @@ setup(
     install_requires=[
         'chardet>=3.0.2',
     ],
+    tests_require=[
+        'hypothesis'
+    ],
     license="BSD",
     zip_safe=False,
     keywords='binaryornot',
