@@ -31,7 +31,7 @@ setup(
     long_description=readme + '\n\n' + history,
     author='Audrey Roy Greenfeld',
     author_email='aroy@alum.mit.edu',
-    url='https://github.com/audreyr/binaryornot',
+    url='https://github.com/binaryornot/binaryornot',
     packages=[
         'binaryornot',
     ],

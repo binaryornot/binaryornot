@@ -10,8 +10,8 @@ BinaryOrNot
     :alt: Documentation Status
 
 
-.. image:: https://pyup.io/repos/github/audreyr/binaryornot/shield.svg
-   :target: https://pyup.io/repos/github/audreyr/binaryornot/
+.. image:: https://pyup.io/repos/github/binaryornot/binaryornot/shield.svg
+   :target: https://pyup.io/repos/github/binaryornot/binaryornot/
    :alt: Updates
 
 Ultra-lightweight pure Python package to guess whether a file is binary or text,
