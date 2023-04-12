@@ -22,10 +22,11 @@ def print_as_hex(s):
     print(":".join("{0:x}".format(ord(c)) for c in s))
 
 
-def get_starting_chunk(filename, length=1024):
+def get_starting_chunk(filename, length=1024, output=True):
     """
     :param filename: File to open and get the first little chunk of.
     :param length: Number of bytes to read, default 1024.
+    :param output: Enable to print out the IOError
     :returns: Starting chunk of bytes.
     """
     # Ensure we open the file in binary mode
@@ -34,7 +35,8 @@ def get_starting_chunk(filename, length=1024):
             chunk = f.read(length)
             return chunk
     except IOError as e:
-        print(e)
+        if output:
+            print(e)
 
 
 _control_chars = b'\n\r\t\f\b'
