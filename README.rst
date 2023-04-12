@@ -13,10 +13,13 @@ BinaryOrNot
     :target: http://binaryornot.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-
 .. image:: https://pyup.io/repos/github/binaryornot/binaryornot/shield.svg
    :target: https://pyup.io/repos/github/binaryornot/binaryornot/
    :alt: Updates
+
+.. image:: https://api.reuse.software/badge/github.com/binaryornot/binaryornot
+   :target: https://api.reuse.software/info/github.com/binaryornot/binaryornot
+   :alt: REUSE Compliance
 
 Ultra-lightweight pure Python package to guess whether a file is binary or text,
 using a heuristic similar to Perl's `pp_fttext` and its analysis by @eliben.
