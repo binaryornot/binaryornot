@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# SPDX-FileCopyrightText: 2023 The binaryornot Authors, see AUTHORS.rst
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 import sys, os
 
 try:

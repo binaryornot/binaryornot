@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+# SPDX-FileCopyrightText: 2023 The binaryornot Authors, see AUTHORS.rst
+#
+# SPDX-License-Identifier: BSD-3-Clause
 #
 # complexity documentation build configuration file, created by
 # sphinx-quickstart on Tue Jul  9 22:26:36 2013.
