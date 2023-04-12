@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# SPDX-FileCopyrightText: 2023 The binaryornot Authors, see AUTHORS.rst
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 import sys, os
 
 try:
@@ -31,7 +35,7 @@ setup(
     long_description=readme + '\n\n' + history,
     author='Audrey Roy Greenfeld',
     author_email='aroy@alum.mit.edu',
-    url='https://github.com/audreyr/binaryornot',
+    url='https://github.com/binaryornot/binaryornot',
     packages=[
         'binaryornot',
     ],
@@ -40,7 +44,7 @@ setup(
     install_requires=[
         'chardet>=3.0.2',
     ],
-    license="BSD",
+    license="BSD-3-Clause",
     zip_safe=False,
     keywords='binaryornot',
     classifiers=[

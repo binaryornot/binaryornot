@@ -1,3 +1,6 @@
+:: SPDX-FileCopyrightText: 2023 The binaryornot Authors, see AUTHORS.rst
+:: SPDX-License-Identifier: BSD-3-Clause
+::
 :: To build extensions for 64 bit Python 3, we need to configure environment
 :: variables to use the MSVC 2010 C++ compilers from GRMSDKX_EN_DVD.iso of:
 :: MS Windows SDK for Windows 7 and .NET Framework 4

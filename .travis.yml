@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023 The binaryornot Authors, see AUTHORS.rst
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 # Config file for automatic testing at travis-ci.org
 
 sudo: false

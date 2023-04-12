@@ -1,9 +1,13 @@
+.. SPDX-FileCopyrightText: 2023 The binaryornot Authors, see AUTHORS.rst
+..
+.. SPDX-License-Identifier: BSD-3-Clause
+
 ============
 Contributing
 ============
 
 Contributions are welcome, and they are greatly appreciated! Every
-little bit helps, and credit will always be given. 
+little bit helps, and credit will always be given.
 
 You can contribute in many ways:
 
@@ -13,7 +17,7 @@ Types of Contributions
 Report Bugs
 ~~~~~~~~~~~
 
-Report bugs at https://github.com/audreyr/binaryornot/issues.
+Report bugs at https://github.com/binaryornot/binaryornot/issues.
 
 If you are reporting a bug, please include:
 
@@ -36,7 +40,7 @@ is open to whoever wants to implement it.
 Write Documentation
 ~~~~~~~~~~~~~~~~~~~
 
-BinaryOrNot could always use more documentation, whether as part of the 
+BinaryOrNot could always use more documentation, whether as part of the
 official BinaryOrNot docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
@@ -81,15 +85,17 @@ tests, including testing other Python versions with tox::
 	$ python setup.py test
     $ tox
 
-To get flake8 and tox, just pip install them into your virtualenv. 
+To get flake8 and tox, just pip install them into your virtualenv.
 
-6. Commit your changes and push your branch to GitHub::
+6. You are welcome to add yourself to the AUTHORS.rst file
+
+7. Commit your changes and push your branch to GitHub::
 
     $ git add .
     $ git commit -m "Your detailed description of your changes."
     $ git push origin name-of-your-bugfix-or-feature
 
-7. Submit a pull request through the GitHub website.
+8. Submit a pull request through the GitHub website.
 
 Pull Request Guidelines
 -----------------------
@@ -100,9 +106,11 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.rst.
-3. The pull request should work for Python 2.6, 2.7, and 3.7, and for PyPy. Check 
+3. The pull request should work for Python 2.6, 2.7, and 3.7, and for PyPy. Check
    https://travis-ci.org/audreyr/binaryornot/pull_requests
    and make sure that the tests pass for all supported Python versions.
+4. You agree to put your contribution under the BSD-3-Clause license and confirm
+   that you have the right to do so.
 
 Tips
 ----

@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2023 The binaryornot Authors, see AUTHORS.rst
+..
+.. SPDX-License-Identifier: BSD-3-Clause
+
 =============================
 BinaryOrNot
 =============================
@@ -9,15 +13,18 @@ BinaryOrNot
     :target: http://binaryornot.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-
-.. image:: https://pyup.io/repos/github/audreyr/binaryornot/shield.svg
-   :target: https://pyup.io/repos/github/audreyr/binaryornot/
+.. image:: https://pyup.io/repos/github/binaryornot/binaryornot/shield.svg
+   :target: https://pyup.io/repos/github/binaryornot/binaryornot/
    :alt: Updates
+
+.. image:: https://api.reuse.software/badge/github.com/binaryornot/binaryornot
+   :target: https://api.reuse.software/info/github.com/binaryornot/binaryornot
+   :alt: REUSE Compliance
 
 Ultra-lightweight pure Python package to guess whether a file is binary or text,
 using a heuristic similar to Perl's `pp_fttext` and its analysis by @eliben.
 
-* Free software: BSD license
+* Free software: BSD 3 Clause license (BSD-3-Clause)
 * Documentation: https://binaryornot.readthedocs.io
 
 Status
@@ -74,9 +81,11 @@ Credits
 
 * Special thanks to Eli Bendersky (@eliben) for his writeup explaining the heuristic and his implementation, which this is largely based on.
 * Source code from the portion of Perl's `pp_fttext` that checks for textiness: https://github.com/Perl/perl5/blob/v5.23.1/pp_sys.c#L3527-L3587
+* Many test files have been borrowed from Garen Torikian's `isBinaryFile`: https://github.com/gjtorikian/isBinaryFile
 
 
 Creator
 -------
 
 This project was created by `Audrey Roy Greenfeld <https://github.com/audreyfeldroy>`_.
+Please find all contributors in `AUTHORS.rst <AUTHORS.rst>`_.

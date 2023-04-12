@@ -1,0 +1,16 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: binaryornot
+Upstream-Contact: Philippe Ombredanne <https://github.com/pombredanne>
+Source: https://github.com/binaryornot/binaryornot
+
+# Many test files borrowed from
+# https://github.com/gjtorikian/isBinaryFile/tree/main/test/fixtures
+# Some in this folder are from a different copyright holder. These are described
+# separatedly
+Files: tests/isBinaryFile/*
+Copyright: 2015 Garen Torikian
+License: MIT
+
+Files: tests/files/*
+Copyright: 2015 The binaryornot Authors, see AUTHORS.rst
+License: BSD-3-Clause

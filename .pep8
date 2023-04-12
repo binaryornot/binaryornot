@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023 The binaryornot Authors, see AUTHORS.rst
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 [pep8]
 max-line-length = 120
 exclude=docs/, .tox/, .hypothesis/

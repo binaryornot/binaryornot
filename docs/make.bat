@@ -1,3 +1,7 @@
+REM SPDX-FileCopyrightText: 2023 The binaryornot Authors, see AUTHORS.rst
+REM
+REM SPDX-License-Identifier: BSD-3-Clause
+
 @ECHO OFF
 
 REM Command file for Sphinx documentation
