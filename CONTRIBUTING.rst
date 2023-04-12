@@ -87,13 +87,15 @@ tests, including testing other Python versions with tox::
 
 To get flake8 and tox, just pip install them into your virtualenv.
 
-6. Commit your changes and push your branch to GitHub::
+6. You are welcome to add yourself to the AUTHORS.rst file
+
+7. Commit your changes and push your branch to GitHub::
 
     $ git add .
     $ git commit -m "Your detailed description of your changes."
     $ git push origin name-of-your-bugfix-or-feature
 
-7. Submit a pull request through the GitHub website.
+8. Submit a pull request through the GitHub website.
 
 Pull Request Guidelines
 -----------------------
@@ -107,6 +109,8 @@ Before you submit a pull request, check that it meets these guidelines:
 3. The pull request should work for Python 2.6, 2.7, and 3.7, and for PyPy. Check
    https://travis-ci.org/audreyr/binaryornot/pull_requests
    and make sure that the tests pass for all supported Python versions.
+4. You agree to put your contribution under the BSD-3-Clause license and confirm
+   that you have the right to do so.
 
 Tips
 ----
