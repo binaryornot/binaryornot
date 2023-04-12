@@ -40,7 +40,7 @@ setup(
     install_requires=[
         'chardet>=3.0.2',
     ],
-    license="BSD",
+    license="BSD-3-Clause",
     zip_safe=False,
     keywords='binaryornot',
     classifiers=[

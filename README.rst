@@ -17,7 +17,7 @@ BinaryOrNot
 Ultra-lightweight pure Python package to guess whether a file is binary or text,
 using a heuristic similar to Perl's `pp_fttext` and its analysis by @eliben.
 
-* Free software: BSD license
+* Free software: BSD 3 Clause license (BSD-3-Clause)
 * Documentation: https://binaryornot.readthedocs.io
 
 Status
