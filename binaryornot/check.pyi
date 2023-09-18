@@ -1,0 +1,3 @@
+from os import PathLike
+
+def is_binary(filename: str | bytes | PathLike) -> bool: ...
