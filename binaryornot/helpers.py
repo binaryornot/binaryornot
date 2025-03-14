@@ -34,7 +34,7 @@ def get_starting_chunk(filename, length=1024):
             chunk = f.read(length)
             return chunk
     except IOError as e:
-        print(e)
+        logger.exception('Failed to read the starting chunk from file: %s', filename)
 
 
 _control_chars = b'\n\r\t\f\b'
