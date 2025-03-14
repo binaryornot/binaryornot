@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# SPDX-FileCopyrightText: 2023 The binaryornot Authors, see AUTHORS.rst
+#
+# SPDX-License-Identifier: BSD-3-Clause
 
 """
 test_binaryornot
@@ -59,7 +62,7 @@ class TestIsBinary(unittest.TestCase):
 
     def test_binary_exe2(self):
         self.assertTrue(is_binary('tests/isBinaryFile/grep'))
-    
+
     @expectedFailure
     def test_negative_binary(self):
         self.assertTrue(is_binary('tests/isBinaryFile/this_is_not_a_bin.pyc'))
