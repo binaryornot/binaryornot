@@ -43,7 +43,6 @@ class TestIsBinary(unittest.TestCase):
     def test_txt_unicode(self):
         self.assertFalse(is_binary("tests/files/unicode.txt"))
 
-    @expectedFailure
     def test_binary_pdf2(self):
         self.assertTrue(is_binary("tests/isBinaryFile/pdf.pdf"))
 

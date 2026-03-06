@@ -25,9 +25,7 @@ classifiers = [
     "Typing :: Typed",
 ]
 license = {text = "MIT"}
-dependencies = [
-  "chardet>=3.0.2,<6",
-]
+dependencies = []
 requires-python = ">= 3.12"
 
 [dependency-groups]
