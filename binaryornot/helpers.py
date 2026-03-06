@@ -8,7 +8,7 @@ binaryornot.helpers
 Helper utilities used by BinaryOrNot.
 """
 
-import chardet
+from charset_normalizer import detect as chardet_detect
 import logging
 
 
@@ -93,13 +93,21 @@ def is_binary_string(bytes_to_check):
     )
     logger.debug('is_likely_binary: %(is_likely_binary)r', locals())
 
-    # then check for binary for possible encoding detection with chardet
-    detected_encoding = chardet.detect(bytes_to_check)
+    # If heuristics strongly suggest binary, trust them. charset-normalizer
+    # is more aggressive than chardet at finding encodings for arbitrary byte
+    # sequences (any single-byte encoding can decode anything), so we don't
+    # let encoding detection override a strong binary signal.
+    if is_likely_binary:
+        return True
+
+    # For files that don't look obviously binary, check encoding detection
+    # to avoid false positives on non-Latin text files (CJK, Cyrillic, etc.)
+    detected_encoding = chardet_detect(bytes_to_check)
     logger.debug('detected_encoding: %(detected_encoding)r', locals())
 
-    # finally use all the check to decide binary or text
     decodable_as_unicode = False
-    if (detected_encoding['confidence'] > 0.9 and
+    if (detected_encoding['confidence'] is not None and
+            detected_encoding['confidence'] > 0.9 and
             detected_encoding['encoding'] != 'ascii'):
         try:
             try:
@@ -117,19 +125,10 @@ def is_binary_string(bytes_to_check):
             logger.debug('failure: decodable_as_unicode: '
                          '%(decodable_as_unicode)r', locals())
 
-    logger.debug('failure: decodable_as_unicode: '
-                 '%(decodable_as_unicode)r', locals())
-    if is_likely_binary:
-        if decodable_as_unicode:
-            return False
-        else:
-            return True
-    else:
-        if decodable_as_unicode:
-            return False
-        else:
-            if b'\x00' in bytes_to_check or b'\xff' in bytes_to_check:
-                # Check for NULL bytes last
-                logger.debug('has nulls:' + repr(b'\x00' in bytes_to_check))
-                return True
+    logger.debug('decodable_as_unicode: %(decodable_as_unicode)r', locals())
+    if decodable_as_unicode:
         return False
+    if b'\x00' in bytes_to_check or b'\xff' in bytes_to_check:
+        logger.debug('has nulls:' + repr(b'\x00' in bytes_to_check))
+        return True
+    return False
