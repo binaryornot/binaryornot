@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 test_binaryornot
@@ -9,14 +8,9 @@ Tests for `binaryornot` module.
 """
 
 import logging
-try:
-    from unittest.case import expectedFailure
-    import unittest
-except ImportError:
-    from unittest2.case import expectedFailure
-    import unittest2 as unittest
-
 import os
+import unittest
+from unittest.case import expectedFailure
 from contextlib import contextmanager
 from tempfile import mkstemp
 
