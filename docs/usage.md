@@ -30,13 +30,20 @@ Run `binaryornot --help` for usage details.
 
 ## How it works
 
-BinaryOrNot uses a heuristic similar to Perl's `pp_fttext`, based on [Eli Bendersky's translation to Python](http://eli.thegreenplace.net/2011/10/19/perls-guess-if-file-is-text-or-binary-implemented-in-python/). The detection runs in three stages:
+BinaryOrNot reads the first 1024 bytes of a file and classifies them as binary or text using a trained decision tree. The tree operates on 18 features computed from the byte chunk:
 
-1. **Byte ratio analysis**: checks the ratio of ASCII control characters and high-ASCII characters in the first 1024 bytes. Files that are overwhelmingly control characters are binary. Files with a high ratio of control characters and very few high-ASCII characters are flagged as "likely binary."
+- **Byte class ratios**: null bytes, control characters, printable ASCII, high bytes (0x80-0xFF)
+- **Encoding validity**: whether the chunk decodes as UTF-8, UTF-16-LE/BE, or UTF-32-LE/BE
+- **Positional null ratios**: fraction of even-index and odd-index bytes that are 0x00 (detects BOM-less UTF-16)
+- **BOM flags**: presence of UTF-8, UTF-16, or UTF-32 byte order marks
+- **Shannon entropy**: byte distribution randomness (structured text vs random binary)
+- **Longest printable run**: longest streak of printable ASCII + whitespace relative to chunk length
 
-2. **Charset detection**: runs [chardet](https://github.com/chardet/chardet) on the chunk. If chardet identifies an encoding with >90% confidence (and it's not plain ASCII), the chunk is decoded to verify.
+The decision tree was trained on Hypothesis-generated data (Unicode text encoded via Python's stdlib codecs, plus synthetic binary patterns) and the project's own test files. The training script lives in `scripts/train_detector.py` and can be re-run to retrain the model.
 
-3. **Final decision**: combines the byte ratio flag with the charset detection result. Files flagged as likely binary that can't be decoded as Unicode are binary. Files not flagged as likely binary but containing null bytes (`\x00`) or `\xff` are binary. Everything else is text.
+## Encoding coverage
+
+BinaryOrNot ships an encoding coverage matrix at `binaryornot/data/encodings.csv` that lists every encoding family, whether the detection covers it, known gaps, and sample text for testing. The test suite reads this CSV to verify coverage claims: each encoding marked "covered" becomes a passing test, each "gap" becomes an expected failure. When someone improves the model and a gap starts passing, the test tells them to update the CSV.
 
 ## Tested file types
 

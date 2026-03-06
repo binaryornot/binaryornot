@@ -1,6 +1,6 @@
 # BinaryOrNot
 
-Python library and CLI tool to check if a file is binary or text. Byte ratio analysis + chardet go into the decision matrix.
+Python library and CLI tool to check if a file is binary or text. Zero dependencies.
 
 ```python
 from binaryornot.check import is_binary
@@ -30,7 +30,7 @@ That's the first thing everyone tries. It works until it doesn't:
 - A Big5 or GB2312 text file has high-ASCII bytes everywhere. Looks binary by byte ratios alone.
 - A font file (.woff, .eot) is clearly binary but might not have null bytes in the first chunk.
 
-BinaryOrNot reads the first 1024 bytes and computes two ratios: ASCII control characters vs. printable, and high-ASCII vs. everything else. Then [chardet](https://github.com/chardet/chardet) tries to identify the encoding. If chardet says "this is Big5 with 99% confidence" and the bytes actually decode, it's text, regardless of what the byte ratios suggest.
+BinaryOrNot reads the first 1024 bytes and classifies them with a trained decision tree. The tree operates on 18 features: byte class ratios, Shannon entropy, encoding validity checks (UTF-8, UTF-16, UTF-32), BOM detection, and longest printable run. It handles all the edge cases above correctly, with zero dependencies.
 
 Tested against real files across UTF-8, UTF-16, UTF-32, GB2312, Big5, EUC-KR, Latin-1, Shift-JIS, plus images, fonts, compiled bytecode, SQLite databases, and executables. Fuzz-tested with [Hypothesis](https://hypothesis.readthedocs.io/).
 
@@ -53,7 +53,7 @@ is_binary_string(b"\x00\x01\x02")  # True
 is_binary_string(b"hello world")   # False
 ```
 
-[Full documentation](https://binaryornot.github.io/binaryornot/) covers the three-stage detection algorithm in detail.
+[Full documentation](https://binaryornot.github.io/binaryornot/) covers the detection algorithm in detail.
 
 ## Credits
 
