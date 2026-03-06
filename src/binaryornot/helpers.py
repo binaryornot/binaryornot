@@ -99,11 +99,7 @@ def _compute_features(chunk):
 
     bom_utf32le = 1.0 if chunk[:4] == b"\xff\xfe\x00\x00" else 0.0
     bom_utf32be = 1.0 if chunk[:4] == b"\x00\x00\xfe\xff" else 0.0
-    bom_utf16le = (
-        1.0
-        if chunk[:2] == b"\xff\xfe" and chunk[:4] != b"\xff\xfe\x00\x00"
-        else 0.0
-    )
+    bom_utf16le = 1.0 if chunk[:2] == b"\xff\xfe" and chunk[:4] != b"\xff\xfe\x00\x00" else 0.0
     bom_utf16be = 1.0 if chunk[:2] == b"\xfe\xff" else 0.0
     bom_utf8 = 1.0 if chunk[:3] == b"\xef\xbb\xbf" else 0.0
 
@@ -159,12 +155,29 @@ def _compute_features(chunk):
     try_euc_kr = _try_decode("euc-kr") if n >= 10 else 0.0
 
     return [
-        null_ratio, control_ratio, printable_ascii_ratio, high_byte_ratio,
-        utf8_valid, even_null_ratio, odd_null_ratio, entropy,
-        bom_utf32le, bom_utf32be, bom_utf16le, bom_utf16be, bom_utf8,
-        try_utf16le, try_utf16be, try_utf32le, try_utf32be,
+        null_ratio,
+        control_ratio,
+        printable_ascii_ratio,
+        high_byte_ratio,
+        utf8_valid,
+        even_null_ratio,
+        odd_null_ratio,
+        entropy,
+        bom_utf32le,
+        bom_utf32be,
+        bom_utf16le,
+        bom_utf16be,
+        bom_utf8,
+        try_utf16le,
+        try_utf16be,
+        try_utf32le,
+        try_utf32be,
         longest_printable_run,
-        try_gb2312, try_big5, try_shift_jis, try_euc_jp, try_euc_kr,
+        try_gb2312,
+        try_big5,
+        try_shift_jis,
+        try_euc_jp,
+        try_euc_kr,
     ]
 
 
@@ -183,11 +196,38 @@ def is_binary_string(bytes_to_check):
 
     features = _compute_features(bytes_to_check)
     result = _is_binary_by_features(features)
-    logger.debug("is_binary_string: %r (features=%r)", result, dict(zip(
-        ["null", "ctrl", "ascii", "high", "utf8", "even0", "odd0", "entropy",
-         "bom32le", "bom32be", "bom16le", "bom16be", "bom8",
-         "try16le", "try16be", "try32le", "try32be", "run",
-         "gb2312", "big5", "shiftjis", "eucjp", "euckr"],
-        [f"{v:.3f}" for v in features],
-    )))
+    logger.debug(
+        "is_binary_string: %r (features=%r)",
+        result,
+        dict(
+            zip(
+                [
+                    "null",
+                    "ctrl",
+                    "ascii",
+                    "high",
+                    "utf8",
+                    "even0",
+                    "odd0",
+                    "entropy",
+                    "bom32le",
+                    "bom32be",
+                    "bom16le",
+                    "bom16be",
+                    "bom8",
+                    "try16le",
+                    "try16be",
+                    "try32le",
+                    "try32be",
+                    "run",
+                    "gb2312",
+                    "big5",
+                    "shiftjis",
+                    "eucjp",
+                    "euckr",
+                ],
+                [f"{v:.3f}" for v in features],
+            )
+        ),
+    )
     return result

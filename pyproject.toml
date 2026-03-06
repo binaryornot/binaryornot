@@ -64,10 +64,8 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 norecursedirs = ["tests/isBinaryFile"]
 
-[tool.ty]
-# All rules are enabled as "error" by default; no need to specify unless overriding.
-# Example override: relax a rule for the entire project (uncomment if needed).
-# rules.TY015 = "warn"  # For invalid-argument-type, warn instead of error.
+[tool.ty.src]
+exclude = ["scripts/"]
 
 [tool.ruff]
 line-length = 120

@@ -26,12 +26,29 @@ from sklearn.tree import DecisionTreeClassifier, export_text
 from binaryornot.helpers import _compute_features
 
 FEATURE_NAMES = [
-    "null_ratio", "control_ratio", "printable_ascii_ratio", "high_byte_ratio",
-    "utf8_valid", "even_null_ratio", "odd_null_ratio", "byte_entropy",
-    "bom_utf32le", "bom_utf32be", "bom_utf16le", "bom_utf16be", "bom_utf8",
-    "try_utf16le", "try_utf16be", "try_utf32le", "try_utf32be",
+    "null_ratio",
+    "control_ratio",
+    "printable_ascii_ratio",
+    "high_byte_ratio",
+    "utf8_valid",
+    "even_null_ratio",
+    "odd_null_ratio",
+    "byte_entropy",
+    "bom_utf32le",
+    "bom_utf32be",
+    "bom_utf16le",
+    "bom_utf16be",
+    "bom_utf8",
+    "try_utf16le",
+    "try_utf16be",
+    "try_utf32le",
+    "try_utf32be",
     "longest_printable_run",
-    "try_gb2312", "try_big5", "try_shift_jis", "try_euc_jp", "try_euc_kr",
+    "try_gb2312",
+    "try_big5",
+    "try_shift_jis",
+    "try_euc_jp",
+    "try_euc_kr",
 ]
 
 
@@ -66,20 +83,37 @@ TEXT_ENCODINGS = _load_encodings_from_csv()
 
 # Well-known file format magic bytes (from public format specifications)
 BINARY_HEADERS = [
-    b"\x89PNG\r\n\x1a\n", b"\xff\xd8\xff\xe0", b"\xff\xd8\xff\xe1",
-    b"GIF87a", b"GIF89a", b"%PDF-1.", b"PK\x03\x04",
-    b"\x1f\x8b\x08", b"\xfd7zXZ\x00", b"\x7fELF",
-    b"\xfe\xed\xfa\xce", b"\xfe\xed\xfa\xcf",
-    b"\xce\xfa\xed\xfe", b"\xcf\xfa\xed\xfe",
-    b"MZ", b"\xca\xfe\xba\xbe", b"SQLite format 3\x00",
-    b"RIFF", b"\x00\x00\x01\x00", b"OggS", b"fLaC", b"\x00asm",
+    b"\x89PNG\r\n\x1a\n",
+    b"\xff\xd8\xff\xe0",
+    b"\xff\xd8\xff\xe1",
+    b"GIF87a",
+    b"GIF89a",
+    b"%PDF-1.",
+    b"PK\x03\x04",
+    b"\x1f\x8b\x08",
+    b"\xfd7zXZ\x00",
+    b"\x7fELF",
+    b"\xfe\xed\xfa\xce",
+    b"\xfe\xed\xfa\xcf",
+    b"\xce\xfa\xed\xfe",
+    b"\xcf\xfa\xed\xfe",
+    b"MZ",
+    b"\xca\xfe\xba\xbe",
+    b"SQLite format 3\x00",
+    b"RIFF",
+    b"\x00\x00\x01\x00",
+    b"OggS",
+    b"fLaC",
+    b"\x00asm",
 ]
 
 
 # --- Hypothesis strategies ---
 
+
 def encoded_text_strategy(min_size=5, max_size=512):
     """Strategy: generate Unicode text, encode it in a random encoding."""
+
     @st.composite
     def strat(draw):
         t = draw(st.text(min_size=min_size, max_size=max_size))
@@ -90,6 +124,7 @@ def encoded_text_strategy(min_size=5, max_size=512):
             assume(False)
         assume(len(chunk) >= 4)
         return chunk
+
     return strat()
 
 
@@ -100,11 +135,13 @@ def binary_random_strategy():
 
 def binary_with_header_strategy():
     """Strategy: known file format header + random padding."""
+
     @st.composite
     def strat(draw):
         header = draw(st.sampled_from(BINARY_HEADERS))
         padding = draw(st.binary(min_size=20, max_size=500))
         return (header + padding)[:1024]
+
     return strat()
 
 
@@ -117,41 +154,41 @@ def binary_control_chars_strategy():
 
 def binary_scattered_nulls_strategy():
     """Strategy: random bytes with null bytes injected."""
+
     @st.composite
     def strat(draw):
         data = bytearray(draw(st.binary(min_size=50, max_size=1024)))
         n = len(data)
         null_count = draw(st.integers(min_value=n // 20, max_value=n // 5))
-        positions = draw(
-            st.lists(st.integers(min_value=0, max_value=n - 1),
-                     min_size=null_count, max_size=null_count)
-        )
+        positions = draw(st.lists(st.integers(min_value=0, max_value=n - 1), min_size=null_count, max_size=null_count))
         for pos in positions:
             data[pos] = 0
         return bytes(data)
+
     return strat()
 
 
 def binary_high_bytes_strategy():
     """Strategy: bytes only in the 0x80-0xFF range."""
-    return st.binary(min_size=10, max_size=500).map(
-        lambda b: bytes((x % 128) + 128 for x in b)
-    )
+    return st.binary(min_size=10, max_size=500).map(lambda b: bytes((x % 128) + 128 for x in b))
 
 
 def binary_pyc_strategy():
     """Strategy: simulated .pyc file (magic + random)."""
+
     @st.composite
     def strat(draw):
         magic_val = draw(st.integers(min_value=0x0A0D, max_value=0x0FFF))
         magic = struct.pack("<H", magic_val) + b"\r\n"
         rest = draw(st.binary(min_size=50, max_size=500))
         return (magic + rest)[:1024]
+
     return strat()
 
 
 def binary_mixed_printable_strategy():
     """Strategy: alternating ASCII text and binary segments."""
+
     @st.composite
     def strat(draw):
         n_parts = draw(st.integers(min_value=3, max_value=8))
@@ -159,8 +196,7 @@ def binary_mixed_printable_strategy():
         for _ in range(n_parts):
             if draw(st.booleans()):
                 word = draw(st.binary(min_size=3, max_size=20)).translate(
-                    bytes(range(256)),
-                    bytes(0 for _ in range(256))
+                    bytes(range(256)), bytes(0 for _ in range(256))
                 )
                 # Map to printable ASCII range
                 parts.append(bytes((b % 95) + 32 for b in draw(st.binary(min_size=3, max_size=20))))
@@ -169,6 +205,7 @@ def binary_mixed_printable_strategy():
         chunk = b"".join(parts)[:1024]
         assume(len(chunk) >= 10)
         return chunk
+
     return strat()
 
 
@@ -230,18 +267,13 @@ def generate_binary_samples() -> list[tuple[bytes, int]]:
 # ---------------------------------------------------------------------------
 
 
-TREE_MODULE_PATH = os.path.join(
-    os.path.dirname(__file__), "..", "src", "binaryornot", "tree.py"
-)
+TREE_MODULE_PATH = os.path.join(os.path.dirname(__file__), "..", "src", "binaryornot", "tree.py")
 
 
 def export_tree_as_python(tree, feature_names, indent="    ", start_depth=0):
     """Export a fitted DecisionTreeClassifier as Python if/else code."""
     tree_ = tree.tree_
-    feature_name = [
-        feature_names[i] if i >= 0 else "undefined"
-        for i in tree_.feature
-    ]
+    feature_name = [feature_names[i] if i >= 0 else "undefined" for i in tree_.feature]
 
     lines = []
 

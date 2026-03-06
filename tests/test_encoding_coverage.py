@@ -47,6 +47,4 @@ def test_encoding_detected_as_text(row):
     if status == "gap":
         pytest.xfail(f"Known gap: {row['gap_reason']}")
 
-    assert is_binary_string(chunk) is False, (
-        f"Text encoded as {encoding} was misclassified as binary"
-    )
+    assert is_binary_string(chunk) is False, f"Text encoded as {encoding} was misclassified as binary"
