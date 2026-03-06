@@ -1,0 +1,116 @@
+# Justfile for binaryornot
+
+# Show available commands
+list:
+    @just --list
+
+alias b := build
+alias c := clean
+alias d := docs-serve
+alias t := test
+alias tc := type-check
+
+# Type check the project with ty
+type-check:
+    uv run --python=3.13 ty check .
+
+# Type check with concise output (one diagnostic per line)
+type-check-concise:
+    uv run --python=3.13 ty check --output-format=concise .
+
+# Type check in watch mode (rechecks on file changes)
+type-check-watch:
+    uv run --python=3.13 ty check --watch .
+
+# Run all the formatting, linting, and testing commands
+qa:
+    uv run --python=3.13 ruff format .
+    uv run --python=3.13 ruff check . --fix
+    uv run --python=3.13 ruff check --select I --fix .
+    uv run --python=3.13 ty check --output-format=concise .
+    uv run --python=3.13 pytest .
+
+# Run all the tests for all the supported Python versions
+testall:
+    uv run --python=3.12 pytest
+    uv run --python=3.13 pytest
+    uv run --python=3.14 pytest
+
+# Run all the tests, but allow for arguments to be passed
+test *ARGS:
+    @echo "Running with arg: {{ARGS}}"
+    uv run --python=3.13 pytest {{ARGS}}
+
+# Run all the tests, but on failure, drop into the debugger
+pdb *ARGS:
+    @echo "Running with arg: {{ARGS}}"
+    uv run --python=3.13 pytest --pdb --maxfail=10 {{ARGS}}
+
+# Run tests with coverage across all supported Python versions
+coverage:
+    uv run --python=3.12 coverage run -m pytest
+    uv run --python=3.13 coverage run -m pytest
+    uv run --python=3.14 coverage run -m pytest
+    uv run --python=3.13 coverage combine
+    uv run --python=3.13 coverage report
+    uv run --python=3.13 coverage html
+
+# Serve docs locally with live reload
+docs-serve:
+    -lsof -ti :8000 | xargs kill
+    uv run --group docs zensical serve
+
+# Build docs (strict mode, fails on warnings)
+docs-build:
+    uv run --group docs zensical build --clean
+
+# Build the project, useful for checking that packaging is correct
+build:
+    rm -rf build
+    rm -rf dist
+    uv build
+
+VERSION := `uv version`
+
+# Print the current version of the project
+version:
+    @echo "Current version: {{VERSION}}"
+
+# Tag the current version in git and put to github
+tag:
+    echo "Tagging version v{{VERSION}}"
+    git tag -a v{{VERSION}} -m "Creating version v{{VERSION}}"
+    git push origin v{{VERSION}}
+
+# Remove all build, test, coverage and Python artifacts
+clean:
+	clean-build
+	clean-pyc
+	clean-test
+
+# Remove build artifacts
+clean-build:
+	rm -fr build/
+	rm -fr dist/
+	rm -fr .eggs/
+	find . -name '*.egg-info' -exec rm -fr {} +
+	find . -name '*.egg' -exec rm -f {} +
+
+# Remove Python file artifacts
+clean-pyc:
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
+
+# Remove test and coverage artifacts
+clean-test:
+	rm -f .coverage
+	rm -f .coverage.*
+	rm -fr htmlcov/
+	rm -fr .pytest_cache
+
+# Publish to PyPI (manual alternative to GitHub Actions)
+publish:
+    uv build
+    uv publish
