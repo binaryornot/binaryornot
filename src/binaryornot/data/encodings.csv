@@ -34,8 +34,8 @@ big5,cjk_legacy,gap,20,"你好世界。歡迎來到這裡。請檢查結果。",
 shift_jis,cjk_legacy,gap,20,"こんにちは世界。日本語のテストです。",Short pure-CJK chunks indistinguishable from random high bytes
 euc-jp,cjk_legacy,gap,20,"こんにちは世界。日本語のテストです。",Short pure-CJK chunks indistinguishable from random high bytes
 euc-kr,cjk_legacy,gap,20,"안녕하세요 세계에 오신 것을 환영합니다.",Short pure-CJK chunks indistinguishable from random high bytes
-iso-2022-jp,iso2022,gap,10,"Hello World, this is a test.",0x1B escape bytes inflate control_ratio
-iso-2022-kr,iso2022,gap,10,"Hello World, this is a test.",0x1B escape bytes inflate control_ratio
+iso-2022-jp,iso2022,covered,10,"こんにちは世界。日本語のテストです。",
+iso-2022-kr,iso2022,gap,10,"안녕하세요 세계에 오신 것을 환영합니다.",SO/SI control bytes around each word inflate control_ratio to 20%
 hz,cjk_escape,covered,4,"Hello World, this is a test.",
 cp037,ebcdic,gap,1,"Hello World, this is a test.",Completely different byte mapping from ASCII
 cp500,ebcdic,gap,1,"Hello World, this is a test.",Completely different byte mapping from ASCII
