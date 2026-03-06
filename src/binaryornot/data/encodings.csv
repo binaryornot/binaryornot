@@ -1,0 +1,42 @@
+encoding,family,status,min_bytes,sample_text,gap_reason
+utf-8,unicode,covered,1,"Héllo wörld, café, naïve, résumé.",
+utf-16,unicode_bom,covered,2,"Héllo wörld, café, naïve, résumé.",
+utf-16-le,unicode,covered,8,"Héllo wörld, café, naïve, résumé.",
+utf-16-be,unicode,covered,8,"Héllo wörld, café, naïve, résumé.",
+utf-32,unicode_bom,covered,4,"Héllo wörld, café, naïve, résumé.",
+utf-32-le,unicode,covered,16,"Héllo wörld, café, naïve, résumé.",
+utf-32-be,unicode,covered,16,"Héllo wörld, café, naïve, résumé.",
+utf-7,unicode,covered,1,"Hello, world! This is a test of detection.",
+ascii,single_byte,covered,1,"Hello, world! This is a test of detection.",
+iso-8859-1,single_byte,covered,4,"Héllo wörld, café, naïve, résumé, Straße.",
+iso-8859-2,single_byte,covered,4,"Příliš žluťoučký kůň úpěl ďábelské ódy.",
+iso-8859-5,single_byte,covered,4,"Съешь же ещё этих мягких французских булок.",
+iso-8859-6,single_byte,covered,4,"هذا نص تجريبي باللغة العربية.",
+iso-8859-7,single_byte,covered,4,"Αυτό είναι ένα δοκιμαστικό κείμενο.",
+iso-8859-15,single_byte,covered,4,"Héllo wörld, café, naïve, résumé, Straße.",
+windows-1250,single_byte,covered,4,"Příliš žluťoučký kůň úpěl ďábelské ódy.",
+windows-1251,single_byte,covered,4,"Съешь же ещё этих мягких французских булок.",
+windows-1252,single_byte,covered,4,"Héllo wörld, café, naïve, résumé, Straße.",
+windows-1253,single_byte,covered,4,"Αυτό είναι ένα δοκιμαστικό κείμενο.",
+windows-1256,single_byte,covered,4,"هذا نص تجريبي باللغة العربية.",
+koi8-r,single_byte,covered,4,"Съешь же ещё этих мягких французских булок.",
+cp866,single_byte,covered,4,"Съешь же ещё этих мягких французских булок.",
+cp850,single_byte,covered,4,"Héllo wörld, café, naïve, résumé.",
+cp437,single_byte,covered,4,"Héllo wörld, café, naïve, résumé.",
+tis-620,single_byte,covered,4,"สวัสดีครับ นี่คือข้อความทดสอบภาษาไทย.",
+cp1258,single_byte,covered,4,"Héllo wörld, café, résumé.",
+mac-roman,single_byte,covered,4,"Héllo wörld, café, naïve, résumé, Straße.",
+mac-cyrillic,single_byte,covered,4,"Съешь же ещё этих мягких французских булок.",
+gb2312,cjk_legacy,gap,20,"你好世界。中文测试文本。欢迎来到这里。",Short pure-CJK chunks indistinguishable from random high bytes
+gb18030,cjk_legacy,gap,20,"你好世界。中文测试文本。欢迎来到这里。",Short pure-CJK chunks indistinguishable from random high bytes
+gbk,cjk_legacy,gap,20,"你好世界。中文测试文本。欢迎来到这里。",Short pure-CJK chunks indistinguishable from random high bytes
+big5,cjk_legacy,gap,20,"你好世界。歡迎來到這裡。請檢查結果。",Short pure-CJK chunks indistinguishable from random high bytes
+shift_jis,cjk_legacy,gap,20,"こんにちは世界。日本語のテストです。",Short pure-CJK chunks indistinguishable from random high bytes
+euc-jp,cjk_legacy,gap,20,"こんにちは世界。日本語のテストです。",Short pure-CJK chunks indistinguishable from random high bytes
+euc-kr,cjk_legacy,gap,20,"안녕하세요 세계에 오신 것을 환영합니다.",Short pure-CJK chunks indistinguishable from random high bytes
+iso-2022-jp,iso2022,gap,10,"Hello World, this is a test.",0x1B escape bytes inflate control_ratio
+iso-2022-kr,iso2022,gap,10,"Hello World, this is a test.",0x1B escape bytes inflate control_ratio
+hz,cjk_escape,covered,4,"Hello World, this is a test.",
+cp037,ebcdic,gap,1,"Hello World, this is a test.",Completely different byte mapping from ASCII
+cp500,ebcdic,gap,1,"Hello World, this is a test.",Completely different byte mapping from ASCII
+cp1047,ebcdic,gap,1,"Hello World, this is a test.",Completely different byte mapping from ASCII
