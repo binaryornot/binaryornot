@@ -227,6 +227,7 @@ def is_binary_string(bytes_to_check):
                     "euckr",
                 ],
                 [f"{v:.3f}" for v in features],
+                strict=True,
             )
         ),
     )

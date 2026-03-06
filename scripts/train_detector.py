@@ -14,12 +14,12 @@ Usage:
 import csv
 import os
 import struct
+from importlib.resources import files
 
 import numpy as np
 from hypothesis import HealthCheck, Phase, assume, settings
 from hypothesis import strategies as st
 from hypothesis.core import given
-from importlib.resources import files
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier, export_text
 
@@ -195,9 +195,7 @@ def binary_mixed_printable_strategy():
         parts = []
         for _ in range(n_parts):
             if draw(st.booleans()):
-                word = draw(st.binary(min_size=3, max_size=20)).translate(
-                    bytes(range(256)), bytes(0 for _ in range(256))
-                )
+                draw(st.binary(min_size=3, max_size=20)).translate(bytes(range(256)), bytes(0 for _ in range(256)))
                 # Map to printable ASCII range
                 parts.append(bytes((b % 95) + 32 for b in draw(st.binary(min_size=3, max_size=20))))
             else:
@@ -541,7 +539,7 @@ def main():
 
     # Feature importance
     print("\nFeature importance:")
-    importances = list(zip(FEATURE_NAMES, model.feature_importances_))
+    importances = list(zip(FEATURE_NAMES, model.feature_importances_, strict=True))
     importances.sort(key=lambda x: x[1], reverse=True)
     for name, imp in importances:
         if imp > 0.001:
