@@ -41,6 +41,22 @@ def _load_encodings_from_csv():
         return [row["encoding"] for row in csv.DictReader(f)]
 
 
+def _load_csv_samples():
+    """Load per-encoding sample text from the CSV as training data."""
+    csv_path = files("binaryornot.data").joinpath("encodings.csv")
+    samples = []
+    with csv_path.open() as f:
+        for row in csv.DictReader(f):
+            text = (row["sample_text"] + " ") * 20
+            try:
+                chunk = text.encode(row["encoding"])[:1024]
+            except (UnicodeEncodeError, LookupError):
+                continue
+            if len(chunk) >= 4:
+                samples.append((chunk, 0))
+    return samples
+
+
 # ---------------------------------------------------------------------------
 # Training data generation via Hypothesis strategies
 # ---------------------------------------------------------------------------
@@ -218,7 +234,7 @@ TREE_MODULE_PATH = os.path.join(
 )
 
 
-def export_tree_as_python(tree, feature_names, indent="    "):
+def export_tree_as_python(tree, feature_names, indent="    ", start_depth=0):
     """Export a fitted DecisionTreeClassifier as Python if/else code."""
     tree_ = tree.tree_
     feature_name = [
@@ -246,13 +262,13 @@ def export_tree_as_python(tree, feature_names, indent="    "):
             label = "binary" if prediction == 1 else "text"
             lines.append(f"{prefix}return {bool(prediction)}  # {label} ({confidence:.1%}, n={int(total)})")
 
-    recurse(0, 0)
+    recurse(0, start_depth)
     return "\n".join(lines)
 
 
 def write_tree_module(tree, feature_names):
     """Write the trained tree as src/binaryornot/tree.py."""
-    body = export_tree_as_python(tree, feature_names)
+    body = export_tree_as_python(tree, feature_names, indent="    ", start_depth=1)
     module = f'''\
 """Auto-generated decision tree for binary/text classification.
 
@@ -411,6 +427,7 @@ def load_test_file_samples() -> list[tuple[bytes, int]]:
         "tests/files/glyphiconshalflings-regular.ttf",
         "tests/files/glyphiconshalflings-regular.woff",
         "tests/isBinaryFile/grep",
+        "tests/isBinaryFile/pdf.pdf",
         "tests/isBinaryFile/test.sqlite",
         "tests/isBinaryFile/trunks.gif",
     ]
@@ -437,8 +454,10 @@ def main():
     text_samples = generate_text_samples()
     binary_samples = generate_binary_samples()
     real_samples = load_test_file_samples()
-    all_samples = text_samples + binary_samples + real_samples
+    csv_samples = _load_csv_samples()
+    all_samples = text_samples + binary_samples + real_samples + csv_samples
     print(f"  Real file samples: {len(real_samples)}")
+    print(f"  CSV encoding samples: {len(csv_samples)}")
 
     print(f"  Text samples:   {len(text_samples)}")
     print(f"  Binary samples: {len(binary_samples)}")
@@ -455,7 +474,7 @@ def main():
     best_depth = None
     best_score = 0
     print("\nSearching for best tree depth...")
-    for depth in range(3, 12):
+    for depth in range(5, 15):
         model = DecisionTreeClassifier(max_depth=depth, random_state=42)
         scores = cross_val_score(model, X, y, cv=5, scoring="accuracy")
         mean_score = scores.mean()
