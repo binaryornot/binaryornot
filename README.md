@@ -1,66 +1,60 @@
 # BinaryOrNot
 
-![PyPI version](https://img.shields.io/pypi/v/binaryornot.svg)
-
-Ultra-lightweight pure Python package to guess whether a file is binary or text, using a heuristic similar to Perl's `pp_fttext`.
-
-* PyPI package: https://pypi.org/project/binaryornot/
-* Documentation: https://binaryornot.github.io/binaryornot/
-* Free software: MIT License
-
-## Quickstart
+Python library and CLI tool to check if a file is binary or text. Byte ratio analysis + chardet go into the decision matrix.
 
 ```python
->>> from binaryornot.check import is_binary
->>> is_binary('README.md')
-False
->>> is_binary('logo.png')
+from binaryornot.check import is_binary
+
+is_binary("image.png")    # True
+is_binary("README.md")    # False
+is_binary("data.sqlite")  # True
+is_binary("report.csv")   # False
+```
+
+```sh
+$ binaryornot image.png
 True
 ```
 
-Or from the command line:
+## Install
 
 ```sh
-$ binaryornot README.md
-False
+pip install binaryornot
 ```
 
-## Why?
+## Why not just check for null bytes?
 
-You may be thinking, "I can write this in 2 lines of code?!"
+That's the first thing everyone tries. It works until it doesn't:
 
-It's actually not that easy. Reliable binary detection needs to handle edge cases across encodings (UTF-16, GB2312, Big5, EUC-KR, Latin-1), file types (fonts, images, compiled bytecode, SQLite databases), and the boundary between "high-ASCII text" and "binary with printable bytes." BinaryOrNot saves you from writing and thoroughly testing that code across all these cases yourself.
+- A UTF-16 text file is full of null bytes. Your tool thinks it's binary and corrupts it.
+- A Big5 or GB2312 text file has high-ASCII bytes everywhere. Looks binary by byte ratios alone.
+- A font file (.woff, .eot) is clearly binary but might not have null bytes in the first chunk.
 
-For the full story, see Eli Bendersky's [writeup on Perl's heuristic](http://eli.thegreenplace.net/2011/10/19/perls-guess-if-file-is-text-or-binary-implemented-in-python/).
+BinaryOrNot reads the first 1024 bytes and computes two ratios: ASCII control characters vs. printable, and high-ASCII vs. everything else. Then [chardet](https://github.com/chardet/chardet) tries to identify the encoding. If chardet says "this is Big5 with 99% confidence" and the bytes actually decode, it's text, regardless of what the byte ratios suggest.
 
-## Features
+Tested against real files across UTF-8, UTF-16, UTF-32, GB2312, Big5, EUC-KR, Latin-1, Shift-JIS, plus images, fonts, compiled bytecode, SQLite databases, and executables. Fuzz-tested with [Hypothesis](https://hypothesis.readthedocs.io/).
 
-Has tests for these file types:
+## API
 
-* **Text**: .txt, .css, .json, .svg, .js, .lua, .pl, .rst, .py
-* **Binary**: .png, .gif, .jpg, .tiff, .bmp, .rgb, .DS_Store, .eot, .otf, .ttf, .woff, .pyc, .sqlite
+One function:
 
-Has tests for numerous encodings: UTF-8, UTF-16, UTF-32, GB2312, Big5, EUC-KR, Latin-1, Shift-JIS.
+```python
+from binaryornot.check import is_binary
 
-## Development
-
-```bash
-git clone git@github.com:binaryornot/binaryornot.git
-cd binaryornot
-uv sync
-uv run pytest
+is_binary(filename)  # returns True or False
 ```
 
-Run quality checks (format, lint, type check, test):
+There's also `is_binary_string()` if you already have bytes:
 
-```bash
-just qa
+```python
+from binaryornot.helpers import is_binary_string
+
+is_binary_string(b"\x00\x01\x02")  # True
+is_binary_string(b"hello world")   # False
 ```
+
+[Full documentation](https://binaryornot.github.io/binaryornot/) covers the three-stage detection algorithm in detail.
 
 ## Credits
 
-* Created by [Audrey Roy Greenfeld](https://github.com/audreyfeldroy)
-* Special thanks to [Eli Bendersky](https://eli.thegreenplace.net/) for his writeup and implementation, which BinaryOrNot is largely based on
-* Perl's `pp_fttext` source: [perl5/pp_sys.c](https://github.com/Perl/perl5/blob/v5.23.1/pp_sys.c#L3527-L3587)
-
-Built with [Cookiecutter](https://github.com/cookiecutter/cookiecutter) and [cookiecutter-pypackage](https://github.com/audreyfeldroy/cookiecutter-pypackage).
+Created by [Audrey Roy Greenfeld](https://github.com/audreyfeldroy). Based on [Eli Bendersky's analysis](http://eli.thegreenplace.net/2011/10/19/perls-guess-if-file-is-text-or-binary-implemented-in-python/) of Perl's [`pp_fttext`](https://github.com/Perl/perl5/blob/v5.23.1/pp_sys.c#L3527-L3587).
