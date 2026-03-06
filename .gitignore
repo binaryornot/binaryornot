@@ -1,55 +1,54 @@
-*.py[cod]
-!hello_world.pyc
-!empty.pyc
-!troublesome.pyc
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[codz]
+*$py.class
 
 # C extensions
 *.so
 
-# Packages
+# Distribution / packaging
+build/
+dist/
+eggs/
+.eggs/
+*.egg-info/
 *.egg
-*.egg-info
-dist
-build
-eggs
-parts
-bin
-var
-sdist
-develop-eggs
-.installed.cfg
-lib
-lib64
-.eggs
-
-# Installer logs
-pip-log.txt
+MANIFEST
 
 # Unit test / coverage reports
-.coverage
-.tox
-nosetests.xml
-
-# Translations
-*.mo
-
-# Mr Developer
-.mr.developer.cfg
-.project
-.pydevproject
-
-# Complexity
-output/*.html
-output/*/index.html
-
-# Sphinx
-docs/_build
-
-# Coverage
 htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+coverage.xml
+.hypothesis/
+.pytest_cache/
 
-# Profiling
-binaryornot_profile
+# Environments
+.env
+.envrc
+.venv
 
-# Hypothesis
-.hypothesis
+# uv
+#   Generally recommended to include uv.lock in version control for
+#   reproducibility. Uncomment for libraries where you want consumers
+#   to resolve their own dependencies.
+# uv.lock
+
+# Ruff
+.ruff_cache/
+
+# Type checkers
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# Documentation build output
+site/
+
+# IDE files
+# .idea/
+# .vscode/
