@@ -14,13 +14,19 @@ maintainers = [
   {name = "Audrey Roy Greenfeld", email = "aroy@alum.mit.edu"}
 ]
 classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Typing :: Typed",
-    # TODO: Add additional classifiers as needed
 ]
 license = {text = "MIT"}
 dependencies = [
-  "typer",
-  "rich",
+  "chardet>=3.0.2,<6",
 ]
 requires-python = ">= 3.12"
 
@@ -35,6 +41,7 @@ lint = [
 ]
 test = [
     "coverage",
+    "hypothesis",
     "pytest",
 ]
 typecheck = [
@@ -52,7 +59,12 @@ documentation = "https://binaryornot.github.io/binaryornot/"
 homepage = "https://github.com/binaryornot/binaryornot"
 
 [project.scripts]
-binaryornot = "binaryornot.cli:app"
+binaryornot = "binaryornot.check:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+norecursedirs = ["tests/isBinaryFile"]
 
 [tool.ty]
 # All rules are enabled as "error" by default; no need to specify unless overriding.
