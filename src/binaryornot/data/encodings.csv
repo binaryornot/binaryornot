@@ -27,13 +27,13 @@ tis-620,single_byte,covered,4,"สวัสดีครับ นี่คือ
 cp1258,single_byte,covered,4,"Héllo wörld, café, résumé.",
 mac-roman,single_byte,covered,4,"Héllo wörld, café, naïve, résumé, Straße.",
 mac-cyrillic,single_byte,covered,4,"Съешь же ещё этих мягких французских булок.",
-gb2312,cjk_legacy,gap,20,"你好世界。中文测试文本。欢迎来到这里。",Short pure-CJK chunks indistinguishable from random high bytes
-gb18030,cjk_legacy,gap,20,"你好世界。中文测试文本。欢迎来到这里。",Short pure-CJK chunks indistinguishable from random high bytes
-gbk,cjk_legacy,gap,20,"你好世界。中文测试文本。欢迎来到这里。",Short pure-CJK chunks indistinguishable from random high bytes
-big5,cjk_legacy,gap,20,"你好世界。歡迎來到這裡。請檢查結果。",Short pure-CJK chunks indistinguishable from random high bytes
-shift_jis,cjk_legacy,gap,20,"こんにちは世界。日本語のテストです。",Short pure-CJK chunks indistinguishable from random high bytes
-euc-jp,cjk_legacy,gap,20,"こんにちは世界。日本語のテストです。",Short pure-CJK chunks indistinguishable from random high bytes
-euc-kr,cjk_legacy,gap,20,"안녕하세요 세계에 오신 것을 환영합니다.",Short pure-CJK chunks indistinguishable from random high bytes
+gb2312,cjk_legacy,covered,20,"你好世界。中文测试文本。欢迎来到这里。",
+gb18030,cjk_legacy,covered,20,"你好世界。中文测试文本。欢迎来到这里。",
+gbk,cjk_legacy,covered,20,"你好世界。中文测试文本。欢迎来到这里。",
+big5,cjk_legacy,covered,20,"你好世界。歡迎來到這裡。請檢查結果。",
+shift_jis,cjk_legacy,covered,20,"こんにちは世界。日本語のテストです。",
+euc-jp,cjk_legacy,covered,20,"こんにちは世界。日本語のテストです。",
+euc-kr,cjk_legacy,covered,20,"안녕하세요 세계에 오신 것을 환영합니다.",
 iso-2022-jp,iso2022,covered,10,"こんにちは世界。日本語のテストです。",
 iso-2022-kr,iso2022,gap,10,"안녕하세요 세계에 오신 것을 환영합니다.",SO/SI control bytes around each word inflate control_ratio to 20%
 hz,cjk_escape,covered,4,"Hello World, this is a test.",

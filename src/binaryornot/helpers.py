@@ -57,6 +57,11 @@ def _compute_features(chunk):
       15: try_utf32le         - 1.0 if chunk decodes as UTF-32-LE
       16: try_utf32be         - 1.0 if chunk decodes as UTF-32-BE
       17: longest_printable_run - longest run of printable chars / length
+      18: try_gb2312          - 1.0 if chunk decodes as GB2312
+      19: try_big5            - 1.0 if chunk decodes as Big5
+      20: try_shift_jis       - 1.0 if chunk decodes as Shift-JIS
+      21: try_euc_jp          - 1.0 if chunk decodes as EUC-JP
+      22: try_euc_kr          - 1.0 if chunk decodes as EUC-KR
     """
     n = len(chunk)
 
@@ -140,12 +145,26 @@ def _compute_features(chunk):
             current_run = 0
     longest_printable_run = max_run / n
 
+    def _try_decode(encoding):
+        try:
+            chunk.decode(encoding)
+            return 1.0
+        except (UnicodeDecodeError, ValueError):
+            return 0.0
+
+    try_gb2312 = _try_decode("gb2312") if n >= 10 else 0.0
+    try_big5 = _try_decode("big5") if n >= 10 else 0.0
+    try_shift_jis = _try_decode("shift_jis") if n >= 10 else 0.0
+    try_euc_jp = _try_decode("euc-jp") if n >= 10 else 0.0
+    try_euc_kr = _try_decode("euc-kr") if n >= 10 else 0.0
+
     return [
         null_ratio, control_ratio, printable_ascii_ratio, high_byte_ratio,
         utf8_valid, even_null_ratio, odd_null_ratio, entropy,
         bom_utf32le, bom_utf32be, bom_utf16le, bom_utf16be, bom_utf8,
         try_utf16le, try_utf16be, try_utf32le, try_utf32be,
         longest_printable_run,
+        try_gb2312, try_big5, try_shift_jis, try_euc_jp, try_euc_kr,
     ]
 
 
@@ -167,7 +186,8 @@ def is_binary_string(bytes_to_check):
     logger.debug("is_binary_string: %r (features=%r)", result, dict(zip(
         ["null", "ctrl", "ascii", "high", "utf8", "even0", "odd0", "entropy",
          "bom32le", "bom32be", "bom16le", "bom16be", "bom8",
-         "try16le", "try16be", "try32le", "try32be", "run"],
+         "try16le", "try16be", "try32le", "try32be", "run",
+         "gb2312", "big5", "shiftjis", "eucjp", "euckr"],
         [f"{v:.3f}" for v in features],
     )))
     return result

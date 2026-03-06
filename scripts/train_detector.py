@@ -31,6 +31,7 @@ FEATURE_NAMES = [
     "bom_utf32le", "bom_utf32be", "bom_utf16le", "bom_utf16be", "bom_utf8",
     "try_utf16le", "try_utf16be", "try_utf32le", "try_utf32be",
     "longest_printable_run",
+    "try_gb2312", "try_big5", "try_shift_jis", "try_euc_jp", "try_euc_kr",
 ]
 
 
