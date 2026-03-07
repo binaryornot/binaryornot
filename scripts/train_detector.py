@@ -294,10 +294,13 @@ def cjk_text_strategy():
     @st.composite
     def strat(draw):
         # CJK Unified Ideographs (U+4E00-U+9FFF) + punctuation
-        chars = draw(st.text(
-            alphabet=st.characters(whitelist_categories=("Lo", "Zs"), whitelist_characters="，。！？、"),
-            min_size=5, max_size=40,
-        ))
+        chars = draw(
+            st.text(
+                alphabet=st.characters(whitelist_categories=("Lo", "Zs"), whitelist_characters="，。！？、"),
+                min_size=5,
+                max_size=40,
+            )
+        )
         enc = draw(st.sampled_from(cjk_encodings))
         try:
             chunk = chars.encode(enc)[:128]
@@ -318,10 +321,13 @@ def text_with_whitespace_strategy():
 
     @st.composite
     def strat(draw):
-        words = draw(st.lists(
-            st.from_regex(r"[A-Za-z0-9_]{1,12}", fullmatch=True),
-            min_size=5, max_size=20,
-        ))
+        words = draw(
+            st.lists(
+                st.from_regex(r"[A-Za-z0-9_]{1,12}", fullmatch=True),
+                min_size=5,
+                max_size=20,
+            )
+        )
         separators = [" ", "\t", "\n", "\r\n", "  "]
         parts = []
         for word in words:

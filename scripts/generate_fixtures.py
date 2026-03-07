@@ -27,9 +27,7 @@ def generate_with_tool(name, cmd, input_data=None):
     """Run a shell command to generate a fixture."""
     path = os.path.join(FIXTURES_DIR, name)
     try:
-        result = subprocess.run(
-            cmd, input=input_data, capture_output=True, timeout=10
-        )
+        result = subprocess.run(cmd, input=input_data, capture_output=True, timeout=10)
         if result.returncode == 0 and os.path.exists(path):
             size = os.path.getsize(path)
             print(f"  {name} ({size} bytes) [tool]")
@@ -48,6 +46,7 @@ def generate_with_tool(name, cmd, input_data=None):
 
 
 # --- Tool-generated fixtures ---
+
 
 def gen_bzip2():
     return generate_with_tool(
@@ -80,10 +79,16 @@ def gen_mp4():
     return generate_with_tool(
         "test.mp4",
         [
-            "ffmpeg", "-y", "-f", "lavfi", "-i",
+            "ffmpeg",
+            "-y",
+            "-f",
+            "lavfi",
+            "-i",
             "color=c=red:s=8x8:d=0.1",
-            "-c:v", "libx264",
-            "-pix_fmt", "yuv420p",
+            "-c:v",
+            "libx264",
+            "-pix_fmt",
+            "yuv420p",
             out_path,
         ],
     )
@@ -95,9 +100,16 @@ def gen_mp3():
     return generate_with_tool(
         "test.mp3",
         [
-            "ffmpeg", "-y", "-f", "lavfi", "-i",
+            "ffmpeg",
+            "-y",
+            "-f",
+            "lavfi",
+            "-i",
             "sine=frequency=440:duration=0.1",
-            "-c:a", "libmp3lame", "-b:a", "32k",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "32k",
             out_path,
         ],
     )
@@ -109,9 +121,14 @@ def gen_matroska():
     return generate_with_tool(
         "test.webm",
         [
-            "ffmpeg", "-y", "-f", "lavfi", "-i",
+            "ffmpeg",
+            "-y",
+            "-f",
+            "lavfi",
+            "-i",
             "color=c=blue:s=8x8:d=0.1",
-            "-c:v", "libvpx-vp9",
+            "-c:v",
+            "libvpx-vp9",
             out_path,
         ],
     )
@@ -144,8 +161,13 @@ def gen_git_pack():
         subprocess.run(
             ["git", "-C", tmpdir, "commit", "-m", "test", "--allow-empty"],
             capture_output=True,
-            env={**os.environ, "GIT_AUTHOR_NAME": "test", "GIT_AUTHOR_EMAIL": "test@test",
-                 "GIT_COMMITTER_NAME": "test", "GIT_COMMITTER_EMAIL": "test@test"},
+            env={
+                **os.environ,
+                "GIT_AUTHOR_NAME": "test",
+                "GIT_AUTHOR_EMAIL": "test@test",
+                "GIT_COMMITTER_NAME": "test",
+                "GIT_COMMITTER_EMAIL": "test@test",
+            },
         )
         # Pack all objects
         result = subprocess.run(
@@ -159,6 +181,7 @@ def gen_git_pack():
 
 
 # --- Python-generated minimal fixtures ---
+
 
 def gen_woff2():
     """Minimal WOFF2: signature + valid header fields."""
@@ -199,7 +222,7 @@ def gen_midi():
     data += struct.pack(">H", 1)  # 1 track
     data += struct.pack(">H", 96)  # 96 ticks per quarter
     # MTrk chunk (empty track with end-of-track event)
-    track_data = b"\x00\xFF\x2F\x00"  # delta=0, meta event, end of track
+    track_data = b"\x00\xff\x2f\x00"  # delta=0, meta event, end of track
     data += b"MTrk"
     data += struct.pack(">I", len(track_data))
     data += track_data
