@@ -20,10 +20,10 @@ def print_as_hex(s):
     print(":".join(f"{ord(c):x}" for c in s))
 
 
-def get_starting_chunk(filename, length=1024):
+def get_starting_chunk(filename, length=128):
     """
     :param filename: File to open and get the first little chunk of.
-    :param length: Number of bytes to read, default 1024.
+    :param length: Number of bytes to read, default 128.
     :returns: Starting chunk of bytes.
     """
     # Ensure we open the file in binary mode

@@ -67,7 +67,7 @@ def _load_csv_samples():
         for row in csv.DictReader(f):
             text = (row["sample_text"] + " ") * 20
             try:
-                chunk = text.encode(row["encoding"])[:1024]
+                chunk = text.encode(row["encoding"])[:128]
             except (UnicodeEncodeError, LookupError):
                 continue
             if len(chunk) >= 4:
@@ -111,7 +111,7 @@ BINARY_HEADERS = [
 # --- Hypothesis strategies ---
 
 
-def encoded_text_strategy(min_size=5, max_size=512):
+def encoded_text_strategy(min_size=5, max_size=64):
     """Strategy: generate Unicode text, encode it in a random encoding."""
 
     @st.composite
@@ -119,7 +119,7 @@ def encoded_text_strategy(min_size=5, max_size=512):
         t = draw(st.text(min_size=min_size, max_size=max_size))
         enc = draw(st.sampled_from(TEXT_ENCODINGS))
         try:
-            chunk = t.encode(enc)[:1024]
+            chunk = t.encode(enc)[:128]
         except (UnicodeEncodeError, UnicodeDecodeError, LookupError):
             assume(False)
         assume(len(chunk) >= 4)
@@ -130,7 +130,7 @@ def encoded_text_strategy(min_size=5, max_size=512):
 
 def binary_random_strategy():
     """Strategy: random bytes at various lengths."""
-    return st.binary(min_size=10, max_size=1024)
+    return st.binary(min_size=10, max_size=128)
 
 
 def binary_with_header_strategy():
@@ -140,7 +140,7 @@ def binary_with_header_strategy():
     def strat(draw):
         header = draw(st.sampled_from(BINARY_HEADERS))
         padding = draw(st.binary(min_size=20, max_size=500))
-        return (header + padding)[:1024]
+        return (header + padding)[:128]
 
     return strat()
 
@@ -157,7 +157,7 @@ def binary_scattered_nulls_strategy():
 
     @st.composite
     def strat(draw):
-        data = bytearray(draw(st.binary(min_size=50, max_size=1024)))
+        data = bytearray(draw(st.binary(min_size=50, max_size=128)))
         n = len(data)
         null_count = draw(st.integers(min_value=n // 20, max_value=n // 5))
         positions = draw(st.lists(st.integers(min_value=0, max_value=n - 1), min_size=null_count, max_size=null_count))
@@ -181,7 +181,7 @@ def binary_pyc_strategy():
         magic_val = draw(st.integers(min_value=0x0A0D, max_value=0x0FFF))
         magic = struct.pack("<H", magic_val) + b"\r\n"
         rest = draw(st.binary(min_size=50, max_size=500))
-        return (magic + rest)[:1024]
+        return (magic + rest)[:128]
 
     return strat()
 
@@ -200,7 +200,7 @@ def binary_mixed_printable_strategy():
                 parts.append(bytes((b % 95) + 32 for b in draw(st.binary(min_size=3, max_size=20))))
             else:
                 parts.append(draw(st.binary(min_size=10, max_size=100)))
-        chunk = b"".join(parts)[:1024]
+        chunk = b"".join(parts)[:128]
         assume(len(chunk) >= 10)
         return chunk
 
@@ -231,14 +231,14 @@ def generate_text_samples() -> list[tuple[bytes, int]]:
     samples = []
 
     # Main text generation: Hypothesis text() -> encode in random encoding
-    # Large sample for full-length chunks
-    samples.extend(collect_samples(encoded_text_strategy(5, 512), label=0, count=800))
+    # Full-length chunks
+    samples.extend(collect_samples(encoded_text_strategy(5, 64), label=0, count=800))
 
     # Short text for edge cases
     samples.extend(collect_samples(encoded_text_strategy(1, 20), label=0, count=200))
 
-    # Long text (near 1024 byte chunks)
-    samples.extend(collect_samples(encoded_text_strategy(200, 800), label=0, count=200))
+    # Near-max-length chunks
+    samples.extend(collect_samples(encoded_text_strategy(30, 64), label=0, count=200))
 
     print(f"  Text samples generated: {len(samples)}")
     return samples
@@ -385,7 +385,7 @@ def validate_against_test_files(model):
             continue
 
         with open(path, "rb") as f:
-            chunk = f.read(1024)
+            chunk = f.read(128)
 
         if len(chunk) == 0:
             predicted_binary = False
@@ -465,7 +465,7 @@ def load_test_file_samples() -> list[tuple[bytes, int]]:
     for path in text_files:
         if os.path.exists(path):
             with open(path, "rb") as f:
-                chunk = f.read(1024)
+                chunk = f.read(128)
             if len(chunk) > 0:
                 # Add multiple times to weight real files more heavily
                 for _ in range(10):
@@ -473,7 +473,7 @@ def load_test_file_samples() -> list[tuple[bytes, int]]:
     for path in binary_files:
         if os.path.exists(path):
             with open(path, "rb") as f:
-                chunk = f.read(1024)
+                chunk = f.read(128)
             if len(chunk) > 0:
                 for _ in range(10):
                     samples.append((chunk, 1))
