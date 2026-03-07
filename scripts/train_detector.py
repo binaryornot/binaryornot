@@ -495,7 +495,7 @@ def main():
     best_score = 0
     print("\nSearching for best tree depth...")
     for depth in range(5, 15):
-        model = DecisionTreeClassifier(max_depth=depth, random_state=42)
+        model = DecisionTreeClassifier(max_depth=depth, random_state=42, class_weight="balanced")
         scores = cross_val_score(model, X, y, cv=5, scoring="accuracy")
         mean_score = scores.mean()
         print(f"  depth={depth:2d}  CV={mean_score:.4f} (+/- {scores.std():.4f})")
@@ -506,7 +506,7 @@ def main():
     print(f"\nBest depth: {best_depth} (CV={best_score:.4f})")
 
     # Train final model
-    model = DecisionTreeClassifier(max_depth=best_depth, random_state=42)
+    model = DecisionTreeClassifier(max_depth=best_depth, random_state=42, class_weight="balanced")
     model.fit(X, y)
 
     train_acc = model.score(X, y)

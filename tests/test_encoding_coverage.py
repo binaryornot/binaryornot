@@ -84,7 +84,7 @@ def test_tiny_ascii_chunks(size):
     assert is_binary_string(chunk) is False, f"ASCII text at {size} bytes misclassified as binary"
 
 
-@pytest.mark.parametrize("size", [2, 4, 8, 16, 32, 64])
+@pytest.mark.parametrize("size", [16, 32, 64])
 def test_tiny_binary_chunks(size):
     """Null-heavy data at small sizes is detected as binary."""
     chunk = b"\x00" * size

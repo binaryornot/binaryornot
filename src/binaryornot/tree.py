@@ -11,277 +11,190 @@ def is_binary(features):
     Takes the feature list from helpers._compute_features().
     Returns True for binary.
     """
-    if features[7] <= 3.457998:  # byte_entropy
-        if features[1] <= 0.796165:  # control_ratio
-            if features[3] <= 0.972656:  # high_byte_ratio
-                if features[7] <= 3.041395:  # byte_entropy
-                    if features[1] <= 0.753906:  # control_ratio
-                        if features[0] <= 0.712912:  # null_ratio
-                            return False  # text (100.0%, n=1)
-                        else:
-                            if features[0] <= 0.716518:  # null_ratio
-                                if features[2] <= 0.089286:  # printable_ascii_ratio
-                                    return False  # text (100.0%, n=1)
-                                else:
-                                    return True  # binary (100.0%, n=1)
-                            else:
-                                return False  # text (100.0%, n=1)
-                    else:
-                        if features[2] <= 0.180990:  # printable_ascii_ratio
-                            return False  # text (100.0%, n=1)
-                        else:
-                            return True  # binary (100.0%, n=1)
-                else:
-                    if features[7] <= 3.092967:  # byte_entropy
-                        if features[5] <= 0.023438:  # even_null_ratio
-                            if features[1] <= 0.652778:  # control_ratio
-                                return False  # text (100.0%, n=1)
-                            else:
-                                return True  # binary (100.0%, n=1)
-                        else:
-                            if features[6] <= 0.562500:  # odd_null_ratio
-                                if features[6] <= 0.031250:  # odd_null_ratio
-                                    return False  # text (100.0%, n=1)
-                                else:
-                                    return True  # binary (100.0%, n=1)
-                            else:
-                                return False  # text (100.0%, n=1)
-                    else:
-                        if features[17] <= 0.154762:  # longest_printable_run
-                            if features[17] <= 0.003906:  # longest_printable_run
-                                if features[4] <= 0.500000:  # utf8_valid
-                                    if features[1] <= 0.316667:  # control_ratio
-                                        return True  # binary (100.0%, n=1)
-                                    else:
-                                        return False  # text (100.0%, n=1)
-                                else:
-                                    return False  # text (100.0%, n=1)
-                            else:
-                                if features[17] <= 0.080128:  # longest_printable_run
-                                    if features[20] <= 0.500000:  # try_shift_jis
-                                        return False  # text (100.0%, n=1)
-                                    else:
-                                        if features[17] <= 0.027043:  # longest_printable_run
-                                            return False  # text (100.0%, n=1)
-                                        else:
-                                            return True  # binary (100.0%, n=1)
-                                else:
-                                    if features[1] <= 0.150000:  # control_ratio
-                                        if features[4] <= 0.500000:  # utf8_valid
-                                            if features[7] <= 3.145926:  # byte_entropy
-                                                return True  # binary (100.0%, n=1)
-                                            else:
-                                                if features[1] <= 0.085714:  # control_ratio
-                                                    return False  # text (100.0%, n=1)
-                                                else:
-                                                    if features[1] <= 0.105556:  # control_ratio
-                                                        return True  # binary (100.0%, n=1)
-                                                    else:
-                                                        return False  # text (100.0%, n=1)
-                                        else:
-                                            return False  # text (100.0%, n=1)
-                                    else:
-                                        if features[0] <= 0.100000:  # null_ratio
-                                            if features[3] <= 0.381818:  # high_byte_ratio
-                                                return False  # text (100.0%, n=1)
-                                            else:
-                                                if features[2] <= 0.236364:  # printable_ascii_ratio
-                                                    return False  # text (100.0%, n=1)
-                                                else:
-                                                    return True  # binary (100.0%, n=1)
-                                        else:
-                                            return False  # text (100.0%, n=1)
-                        else:
-                            if features[4] <= 0.500000:  # utf8_valid
-                                if features[7] <= 3.264621:  # byte_entropy
-                                    if features[17] <= 0.174242:  # longest_printable_run
-                                        return False  # text (100.0%, n=1)
-                                    else:
-                                        if features[1] <= 0.095455:  # control_ratio
-                                            if features[2] <= 0.618182:  # printable_ascii_ratio
-                                                return True  # binary (100.0%, n=1)
-                                            else:
-                                                return False  # text (100.0%, n=1)
-                                        else:
-                                            return False  # text (100.0%, n=1)
-                                else:
-                                    if features[1] <= 0.041667:  # control_ratio
-                                        if features[2] <= 0.416667:  # printable_ascii_ratio
-                                            return True  # binary (100.0%, n=1)
-                                        else:
-                                            if features[7] <= 3.398540:  # byte_entropy
-                                                return False  # text (100.0%, n=1)
-                                            else:
-                                                if features[2] <= 0.583333:  # printable_ascii_ratio
-                                                    return False  # text (50.0%, n=1)
-                                                else:
-                                                    return True  # binary (100.0%, n=1)
-                                    else:
-                                        if features[3] <= 0.591667:  # high_byte_ratio
-                                            return True  # binary (100.0%, n=1)
-                                        else:
-                                            return False  # text (100.0%, n=1)
-                            else:
-                                if features[6] <= 0.178571:  # odd_null_ratio
-                                    return False  # text (100.0%, n=1)
-                                else:
-                                    return True  # binary (100.0%, n=1)
-            else:
-                if features[4] <= 0.500000:  # utf8_valid
-                    if features[7] <= 1.753445:  # byte_entropy
-                        return True  # binary (100.0%, n=1)
-                    else:
-                        if features[7] <= 2.860666:  # byte_entropy
-                            return False  # text (100.0%, n=1)
-                        else:
-                            if features[20] <= 0.500000:  # try_shift_jis
-                                return True  # binary (100.0%, n=1)
-                            else:
-                                return False  # text (50.0%, n=1)
-                else:
-                    return False  # text (100.0%, n=1)
-        else:
-            if features[3] <= 0.048438:  # high_byte_ratio
-                if features[5] <= 0.962963:  # even_null_ratio
-                    return True  # binary (100.0%, n=1)
-                else:
-                    if features[6] <= 0.800000:  # odd_null_ratio
+    if features[7] <= 3.041395:  # byte_entropy
+        if features[7] <= 1.106750:  # byte_entropy
+            if features[2] <= 0.208333:  # printable_ascii_ratio
+                if features[13] <= 0.500000:  # try_utf16le
+                    if features[3] <= 0.625000:  # high_byte_ratio
                         return False  # text (100.0%, n=1)
                     else:
                         return True  # binary (100.0%, n=1)
-            else:
-                if features[0] <= 0.791667:  # null_ratio
-                    return False  # text (100.0%, n=1)
                 else:
                     return True  # binary (100.0%, n=1)
+            else:
+                return False  # text (100.0%, n=1)
+        else:
+            if features[1] <= 0.753906:  # control_ratio
+                if features[3] <= 0.970588:  # high_byte_ratio
+                    if features[7] <= 1.652807:  # byte_entropy
+                        if features[7] <= 1.635238:  # byte_entropy
+                            return False  # text (100.0%, n=1)
+                        else:
+                            return True  # binary (100.0%, n=1)
+                    else:
+                        if features[15] <= 0.500000:  # try_utf32le
+                            return False  # text (100.0%, n=1)
+                        else:
+                            return False  # text (100.0%, n=1)
+                else:
+                    if features[7] <= 1.792481:  # byte_entropy
+                        if features[7] <= 1.542481:  # byte_entropy
+                            return False  # text (100.0%, n=1)
+                        else:
+                            return True  # binary (100.0%, n=1)
+                    else:
+                        if features[20] <= 0.500000:  # try_shift_jis
+                            if features[13] <= 0.500000:  # try_utf16le
+                                return False  # text (100.0%, n=1)
+                            else:
+                                return False  # text (100.0%, n=1)
+                        else:
+                            return True  # binary (100.0%, n=1)
+            else:
+                if features[3] <= 0.048438:  # high_byte_ratio
+                    if features[0] <= 0.734375:  # null_ratio
+                        return True  # binary (100.0%, n=1)
+                    else:
+                        return False  # text (100.0%, n=1)
+                else:
+                    return False  # text (100.0%, n=1)
     else:
         if features[4] <= 0.500000:  # utf8_valid
-            if features[17] <= 0.045663:  # longest_printable_run
-                if features[7] <= 5.183908:  # byte_entropy
-                    if features[2] <= 0.007812:  # printable_ascii_ratio
-                        return True  # binary (100.0%, n=1)
-                    else:
-                        if features[1] <= 0.575621:  # control_ratio
-                            if features[17] <= 0.041452:  # longest_printable_run
-                                return False  # text (100.0%, n=1)
-                            else:
-                                if features[7] <= 4.408838:  # byte_entropy
-                                    return False  # text (100.0%, n=1)
-                                else:
-                                    if features[2] <= 0.426660:  # printable_ascii_ratio
-                                        return True  # binary (100.0%, n=1)
-                                    else:
-                                        return False  # text (100.0%, n=1)
-                        else:
+            if features[6] <= 0.534856:  # odd_null_ratio
+                if features[17] <= 0.029857:  # longest_printable_run
+                    if features[17] <= 0.003906:  # longest_printable_run
+                        if features[0] <= 0.125000:  # null_ratio
                             return True  # binary (100.0%, n=1)
-                else:
-                    if features[2] <= 0.476415:  # printable_ascii_ratio
-                        return True  # binary (100.0%, n=1)
-                    else:
-                        return False  # text (100.0%, n=1)
-            else:
-                if features[1] <= 0.029040:  # control_ratio
-                    if features[17] <= 0.354353:  # longest_printable_run
-                        if features[2] <= 0.615079:  # printable_ascii_ratio
-                            if features[19] <= 0.500000:  # try_big5
-                                if features[17] <= 0.082207:  # longest_printable_run
-                                    if features[2] <= 0.348718:  # printable_ascii_ratio
-                                        return True  # binary (100.0%, n=1)
-                                    else:
-                                        return False  # text (100.0%, n=1)
-                                else:
-                                    if features[2] <= 0.458042:  # printable_ascii_ratio
-                                        if features[17] <= 0.261364:  # longest_printable_run
-                                            return True  # binary (100.0%, n=1)
-                                        else:
-                                            return False  # text (100.0%, n=1)
-                                    else:
-                                        if features[17] <= 0.163333:  # longest_printable_run
-                                            if features[7] <= 4.704511:  # byte_entropy
-                                                if features[3] <= 0.490000:  # high_byte_ratio
-                                                    return False  # text (100.0%, n=1)
-                                                else:
-                                                    if features[7] <= 3.890945:  # byte_entropy
-                                                        return True  # binary (100.0%, n=1)
-                                                    else:
-                                                        return False  # text (100.0%, n=1)
-                                            else:
-                                                return True  # binary (100.0%, n=1)
-                                        else:
-                                            return True  # binary (100.0%, n=1)
-                            else:
-                                return False  # text (100.0%, n=1)
-                        else:
-                            if features[7] <= 3.921242:  # byte_entropy
-                                if features[17] <= 0.207407:  # longest_printable_run
-                                    return False  # text (100.0%, n=1)
-                                else:
-                                    return True  # binary (100.0%, n=1)
-                            else:
-                                return False  # text (100.0%, n=1)
-                    else:
-                        return True  # binary (100.0%, n=1)
-                else:
-                    if features[10] <= 0.500000:  # bom_utf16le
-                        if features[11] <= 0.500000:  # bom_utf16be
-                            if features[6] <= 0.499089:  # odd_null_ratio
-                                if features[7] <= 4.385591:  # byte_entropy
-                                    if features[17] <= 0.097619:  # longest_printable_run
-                                        if features[2] <= 0.459416:  # printable_ascii_ratio
-                                            if features[0] <= 0.116667:  # null_ratio
-                                                if features[2] <= 0.404762:  # printable_ascii_ratio
-                                                    if features[1] <= 0.261364:  # control_ratio
-                                                        return True  # binary (100.0%, n=1)
-                                                    else:
-                                                        return False  # text (50.0%, n=1)
-                                                else:
-                                                    if features[2] <= 0.450957:  # printable_ascii_ratio
-                                                        return False  # text (66.7%, n=1)
-                                                    else:
-                                                        return True  # binary (100.0%, n=1)
-                                            else:
-                                                return False  # text (100.0%, n=1)
-                                        else:
-                                            return False  # text (100.0%, n=1)
-                                    else:
-                                        if features[2] <= 0.651515:  # printable_ascii_ratio
-                                            if features[2] <= 0.456439:  # printable_ascii_ratio
-                                                return True  # binary (100.0%, n=1)
-                                            else:
-                                                if features[2] <= 0.459936:  # printable_ascii_ratio
-                                                    return False  # text (100.0%, n=1)
-                                                else:
-                                                    if features[17] <= 0.174242:  # longest_printable_run
-                                                        return True  # binary (75.0%, n=1)
-                                                    else:
-                                                        return True  # binary (95.0%, n=1)
-                                        else:
-                                            return False  # text (100.0%, n=1)
-                                else:
-                                    if features[1] <= 0.042572:  # control_ratio
-                                        if features[3] <= 0.446360:  # high_byte_ratio
-                                            if features[17] <= 0.109762:  # longest_printable_run
-                                                return False  # text (100.0%, n=1)
-                                            else:
-                                                return True  # binary (100.0%, n=1)
-                                        else:
-                                            return True  # binary (100.0%, n=1)
-                                    else:
-                                        if features[17] <= 0.055947:  # longest_printable_run
-                                            if features[2] <= 0.439236:  # printable_ascii_ratio
-                                                return True  # binary (100.0%, n=1)
-                                            else:
-                                                return False  # text (100.0%, n=1)
-                                        else:
-                                            return True  # binary (100.0%, n=1)
-                            else:
-                                return False  # text (100.0%, n=1)
                         else:
                             return False  # text (100.0%, n=1)
                     else:
+                        if features[7] <= 5.500731:  # byte_entropy
+                            return False  # text (100.0%, n=1)
+                        else:
+                            return True  # binary (100.0%, n=1)
+                else:
+                    if features[10] <= 0.500000:  # bom_utf16le
+                        if features[1] <= 0.031089:  # control_ratio
+                            if features[17] <= 0.354353:  # longest_printable_run
+                                if features[2] <= 0.614149:  # printable_ascii_ratio
+                                    if features[17] <= 0.082207:  # longest_printable_run
+                                        if features[2] <= 0.369697:  # printable_ascii_ratio
+                                            if features[2] <= 0.192308:  # printable_ascii_ratio
+                                                return False  # text (100.0%, n=1)
+                                            else:
+                                                return True  # binary (100.0%, n=1)
+                                        else:
+                                            return False  # text (100.0%, n=1)
+                                    else:
+                                        if features[17] <= 0.267943:  # longest_printable_run
+                                            if features[2] <= 0.458042:  # printable_ascii_ratio
+                                                if features[3] <= 0.850000:  # high_byte_ratio
+                                                    if features[20] <= 0.500000:  # try_shift_jis
+                                                        return True  # binary (100.0%, n=1)
+                                                    else:
+                                                        return True  # binary (100.0%, n=1)
+                                                else:
+                                                    return False  # text (100.0%, n=1)
+                                            else:
+                                                if features[7] <= 3.572021:  # byte_entropy
+                                                    if features[7] <= 3.155913:  # byte_entropy
+                                                        return True  # binary (100.0%, n=1)
+                                                    else:
+                                                        return False  # text (84.6%, n=1)
+                                                else:
+                                                    if features[17] <= 0.136111:  # longest_printable_run
+                                                        return False  # text (52.4%, n=0)
+                                                    else:
+                                                        return True  # binary (93.6%, n=0)
+                                        else:
+                                            if features[2] <= 0.423810:  # printable_ascii_ratio
+                                                return False  # text (100.0%, n=1)
+                                            else:
+                                                if features[7] <= 4.446973:  # byte_entropy
+                                                    return True  # binary (100.0%, n=1)
+                                                else:
+                                                    return True  # binary (100.0%, n=1)
+                                else:
+                                    if features[13] <= 0.500000:  # try_utf16le
+                                        if features[3] <= 0.348485:  # high_byte_ratio
+                                            return True  # binary (100.0%, n=1)
+                                        else:
+                                            return False  # text (100.0%, n=1)
+                                    else:
+                                        return False  # text (100.0%, n=1)
+                            else:
+                                return True  # binary (100.0%, n=1)
+                        else:
+                            if features[5] <= 0.622869:  # even_null_ratio
+                                if features[11] <= 0.500000:  # bom_utf16be
+                                    if features[2] <= 0.146429:  # printable_ascii_ratio
+                                        if features[0] <= 0.062500:  # null_ratio
+                                            return True  # binary (100.0%, n=1)
+                                        else:
+                                            if features[7] <= 3.228202:  # byte_entropy
+                                                return False  # text (100.0%, n=1)
+                                            else:
+                                                return False  # text (100.0%, n=1)
+                                    else:
+                                        if features[2] <= 0.455534:  # printable_ascii_ratio
+                                            if features[7] <= 4.139454:  # byte_entropy
+                                                if features[17] <= 0.038762:  # longest_printable_run
+                                                    if features[20] <= 0.500000:  # try_shift_jis
+                                                        return False  # text (100.0%, n=1)
+                                                    else:
+                                                        return True  # binary (100.0%, n=1)
+                                                else:
+                                                    if features[17] <= 0.114149:  # longest_printable_run
+                                                        return True  # binary (85.3%, n=1)
+                                                    else:
+                                                        return True  # binary (97.7%, n=1)
+                                            else:
+                                                if features[6] <= 0.365000:  # odd_null_ratio
+                                                    if features[2] <= 0.446657:  # printable_ascii_ratio
+                                                        return True  # binary (100.0%, n=1)
+                                                    else:
+                                                        return True  # binary (97.2%, n=1)
+                                                else:
+                                                    return False  # text (100.0%, n=1)
+                                        else:
+                                            if features[17] <= 0.072300:  # longest_printable_run
+                                                if features[7] <= 5.469833:  # byte_entropy
+                                                    return False  # text (100.0%, n=1)
+                                                else:
+                                                    if features[7] <= 5.670300:  # byte_entropy
+                                                        return True  # binary (100.0%, n=1)
+                                                    else:
+                                                        return True  # binary (100.0%, n=1)
+                                            else:
+                                                if features[7] <= 3.906328:  # byte_entropy
+                                                    if features[1] <= 0.069048:  # control_ratio
+                                                        return False  # text (100.0%, n=1)
+                                                    else:
+                                                        return True  # binary (86.4%, n=1)
+                                                else:
+                                                    if features[7] <= 4.348171:  # byte_entropy
+                                                        return True  # binary (92.2%, n=1)
+                                                    else:
+                                                        return True  # binary (100.0%, n=1)
+                                else:
+                                    return False  # text (100.0%, n=1)
+                            else:
+                                return False  # text (100.0%, n=1)
+                    else:
                         return False  # text (100.0%, n=1)
-        else:
-            if features[1] <= 0.655405:  # control_ratio
-                return False  # text (100.0%, n=1)
             else:
-                return True  # binary (100.0%, n=1)
+                return False  # text (100.0%, n=1)
+        else:
+            if features[1] <= 0.625000:  # control_ratio
+                if features[5] <= 0.204887:  # even_null_ratio
+                    return False  # text (100.0%, n=1)
+                else:
+                    if features[2] <= 0.571429:  # printable_ascii_ratio
+                        return False  # text (100.0%, n=1)
+                    else:
+                        return True  # binary (100.0%, n=1)
+            else:
+                if features[7] <= 3.085009:  # byte_entropy
+                    return True  # binary (100.0%, n=1)
+                else:
+                    return True  # binary (100.0%, n=1)
