@@ -30,20 +30,26 @@ Run `binaryornot --help` for usage details.
 
 ## How it works
 
-BinaryOrNot uses a heuristic similar to Perl's `pp_fttext`, based on [Eli Bendersky's translation to Python](http://eli.thegreenplace.net/2011/10/19/perls-guess-if-file-is-text-or-binary-implemented-in-python/). The detection runs in three stages:
+BinaryOrNot reads the first 128 bytes of a file and classifies them as binary or text using a trained decision tree. The tree operates on 23 features computed from the byte chunk:
 
-1. **Byte ratio analysis**: checks the ratio of ASCII control characters and high-ASCII characters in the first 1024 bytes. Files that are overwhelmingly control characters are binary. Files with a high ratio of control characters and very few high-ASCII characters are flagged as "likely binary."
+- **Byte class ratios**: null bytes, control characters, printable ASCII, high bytes (0x80-0xFF)
+- **Encoding validity**: whether the chunk decodes as UTF-8, UTF-16-LE/BE, UTF-32-LE/BE, GB2312, Big5, Shift-JIS, EUC-JP, or EUC-KR
+- **Positional null ratios**: fraction of even-index and odd-index bytes that are 0x00 (detects BOM-less UTF-16)
+- **BOM flags**: presence of UTF-8, UTF-16, or UTF-32 byte order marks
+- **Shannon entropy**: byte distribution randomness (structured text vs random binary)
+- **Longest printable run**: longest streak of printable ASCII + whitespace relative to chunk length
 
-2. **Charset detection**: runs [chardet](https://github.com/chardet/chardet) on the chunk. If chardet identifies an encoding with >90% confidence (and it's not plain ASCII), the chunk is decoded to verify.
+The decision tree was trained on Hypothesis-generated data (Unicode text encoded via Python's stdlib codecs, plus synthetic binary patterns) and the project's own test files. The training script lives in `scripts/train_detector.py` and can be re-run to retrain the model.
 
-3. **Final decision**: combines the byte ratio flag with the charset detection result. Files flagged as likely binary that can't be decoded as Unicode are binary. Files not flagged as likely binary but containing null bytes (`\x00`) or `\xff` are binary. Everything else is text.
+## Encoding coverage
 
-## Tested file types
+BinaryOrNot ships an encoding coverage matrix at `binaryornot/data/encodings.csv` that lists every encoding family, whether the detection covers it, known gaps, and sample text for testing. The test suite reads this CSV to verify coverage claims: each encoding marked "covered" becomes a passing test, each "gap" becomes an expected failure.
 
-BinaryOrNot has tests covering:
+37 encodings are covered, including UTF-8, UTF-16, UTF-32, all major single-byte encodings (ISO-8859, Windows code pages, KOI8-R, Mac encodings), and CJK encodings (GB2312, GBK, GB18030, Big5, Shift-JIS, EUC-JP, EUC-KR, ISO-2022-JP). 4 gaps are documented with reasons: ISO-2022-KR and three EBCDIC code pages.
 
-**Text**: .txt, .css, .json, .svg, .js, .lua, .pl, .rst, .py
+## Binary format coverage
 
-**Binary**: .png, .gif, .jpg, .tiff, .bmp, .rgb, .DS_Store, .eot, .otf, .ttf, .woff, .pyc, .sqlite
+Binary format detection is tracked in `binaryornot/data/binary_formats.csv`. Each row lists the format name, its magic bytes in hex, an optional path to a real test fixture, and the specification where the magic value is defined.
 
-**Encodings**: UTF-8, UTF-16 (BE/LE/BOM), UTF-32 (LE/BOM), GB2312, Big5, EUC-KR, Latin-1, Shift-JIS
+49 formats are covered across images (PNG, JPEG, GIF, BMP, TIFF, ICO, WebP, PSD, HEIF), documents (PDF, OLE2), databases (SQLite), archives (ZIP, gzip, xz, bzip2, 7z, RAR, Zstandard), executables (ELF, Mach-O, MZ/PE, Java class, WebAssembly, Dalvik DEX), media (RIFF, Ogg, FLAC, MP4/MOV, MP3, Matroska/WebM, MIDI), fonts (WOFF, WOFF2, OTF, TTF, EOT), data (Apache Parquet), and compiled artifacts (.pyc, .DS_Store, LLVM bitcode, Git packfiles).
+

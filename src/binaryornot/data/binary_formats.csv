@@ -1,0 +1,50 @@
+format,family,status,magic_hex,test_file,gap_reason,source
+png,image,covered,89504e470d0a1a0a,tests/files/logo.png,,ISO/IEC 15948 s5.2
+jpeg_jfif,image,covered,ffd8ffe0,,,ITU-T T.81 + JFIF APP0 marker
+jpeg_exif,image,covered,ffd8ffe1,,,ITU-T T.81 + Exif APP1 marker
+gif87a,image,covered,474946383761,tests/files/lena.gif,,GIF87a spec header
+gif89a,image,covered,474946383961,tests/isBinaryFile/trunks.gif,,GIF89a spec header
+bmp,image,covered,424d,tests/files/rgb-3c-8b.bmp,,Microsoft BMP format
+tiff_be,image,covered,4d4d002a,tests/files/palette-1c-8b.tiff,,TIFF 6.0 spec s2 (big-endian)
+tiff_le,image,covered,49492a00,,,TIFF 6.0 spec s2 (little-endian)
+ico,image,covered,00000100,,,Microsoft ICO format
+pdf,document,covered,255044462d312e,tests/isBinaryFile/pdf.pdf,,ISO 32000 s7.5.2
+sqlite,database,covered,53514c69746520666f726d6174203300,tests/isBinaryFile/test.sqlite,,SQLite file format s1.2.1
+zip,archive,covered,504b0304,,,APPNOTE.TXT (PKWARE) s4.3.7
+gzip,archive,covered,1f8b08,,,RFC 1952 s2.3
+xz,archive,covered,fd377a585a00,,,XZ file format spec s2.1.1
+elf,executable,covered,7f454c46,,,System V ABI s4 (ELF header)
+macho_32be,executable,covered,feedface,,,Apple Mach-O format reference
+macho_32le,executable,covered,cefaedfe,,,Apple Mach-O format reference
+macho_64be,executable,covered,feedfacf,,,Apple Mach-O format reference
+macho_64le,executable,covered,cffaedfe,tests/isBinaryFile/grep,,Apple Mach-O format reference
+mz,executable,covered,4d5a,,,Microsoft PE/COFF spec (DOS header)
+java_class,executable,covered,cafebabe,,,JVM spec s4.1
+riff,media,covered,52494646,,,Microsoft RIFF spec
+ogg,media,covered,4f676753,,,Ogg bitstream format spec
+flac,media,covered,664c6143,,,FLAC format spec
+wasm,executable,covered,0061736d,,,WebAssembly spec s5.5.1
+woff,font,covered,774f4646,tests/files/glyphiconshalflings-regular.woff,,W3C WOFF spec
+otf,font,covered,4f54544f,tests/files/glyphiconshalflings-regular.otf,,OpenType spec (CFF-based)
+ttf,font,covered,0001000000,tests/files/glyphiconshalflings-regular.ttf,,OpenType/TrueType spec v1.0
+eot,font,covered,,tests/files/glyphiconshalflings-regular.eot,No universal magic; starts with file size,Microsoft EOT spec
+pyc,compiled,covered,,tests/files/hello_world.pyc,Magic varies by Python version,Python importlib source
+ds_store,metadata,covered,0000000142756431,tests/files/.DS_Store,,Apple .DS_Store reverse-engineered format
+raw_rgb,image,covered,,tests/files/pixelstream.rgb,No magic; pure pixel data,
+woff2,font,covered,774f4632,tests/files/test.woff2,,W3C WOFF2 spec
+webp,image,covered,524946460000000057454250,tests/files/logo.webp,,Google WebP container spec (RIFF+WEBP)
+mp4,media,covered,0000001866747970,tests/files/test.mp4,,ISO 14496-12 s4.3 (ftyp box)
+mp3_id3,media,covered,494433,,,ID3v2 spec s3.1
+bzip2,archive,covered,425a68,tests/files/test.bz2,,bzip2 file format
+7z,archive,covered,377abcaf271c,tests/files/test.7z,,7-Zip format spec
+ole2,document,covered,d0cf11e0a1b11ae1,tests/files/test.doc,,MS-CFB spec s2
+zstd,archive,covered,28b52ffd,tests/files/test.zst,,RFC 8878 s3.1.1
+rar,archive,covered,526172211a07,tests/files/test.rar,,RAR5 tech note
+matroska,media,covered,1a45dfa3,tests/files/test.webm,,EBML/Matroska spec
+midi,media,covered,4d546864,tests/files/test.mid,,MIDI 1.0 spec
+psd,image,covered,38425053,tests/files/test.psd,,Adobe PSD spec
+heif,image,covered,0000001c6674797068656963,tests/files/logo.heic,,ISO 23008-12 (ftyp heic)
+parquet,data,covered,50415231,tests/files/test.parquet,,Apache Parquet format spec
+dex,executable,covered,6465780a,tests/files/test.dex,,Dalvik executable format
+llvm_bc,compiled,covered,4243c0de,tests/files/test.bc,,LLVM bitcode wrapper format
+git_pack,data,covered,5041434b,tests/files/test.pack,,Git pack format spec

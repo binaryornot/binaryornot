@@ -1,6 +1,6 @@
 # BinaryOrNot
 
-Python library and CLI tool to check if a file is binary or text. Byte ratio analysis + chardet go into the decision matrix.
+Python library and CLI tool to check if a file is binary or text. Zero dependencies.
 
 ```python
 from binaryornot.check import is_binary
@@ -30,9 +30,9 @@ That's the first thing everyone tries. It works until it doesn't:
 - A Big5 or GB2312 text file has high-ASCII bytes everywhere. Looks binary by byte ratios alone.
 - A font file (.woff, .eot) is clearly binary but might not have null bytes in the first chunk.
 
-BinaryOrNot reads the first 1024 bytes and computes two ratios: ASCII control characters vs. printable, and high-ASCII vs. everything else. Then [chardet](https://github.com/chardet/chardet) tries to identify the encoding. If chardet says "this is Big5 with 99% confidence" and the bytes actually decode, it's text, regardless of what the byte ratios suggest.
+BinaryOrNot reads the first 128 bytes and runs them through a trained decision tree that considers byte ratios, Shannon entropy, encoding validity, BOM detection, and more. It handles all the edge cases above correctly, with zero dependencies.
 
-Tested against real files across UTF-8, UTF-16, UTF-32, GB2312, Big5, EUC-KR, Latin-1, Shift-JIS, plus images, fonts, compiled bytecode, SQLite databases, and executables. Fuzz-tested with [Hypothesis](https://hypothesis.readthedocs.io/).
+Tested against [37 text encodings and 49 binary formats](https://binaryornot.github.io/binaryornot/usage/), verified by parametrized tests driven from coverage CSVs.
 
 ## API
 
@@ -53,8 +53,8 @@ is_binary_string(b"\x00\x01\x02")  # True
 is_binary_string(b"hello world")   # False
 ```
 
-[Full documentation](https://binaryornot.github.io/binaryornot/) covers the three-stage detection algorithm in detail.
+[Full documentation](https://binaryornot.github.io/binaryornot/) covers the detection algorithm in detail.
 
 ## Credits
 
-Created by [Audrey Roy Greenfeld](https://github.com/audreyfeldroy). Based on [Eli Bendersky's analysis](http://eli.thegreenplace.net/2011/10/19/perls-guess-if-file-is-text-or-binary-implemented-in-python/) of Perl's [`pp_fttext`](https://github.com/Perl/perl5/blob/v5.23.1/pp_sys.c#L3527-L3587).
+Created by [Audrey Roy Greenfeld](https://audrey.feldroy.com).
