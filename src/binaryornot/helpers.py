@@ -27,12 +27,9 @@ def get_starting_chunk(filename, length=128):
     :returns: Starting chunk of bytes.
     """
     # Ensure we open the file in binary mode
-    try:
-        with open(filename, "rb") as f:
-            chunk = f.read(length)
-            return chunk
-    except OSError:
-        logger.exception("Failed to read the starting chunk from file: %s", filename)
+    with open(filename, "rb") as f:
+        chunk = f.read(length)
+        return chunk
 
 
 # Bytes considered non-text control characters (excluding \t \n \r)

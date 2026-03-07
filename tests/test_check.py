@@ -200,6 +200,24 @@ def bytes_in_file(data):
         os.unlink(f)
 
 
+class TestErrorHandling(unittest.TestCase):
+    """Test is_binary() error behavior."""
+
+    def test_nonexistent_file_raises(self):
+        with self.assertRaises(OSError):
+            is_binary("tests/files/this_file_does_not_exist.txt")
+
+    def test_unreadable_file_raises(self):
+        _, path = mkstemp()
+        try:
+            os.chmod(path, 0o000)
+            with self.assertRaises(OSError):
+                is_binary(path)
+        finally:
+            os.chmod(path, 0o644)
+            os.unlink(path)
+
+
 class TestDetectionProperties(unittest.TestCase):
     @given(binary(max_size=512))
     def test_never_crashes(self, data):
