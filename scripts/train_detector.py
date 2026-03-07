@@ -81,31 +81,20 @@ def _load_csv_samples():
 
 TEXT_ENCODINGS = _load_encodings_from_csv()
 
-# Well-known file format magic bytes (from public format specifications)
-BINARY_HEADERS = [
-    b"\x89PNG\r\n\x1a\n",
-    b"\xff\xd8\xff\xe0",
-    b"\xff\xd8\xff\xe1",
-    b"GIF87a",
-    b"GIF89a",
-    b"%PDF-1.",
-    b"PK\x03\x04",
-    b"\x1f\x8b\x08",
-    b"\xfd7zXZ\x00",
-    b"\x7fELF",
-    b"\xfe\xed\xfa\xce",
-    b"\xfe\xed\xfa\xcf",
-    b"\xce\xfa\xed\xfe",
-    b"\xcf\xfa\xed\xfe",
-    b"MZ",
-    b"\xca\xfe\xba\xbe",
-    b"SQLite format 3\x00",
-    b"RIFF",
-    b"\x00\x00\x01\x00",
-    b"OggS",
-    b"fLaC",
-    b"\x00asm",
-]
+
+def _load_binary_headers_from_csv():
+    """Load binary format magic bytes from the coverage CSV."""
+    csv_path = files("binaryornot.data").joinpath("binary_formats.csv")
+    headers = []
+    with csv_path.open() as f:
+        for row in csv.DictReader(f):
+            magic_hex = row["magic_hex"].strip()
+            if magic_hex:
+                headers.append(bytes.fromhex(magic_hex))
+    return headers
+
+
+BINARY_HEADERS = _load_binary_headers_from_csv()
 
 
 # --- Hypothesis strategies ---
