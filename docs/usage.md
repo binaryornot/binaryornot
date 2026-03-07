@@ -30,10 +30,10 @@ Run `binaryornot --help` for usage details.
 
 ## How it works
 
-BinaryOrNot reads the first 1024 bytes of a file and classifies them as binary or text using a trained decision tree. The tree operates on 18 features computed from the byte chunk:
+BinaryOrNot reads the first 128 bytes of a file and classifies them as binary or text using a trained decision tree. The tree operates on 23 features computed from the byte chunk:
 
 - **Byte class ratios**: null bytes, control characters, printable ASCII, high bytes (0x80-0xFF)
-- **Encoding validity**: whether the chunk decodes as UTF-8, UTF-16-LE/BE, or UTF-32-LE/BE
+- **Encoding validity**: whether the chunk decodes as UTF-8, UTF-16-LE/BE, UTF-32-LE/BE, GB2312, Big5, Shift-JIS, EUC-JP, or EUC-KR
 - **Positional null ratios**: fraction of even-index and odd-index bytes that are 0x00 (detects BOM-less UTF-16)
 - **BOM flags**: presence of UTF-8, UTF-16, or UTF-32 byte order marks
 - **Shannon entropy**: byte distribution randomness (structured text vs random binary)
@@ -43,14 +43,20 @@ The decision tree was trained on Hypothesis-generated data (Unicode text encoded
 
 ## Encoding coverage
 
-BinaryOrNot ships an encoding coverage matrix at `binaryornot/data/encodings.csv` that lists every encoding family, whether the detection covers it, known gaps, and sample text for testing. The test suite reads this CSV to verify coverage claims: each encoding marked "covered" becomes a passing test, each "gap" becomes an expected failure. When someone improves the model and a gap starts passing, the test tells them to update the CSV.
+BinaryOrNot ships an encoding coverage matrix at `binaryornot/data/encodings.csv` that lists every encoding family, whether the detection covers it, known gaps, and sample text for testing. The test suite reads this CSV to verify coverage claims: each encoding marked "covered" becomes a passing test, each "gap" becomes an expected failure.
+
+37 encodings are covered, including UTF-8, UTF-16, UTF-32, all major single-byte encodings (ISO-8859, Windows code pages, KOI8-R, Mac encodings), and CJK encodings (GB2312, GBK, GB18030, Big5, Shift-JIS, EUC-JP, EUC-KR, ISO-2022-JP). 4 gaps are documented with reasons: ISO-2022-KR and three EBCDIC code pages.
+
+## Binary format coverage
+
+Binary format detection is tracked in `binaryornot/data/binary_formats.csv`. Each row lists the format name, its magic bytes in hex, an optional path to a real test fixture, and the specification where the magic value is defined.
+
+32 formats are covered across images (PNG, JPEG, GIF, BMP, TIFF, ICO), documents (PDF), databases (SQLite), archives (ZIP, gzip, xz), executables (ELF, Mach-O, MZ/PE, Java class, WebAssembly), media (RIFF, Ogg, FLAC), fonts (WOFF, OTF, TTF, EOT), and compiled artifacts (.pyc, .DS_Store).
 
 ## Tested file types
 
 BinaryOrNot has tests covering:
 
-**Text**: .txt, .css, .json, .svg, .js, .lua, .pl, .rst, .py
+**Text**: .txt, .css, .json, .svg, .js, .lua, .pl, .rst, .py, plus files in 37 text encodings
 
-**Binary**: .png, .gif, .jpg, .tiff, .bmp, .rgb, .DS_Store, .eot, .otf, .ttf, .woff, .pyc, .sqlite
-
-**Encodings**: UTF-8, UTF-16 (BE/LE/BOM), UTF-32 (LE/BOM), GB2312, Big5, EUC-KR, Latin-1, Shift-JIS
+**Binary**: .png, .gif, .jpg, .tiff, .bmp, .rgb, .DS_Store, .eot, .otf, .ttf, .woff, .pyc, .sqlite, .pdf, plus 32 binary formats verified by magic bytes
