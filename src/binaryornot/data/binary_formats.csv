@@ -1,33 +1,33 @@
-format,family,status,magic_hex,test_file,gap_reason
-png,image,covered,89504e470d0a1a0a,tests/files/logo.png,
-jpeg_jfif,image,covered,ffd8ffe0,,
-jpeg_exif,image,covered,ffd8ffe1,,
-gif87a,image,covered,474946383761,tests/files/lena.gif,
-gif89a,image,covered,474946383961,tests/isBinaryFile/trunks.gif,
-bmp,image,covered,424d,tests/files/rgb-3c-8b.bmp,
-tiff_be,image,covered,4d4d002a,tests/files/palette-1c-8b.tiff,
-tiff_le,image,covered,49492a00,,
-ico,image,covered,00000100,,
-pdf,document,covered,255044462d312e,tests/isBinaryFile/pdf.pdf,
-sqlite,database,covered,53514c69746520666f726d6174203300,tests/isBinaryFile/test.sqlite,
-zip,archive,covered,504b0304,,
-gzip,archive,covered,1f8b08,,
-xz,archive,covered,fd377a585a00,,
-elf,executable,covered,7f454c46,,
-macho_32be,executable,covered,feedface,,
-macho_32le,executable,covered,cefaedfe,,
-macho_64be,executable,covered,feedfacf,,
-macho_64le,executable,covered,cffaedfe,tests/isBinaryFile/grep,
-mz,executable,covered,4d5a,,
-java_class,executable,covered,cafebabe,,
-riff,media,covered,52494646,,
-ogg,media,covered,4f676753,,
-flac,media,covered,664c6143,,
-wasm,executable,covered,0061736d,,
-woff,font,covered,774f4646,tests/files/glyphiconshalflings-regular.woff,
-otf,font,covered,4f54544f,tests/files/glyphiconshalflings-regular.otf,
-ttf,font,covered,0001000000,tests/files/glyphiconshalflings-regular.ttf,
-eot,font,covered,,tests/files/glyphiconshalflings-regular.eot,No universal magic; starts with file size
-pyc,compiled,covered,,tests/files/hello_world.pyc,Magic varies by Python version
-ds_store,metadata,covered,0000000142756431,tests/files/.DS_Store,
-raw_rgb,image,covered,,tests/files/pixelstream.rgb,No magic; pure pixel data
+format,family,status,magic_hex,test_file,gap_reason,source
+png,image,covered,89504e470d0a1a0a,tests/files/logo.png,,ISO/IEC 15948 s5.2
+jpeg_jfif,image,covered,ffd8ffe0,,,ITU-T T.81 + JFIF APP0 marker
+jpeg_exif,image,covered,ffd8ffe1,,,ITU-T T.81 + Exif APP1 marker
+gif87a,image,covered,474946383761,tests/files/lena.gif,,GIF87a spec header
+gif89a,image,covered,474946383961,tests/isBinaryFile/trunks.gif,,GIF89a spec header
+bmp,image,covered,424d,tests/files/rgb-3c-8b.bmp,,Microsoft BMP format
+tiff_be,image,covered,4d4d002a,tests/files/palette-1c-8b.tiff,,TIFF 6.0 spec s2 (big-endian)
+tiff_le,image,covered,49492a00,,,TIFF 6.0 spec s2 (little-endian)
+ico,image,covered,00000100,,,Microsoft ICO format
+pdf,document,covered,255044462d312e,tests/isBinaryFile/pdf.pdf,,ISO 32000 s7.5.2
+sqlite,database,covered,53514c69746520666f726d6174203300,tests/isBinaryFile/test.sqlite,,SQLite file format s1.2.1
+zip,archive,covered,504b0304,,,APPNOTE.TXT (PKWARE) s4.3.7
+gzip,archive,covered,1f8b08,,,RFC 1952 s2.3
+xz,archive,covered,fd377a585a00,,,XZ file format spec s2.1.1
+elf,executable,covered,7f454c46,,,System V ABI s4 (ELF header)
+macho_32be,executable,covered,feedface,,,Apple Mach-O format reference
+macho_32le,executable,covered,cefaedfe,,,Apple Mach-O format reference
+macho_64be,executable,covered,feedfacf,,,Apple Mach-O format reference
+macho_64le,executable,covered,cffaedfe,tests/isBinaryFile/grep,,Apple Mach-O format reference
+mz,executable,covered,4d5a,,,Microsoft PE/COFF spec (DOS header)
+java_class,executable,covered,cafebabe,,,JVM spec s4.1
+riff,media,covered,52494646,,,Microsoft RIFF spec
+ogg,media,covered,4f676753,,,Ogg bitstream format spec
+flac,media,covered,664c6143,,,FLAC format spec
+wasm,executable,covered,0061736d,,,WebAssembly spec s5.5.1
+woff,font,covered,774f4646,tests/files/glyphiconshalflings-regular.woff,,W3C WOFF spec
+otf,font,covered,4f54544f,tests/files/glyphiconshalflings-regular.otf,,OpenType spec (CFF-based)
+ttf,font,covered,0001000000,tests/files/glyphiconshalflings-regular.ttf,,OpenType/TrueType spec v1.0
+eot,font,covered,,tests/files/glyphiconshalflings-regular.eot,No universal magic; starts with file size,Microsoft EOT spec
+pyc,compiled,covered,,tests/files/hello_world.pyc,Magic varies by Python version,Python importlib source
+ds_store,metadata,covered,0000000142756431,tests/files/.DS_Store,,Apple .DS_Store reverse-engineered format
+raw_rgb,image,covered,,tests/files/pixelstream.rgb,No magic; pure pixel data,
