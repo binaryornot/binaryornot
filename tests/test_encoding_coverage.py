@@ -1,13 +1,12 @@
-"""Test encoding coverage claims from the encoding coverage CSV.
+"""Test coverage claims from the encoding and binary format CSVs.
 
-Each row in the CSV becomes a test case. Encodings marked 'covered' must
-be detected as text. Encodings marked 'gap' are expected failures.
-
-Sample text for each encoding lives in the CSV's sample_text column,
-keeping test data and coverage claims in one place.
+Each row in encodings.csv becomes a text test case. Each row in
+binary_formats.csv becomes a binary test case. CSVs are the single
+source of truth for what the detector claims to handle.
 """
 
 import csv
+import os
 from importlib.resources import files
 
 import pytest
@@ -17,6 +16,12 @@ from binaryornot.helpers import is_binary_string
 
 def load_encoding_rows():
     csv_path = files("binaryornot.data").joinpath("encodings.csv")
+    with csv_path.open() as f:
+        return list(csv.DictReader(f))
+
+
+def load_binary_format_rows():
+    csv_path = files("binaryornot.data").joinpath("binary_formats.csv")
     with csv_path.open() as f:
         return list(csv.DictReader(f))
 
@@ -33,6 +38,7 @@ def make_id(row):
 
 rows = load_encoding_rows()
 covered_rows = [r for r in rows if r["status"] == "covered"]
+binary_rows = load_binary_format_rows()
 
 
 @pytest.mark.parametrize("row", rows, ids=make_id)
@@ -104,3 +110,33 @@ def test_single_invalid_utf8_byte():
     chunk[10] = 0xFF
     result = is_binary_string(bytes(chunk))
     assert isinstance(result, bool)
+
+
+# --- Binary format tests ---
+
+
+binary_rows_with_magic = [r for r in binary_rows if r["magic_hex"].strip()]
+binary_rows_with_files = [r for r in binary_rows if r["test_file"].strip()]
+
+
+@pytest.mark.parametrize("row", binary_rows_with_magic, ids=lambda r: r["format"])
+def test_binary_magic_detected(row):
+    """Magic bytes + random padding is detected as binary."""
+    magic = bytes.fromhex(row["magic_hex"])
+    # Pad to 128 bytes with random-ish but deterministic data
+    padding = bytes(range(256))[:128]
+    chunk = (magic + padding)[:128]
+    assert is_binary_string(chunk) is True, f"{row['format']} magic bytes misclassified as text"
+
+
+@pytest.mark.parametrize("row", binary_rows_with_files, ids=lambda r: r["format"])
+def test_binary_file_detected(row):
+    """Real binary test fixture files are detected as binary."""
+    path = row["test_file"]
+    if not os.path.exists(path):
+        pytest.skip(f"Test file not found: {path}")
+    with open(path, "rb") as f:
+        chunk = f.read(128)
+    if len(chunk) == 0:
+        pytest.skip(f"Empty file: {path}")
+    assert is_binary_string(chunk) is True, f"{row['format']} file {path} misclassified as text"
