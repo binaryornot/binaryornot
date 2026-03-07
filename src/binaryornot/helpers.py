@@ -7,20 +7,21 @@ Helper utilities used by BinaryOrNot.
 
 import logging
 import math
+from pathlib import Path
 
 from binaryornot.tree import is_binary as _is_binary_by_features
 
 logger = logging.getLogger(__name__)
 
 
-def print_as_hex(s):
+def print_as_hex(s: str) -> None:
     """
     Print a string as hex bytes.
     """
     print(":".join(f"{ord(c):x}" for c in s))
 
 
-def get_starting_chunk(filename, length=128):
+def get_starting_chunk(filename: str | bytes | Path, length: int = 128) -> bytes:
     """
     :param filename: File to open and get the first little chunk of.
     :param length: Number of bytes to read, default 128.
@@ -36,7 +37,7 @@ def get_starting_chunk(filename, length=128):
 _CONTROL_BYTES = frozenset(range(0, 32)) - {9, 10, 13}
 
 
-def _compute_features(chunk):
+def _compute_features(chunk: bytes) -> list[float]:
     """Compute features for the binary/text decision tree.
 
     Feature indices:
@@ -178,7 +179,7 @@ def _compute_features(chunk):
     ]
 
 
-def is_binary_string(bytes_to_check):
+def is_binary_string(bytes_to_check: bytes) -> bool:
     """
     Check if a chunk of bytes appears to be binary or text.
 

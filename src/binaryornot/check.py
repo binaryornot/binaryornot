@@ -7,13 +7,14 @@ Main code for checking if a file is binary or text.
 
 import argparse
 import logging
+from pathlib import Path
 
 from binaryornot.helpers import get_starting_chunk, is_binary_string
 
 logger = logging.getLogger(__name__)
 
 
-def is_binary(filename):
+def is_binary(filename: str | bytes | Path) -> bool:
     """
     :param filename: File to check.
     :returns: True if it's a binary file, otherwise False.
@@ -31,7 +32,7 @@ def is_binary(filename):
     return is_binary_string(chunk)
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Check if a file passed as argument is binary or not")
 
     parser.add_argument(
