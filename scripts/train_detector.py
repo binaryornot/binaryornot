@@ -196,6 +196,73 @@ def binary_mixed_printable_strategy():
     return strat()
 
 
+def binary_structured_strategy():
+    """Strategy: repeating byte patterns like struct-packed records.
+
+    Binary files often contain structured data (pixel rows, database
+    records, protocol buffers) with repeating patterns, not random bytes.
+    """
+
+    @st.composite
+    def strat(draw):
+        # Generate a short pattern (2-8 bytes) and repeat it
+        pattern_len = draw(st.integers(min_value=2, max_value=8))
+        pattern = draw(st.binary(min_size=pattern_len, max_size=pattern_len))
+        repeats = 128 // pattern_len + 1
+        chunk = (pattern * repeats)[:128]
+        # Inject some variation (field values change across records)
+        data = bytearray(chunk)
+        n_mutations = draw(st.integers(min_value=1, max_value=len(data) // 4))
+        for _ in range(n_mutations):
+            pos = draw(st.integers(min_value=0, max_value=len(data) - 1))
+            data[pos] = draw(st.integers(min_value=0, max_value=255))
+        return bytes(data)
+
+    return strat()
+
+
+def binary_with_strings_strategy():
+    """Strategy: binary data with embedded ASCII strings.
+
+    Real executables and object files contain string tables, error
+    messages, and symbol names surrounded by non-printable bytes.
+    """
+
+    @st.composite
+    def strat(draw):
+        parts = []
+        for _ in range(draw(st.integers(min_value=2, max_value=5))):
+            # Binary segment
+            parts.append(draw(st.binary(min_size=5, max_size=30)))
+            # Embedded ASCII string (null-terminated)
+            word = draw(st.from_regex(r"[a-z_]{3,15}", fullmatch=True))
+            parts.append(word.encode("ascii") + b"\x00")
+        chunk = b"".join(parts)[:128]
+        assume(len(chunk) >= 20)
+        return chunk
+
+    return strat()
+
+
+def binary_compressed_strategy():
+    """Strategy: high-entropy bytes that fail all encoding checks.
+
+    Compressed and encrypted data has near-uniform byte distribution
+    but doesn't decode as any text encoding.
+    """
+
+    @st.composite
+    def strat(draw):
+        # Generate bytes spanning the full 0x00-0xFF range
+        data = bytearray(draw(st.binary(min_size=64, max_size=128)))
+        # Ensure invalid UTF-8 sequences by inserting bare continuation bytes
+        for i in range(0, len(data) - 1, 7):
+            data[i] = draw(st.sampled_from([0x80, 0xBF, 0xFE, 0xFF]))
+        return bytes(data)
+
+    return strat()
+
+
 def collect_samples(strategy, label, count, seed=42):
     """Draw `count` examples from a Hypothesis strategy with a fixed seed."""
     collected = []
@@ -215,6 +282,56 @@ def collect_samples(strategy, label, count, seed=42):
     return collected
 
 
+def cjk_text_strategy():
+    """Strategy: CJK characters encoded in CJK encodings.
+
+    These are the main source of false positives (text misclassified as
+    binary) because CJK encodings produce high-byte-ratio chunks with
+    low printable ASCII ratios, looking binary by surface statistics.
+    """
+    cjk_encodings = ["gb2312", "gbk", "gb18030", "big5", "shift_jis", "euc-jp", "euc-kr"]
+
+    @st.composite
+    def strat(draw):
+        # CJK Unified Ideographs (U+4E00-U+9FFF) + punctuation
+        chars = draw(st.text(
+            alphabet=st.characters(whitelist_categories=("Lo", "Zs"), whitelist_characters="，。！？、"),
+            min_size=5, max_size=40,
+        ))
+        enc = draw(st.sampled_from(cjk_encodings))
+        try:
+            chunk = chars.encode(enc)[:128]
+        except (UnicodeEncodeError, UnicodeDecodeError, LookupError):
+            assume(False)
+        assume(len(chunk) >= 8)
+        return chunk
+
+    return strat()
+
+
+def text_with_whitespace_strategy():
+    """Strategy: text with realistic whitespace (tabs, newlines, CRs).
+
+    Real text files have control characters that are still text: \\t,
+    \\n, \\r. These inflate control_ratio without being binary.
+    """
+
+    @st.composite
+    def strat(draw):
+        words = draw(st.lists(
+            st.from_regex(r"[A-Za-z0-9_]{1,12}", fullmatch=True),
+            min_size=5, max_size=20,
+        ))
+        separators = [" ", "\t", "\n", "\r\n", "  "]
+        parts = []
+        for word in words:
+            parts.append(word)
+            parts.append(draw(st.sampled_from(separators)))
+        return "".join(parts).encode("utf-8")[:128]
+
+    return strat()
+
+
 def generate_text_samples() -> list[tuple[bytes, int]]:
     """Generate labeled text samples using Hypothesis strategies."""
     samples = []
@@ -229,6 +346,12 @@ def generate_text_samples() -> list[tuple[bytes, int]]:
     # Near-max-length chunks
     samples.extend(collect_samples(encoded_text_strategy(30, 64), label=0, count=200))
 
+    # CJK text (targets the main false positive source)
+    samples.extend(collect_samples(cjk_text_strategy(), label=0, count=200))
+
+    # Text with realistic whitespace
+    samples.extend(collect_samples(text_with_whitespace_strategy(), label=0, count=100))
+
     print(f"  Text samples generated: {len(samples)}")
     return samples
 
@@ -238,12 +361,15 @@ def generate_binary_samples() -> list[tuple[bytes, int]]:
     samples = []
 
     samples.extend(collect_samples(binary_random_strategy(), label=1, count=300))
-    samples.extend(collect_samples(binary_with_header_strategy(), label=1, count=150))
+    samples.extend(collect_samples(binary_with_header_strategy(), label=1, count=250))
     samples.extend(collect_samples(binary_control_chars_strategy(), label=1, count=30))
     samples.extend(collect_samples(binary_scattered_nulls_strategy(), label=1, count=50))
     samples.extend(collect_samples(binary_high_bytes_strategy(), label=1, count=30))
     samples.extend(collect_samples(binary_pyc_strategy(), label=1, count=30))
     samples.extend(collect_samples(binary_mixed_printable_strategy(), label=1, count=30))
+    samples.extend(collect_samples(binary_structured_strategy(), label=1, count=150))
+    samples.extend(collect_samples(binary_with_strings_strategy(), label=1, count=100))
+    samples.extend(collect_samples(binary_compressed_strategy(), label=1, count=100))
 
     print(f"  Binary samples generated: {len(samples)}")
     return samples
