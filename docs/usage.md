@@ -51,7 +51,7 @@ BinaryOrNot ships an encoding coverage matrix at `binaryornot/data/encodings.csv
 
 Binary format detection is tracked in `binaryornot/data/binary_formats.csv`. Each row lists the format name, its magic bytes in hex, an optional path to a real test fixture, and the specification where the magic value is defined.
 
-32 formats are covered across images (PNG, JPEG, GIF, BMP, TIFF, ICO), documents (PDF), databases (SQLite), archives (ZIP, gzip, xz), executables (ELF, Mach-O, MZ/PE, Java class, WebAssembly), media (RIFF, Ogg, FLAC), fonts (WOFF, OTF, TTF, EOT), and compiled artifacts (.pyc, .DS_Store).
+49 formats are covered across images (PNG, JPEG, GIF, BMP, TIFF, ICO, WebP, PSD, HEIF), documents (PDF, OLE2), databases (SQLite), archives (ZIP, gzip, xz, bzip2, 7z, RAR, Zstandard), executables (ELF, Mach-O, MZ/PE, Java class, WebAssembly, Dalvik DEX), media (RIFF, Ogg, FLAC, MP4/MOV, MP3, Matroska/WebM, MIDI), fonts (WOFF, WOFF2, OTF, TTF, EOT), data (Apache Parquet), and compiled artifacts (.pyc, .DS_Store, LLVM bitcode, Git packfiles).
 
 ## Tested file types
 
@@ -59,4 +59,4 @@ BinaryOrNot has tests covering:
 
 **Text**: .txt, .css, .json, .svg, .js, .lua, .pl, .rst, .py, plus files in 37 text encodings
 
-**Binary**: .png, .gif, .jpg, .tiff, .bmp, .rgb, .DS_Store, .eot, .otf, .ttf, .woff, .pyc, .sqlite, .pdf, plus 32 binary formats verified by magic bytes
+**Binary**: .png, .gif, .jpg, .tiff, .bmp, .rgb, .DS_Store, .eot, .otf, .ttf, .woff, .pyc, .sqlite, .pdf, plus 49 binary formats verified by magic bytes
