@@ -5,13 +5,38 @@ binaryornot.helpers
 Helper utilities used by BinaryOrNot.
 """
 
+import csv
 import logging
 import math
+from importlib.resources import files
 from pathlib import Path
 
 from binaryornot.tree import is_binary as _is_binary_by_features
 
 logger = logging.getLogger(__name__)
+
+
+def _load_binary_signatures() -> tuple[bytes, ...]:
+    """Load known binary file signatures from binary_formats.csv."""
+    csv_path = files("binaryornot.data").joinpath("binary_formats.csv")
+    sigs = []
+    with csv_path.open() as f:
+        for row in csv.DictReader(f):
+            magic_hex = row["magic_hex"].strip()
+            if magic_hex:
+                sigs.append(bytes.fromhex(magic_hex))
+    return tuple(sigs)
+
+
+_BINARY_SIGNATURES = _load_binary_signatures()
+
+
+def _has_known_binary_signature(chunk: bytes) -> bool:
+    """Check if a byte chunk starts with a known binary file signature."""
+    for sig in _BINARY_SIGNATURES:
+        if chunk[: len(sig)] == sig:
+            return True
+    return False
 
 
 def print_as_hex(s: str) -> None:
@@ -21,10 +46,13 @@ def print_as_hex(s: str) -> None:
     print(":".join(f"{ord(c):x}" for c in s))
 
 
-def get_starting_chunk(filename: str | bytes | Path, length: int = 128) -> bytes:
+CHUNK_SIZE = 512
+
+
+def get_starting_chunk(filename: str | bytes | Path, length: int = CHUNK_SIZE) -> bytes:
     """
     :param filename: File to open and get the first little chunk of.
-    :param length: Number of bytes to read, default 128.
+    :param length: Number of bytes to read, default 512.
     :returns: Starting chunk of bytes.
     """
     # Ensure we open the file in binary mode
@@ -60,6 +88,7 @@ def _compute_features(chunk: bytes) -> list[float]:
       20: try_shift_jis       - 1.0 if chunk decodes as Shift-JIS
       21: try_euc_jp          - 1.0 if chunk decodes as EUC-JP
       22: try_euc_kr          - 1.0 if chunk decodes as EUC-KR
+      23: has_magic_signature  - 1.0 if chunk starts with a known binary signature
     """
     n = len(chunk)
 
@@ -152,6 +181,8 @@ def _compute_features(chunk: bytes) -> list[float]:
     try_euc_jp = _try_decode("euc-jp") if n >= 10 else 0.0
     try_euc_kr = _try_decode("euc-kr") if n >= 10 else 0.0
 
+    has_magic_signature = 1.0 if _has_known_binary_signature(chunk) else 0.0
+
     return [
         null_ratio,
         control_ratio,
@@ -176,6 +207,7 @@ def _compute_features(chunk: bytes) -> list[float]:
         try_shift_jis,
         try_euc_jp,
         try_euc_kr,
+        has_magic_signature,
     ]
 
 
@@ -191,6 +223,9 @@ def is_binary_string(bytes_to_check: bytes) -> bool:
     """
     if not bytes_to_check:
         return False
+
+    if _has_known_binary_signature(bytes_to_check):
+        return True
 
     features = _compute_features(bytes_to_check)
     result = _is_binary_by_features(features)
@@ -223,6 +258,7 @@ def is_binary_string(bytes_to_check: bytes) -> bool:
                     "shiftjis",
                     "eucjp",
                     "euckr",
+                    "magic",
                 ],
                 [f"{v:.3f}" for v in features],
                 strict=True,

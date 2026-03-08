@@ -59,6 +59,9 @@ class TestIsBinary(unittest.TestCase):
     def test_binary_sqlite(self):
         self.assertTrue(is_binary("tests/isBinaryFile/test.sqlite"))
 
+    def test_binary_png_issue_642(self):
+        self.assertTrue(is_binary("tests/files/issue-642.png"))
+
 
 class TestFontFiles(unittest.TestCase):
     """Test is_binary() with various font file types."""
@@ -216,6 +219,57 @@ class TestErrorHandling(unittest.TestCase):
         finally:
             os.chmod(path, 0o600)
             os.unlink(path)
+
+
+class TestMagicBytesGuard(unittest.TestCase):
+    """Test that known binary file signatures bypass the decision tree."""
+
+    def test_png_signature_with_adversarial_content(self):
+        from binaryornot.helpers import is_binary_string
+
+        # First 128 bytes of issue-642.png — the tree misclassifies this as text
+        chunk = (
+            b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x02\x00"
+            b"\x00\x00\x02\x00\x08\x04\x00\x00\x00^q\x1cq\x00\x00"
+            b"\x00\x04gAMA\x00\x00\xb1\x8f\x0b\xfca\x05\x00\x00"
+            b"\x00 cHRM\x00\x00z&\x00\x00\x80\x84\x00\x00\xfa\x00"
+            b"\x00\x00\x80\xe8\x00\x00u0\x00\x00\xea`\x00\x00:\x98"
+            b"\x00\x00\x17p\x9c\xbaQ<\x00\x00\x00\x02bKGD\x00\xff"
+            b"\x87\x8f\xcc\xbf\x00\x00\x00\x07tIME\x07\xe4\x07\x0e"
+            b"\x0b\x07\t)6\x99\x95\x00\x00"
+        )
+        self.assertTrue(is_binary_string(chunk))
+
+    def test_plain_text_not_caught(self):
+        from binaryornot.helpers import is_binary_string
+
+        chunk = b"Hello, world! This is a plain text file with enough content.\n" * 2
+        self.assertFalse(is_binary_string(chunk[:128]))
+
+
+class TestFeatureVector(unittest.TestCase):
+    """Test that the feature vector includes all expected features."""
+
+    def test_feature_count_includes_magic_signature(self):
+        from binaryornot.helpers import _compute_features
+
+        chunk = b"\x89PNG\r\n\x1a\n" + b"\x00" * 504
+        features = _compute_features(chunk)
+        self.assertEqual(len(features), 24)
+
+    def test_magic_signature_feature_set_for_png(self):
+        from binaryornot.helpers import _compute_features
+
+        chunk = b"\x89PNG\r\n\x1a\n" + b"\x00" * 504
+        features = _compute_features(chunk)
+        self.assertEqual(features[23], 1.0)
+
+    def test_magic_signature_feature_unset_for_text(self):
+        from binaryornot.helpers import _compute_features
+
+        chunk = b"Hello, world! This is plain text." * 16
+        features = _compute_features(chunk[:512])
+        self.assertEqual(features[23], 0.0)
 
 
 class TestDetectionProperties(unittest.TestCase):

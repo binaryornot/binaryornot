@@ -12,7 +12,7 @@ from importlib.resources import files
 
 import pytest
 
-from binaryornot.helpers import is_binary_string
+from binaryornot.helpers import CHUNK_SIZE, is_binary_string
 
 
 def load_encoding_rows():
@@ -137,7 +137,7 @@ def test_binary_file_detected(row):
     if not os.path.exists(path):
         pytest.skip(f"Test file not found: {path}")
     with open(path, "rb") as f:
-        chunk = f.read(128)
+        chunk = f.read(CHUNK_SIZE)
     if len(chunk) == 0:
         pytest.skip(f"Empty file: {path}")
     assert is_binary_string(chunk) is True, f"{row['format']} file {path} misclassified as text"
