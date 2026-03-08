@@ -5,7 +5,7 @@ Do not edit by hand. Regenerate with:
 """
 
 
-def is_binary(features):
+def is_binary(features: list[float]) -> bool:
     """Classify a byte chunk as binary or text.
 
     Takes the feature list from helpers._compute_features().
