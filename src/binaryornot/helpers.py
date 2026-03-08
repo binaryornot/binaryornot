@@ -34,7 +34,7 @@ _BINARY_SIGNATURES = _load_binary_signatures()
 def _has_known_binary_signature(chunk: bytes) -> bool:
     """Check if a byte chunk starts with a known binary file signature."""
     for sig in _BINARY_SIGNATURES:
-        if chunk[:len(sig)] == sig:
+        if chunk[: len(sig)] == sig:
             return True
     return False
 
