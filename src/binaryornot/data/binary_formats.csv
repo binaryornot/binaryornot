@@ -48,3 +48,13 @@ parquet,data,covered,50415231,tests/files/test.parquet,,Apache Parquet format sp
 dex,executable,covered,6465780a,tests/files/test.dex,,Dalvik executable format
 llvm_bc,compiled,covered,4243c0de,tests/files/test.bc,,LLVM bitcode wrapper format
 git_pack,data,covered,5041434b,tests/files/test.pack,,Git pack format spec
+bplist,metadata,covered,62706c697374,tests/files/test.bplist,,Apple binary plist format
+ar,archive,covered,213c617263683e0a,tests/files/test.a,,Unix ar archive (IEEE Std 1003.1)
+lz4,archive,covered,04224d18,tests/files/test.lz4,,LZ4 frame format spec
+arrow_ipc,data,covered,4152524f5731,tests/files/test.arrow,,Apache Arrow IPC format spec
+avro,data,covered,4f626a01,tests/files/test.avro,,Apache Avro spec s4.1
+lzma,archive,covered,5d0000,tests/files/test.lzma,,LZMA SDK specification
+pcap,data,covered,a1b2c3d4,tests/files/test.pcap,,libpcap savefile format (tcpdump.org)
+snappy,archive,covered,ff060000734e61507059,,,Snappy framing format spec
+jks,security,covered,feedfeed,tests/files/test.jks,,Java KeyStore format
+cpio,archive,covered,303730373031,tests/files/test.cpio,,POSIX.1 cpio format (SVR4/newc)
