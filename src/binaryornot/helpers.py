@@ -46,7 +46,7 @@ def print_as_hex(s: str) -> None:
     print(":".join(f"{ord(c):x}" for c in s))
 
 
-def get_starting_chunk(filename: str | bytes | Path, length: int = 128) -> bytes:
+def get_starting_chunk(filename: str | bytes | Path, length: int = 512) -> bytes:
     """
     :param filename: File to open and get the first little chunk of.
     :param length: Number of bytes to read, default 128.

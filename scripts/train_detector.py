@@ -25,6 +25,8 @@ from sklearn.tree import DecisionTreeClassifier, export_text
 
 from binaryornot.helpers import _compute_features
 
+CHUNK_SIZE = 512
+
 FEATURE_NAMES = [
     "null_ratio",
     "control_ratio",
@@ -67,7 +69,7 @@ def _load_csv_samples():
         for row in csv.DictReader(f):
             text = (row["sample_text"] + " ") * 20
             try:
-                chunk = text.encode(row["encoding"])[:128]
+                chunk = text.encode(row["encoding"])[:CHUNK_SIZE]
             except (UnicodeEncodeError, LookupError):
                 continue
             if len(chunk) >= 4:
@@ -108,7 +110,7 @@ def encoded_text_strategy(min_size=5, max_size=64):
         t = draw(st.text(min_size=min_size, max_size=max_size))
         enc = draw(st.sampled_from(TEXT_ENCODINGS))
         try:
-            chunk = t.encode(enc)[:128]
+            chunk = t.encode(enc)[:CHUNK_SIZE]
         except (UnicodeEncodeError, UnicodeDecodeError, LookupError):
             assume(False)
         assume(len(chunk) >= 4)
@@ -119,7 +121,7 @@ def encoded_text_strategy(min_size=5, max_size=64):
 
 def binary_random_strategy():
     """Strategy: random bytes at various lengths."""
-    return st.binary(min_size=10, max_size=128)
+    return st.binary(min_size=10, max_size=CHUNK_SIZE)
 
 
 def binary_with_header_strategy():
@@ -129,7 +131,7 @@ def binary_with_header_strategy():
     def strat(draw):
         header = draw(st.sampled_from(BINARY_HEADERS))
         padding = draw(st.binary(min_size=20, max_size=500))
-        return (header + padding)[:128]
+        return (header + padding)[:CHUNK_SIZE]
 
     return strat()
 
@@ -146,7 +148,7 @@ def binary_scattered_nulls_strategy():
 
     @st.composite
     def strat(draw):
-        data = bytearray(draw(st.binary(min_size=50, max_size=128)))
+        data = bytearray(draw(st.binary(min_size=50, max_size=CHUNK_SIZE)))
         n = len(data)
         null_count = draw(st.integers(min_value=n // 20, max_value=n // 5))
         positions = draw(st.lists(st.integers(min_value=0, max_value=n - 1), min_size=null_count, max_size=null_count))
@@ -170,7 +172,7 @@ def binary_pyc_strategy():
         magic_val = draw(st.integers(min_value=0x0A0D, max_value=0x0FFF))
         magic = struct.pack("<H", magic_val) + b"\r\n"
         rest = draw(st.binary(min_size=50, max_size=500))
-        return (magic + rest)[:128]
+        return (magic + rest)[:CHUNK_SIZE]
 
     return strat()
 
@@ -189,7 +191,7 @@ def binary_mixed_printable_strategy():
                 parts.append(bytes((b % 95) + 32 for b in draw(st.binary(min_size=3, max_size=20))))
             else:
                 parts.append(draw(st.binary(min_size=10, max_size=100)))
-        chunk = b"".join(parts)[:128]
+        chunk = b"".join(parts)[:CHUNK_SIZE]
         assume(len(chunk) >= 10)
         return chunk
 
@@ -208,8 +210,8 @@ def binary_structured_strategy():
         # Generate a short pattern (2-8 bytes) and repeat it
         pattern_len = draw(st.integers(min_value=2, max_value=8))
         pattern = draw(st.binary(min_size=pattern_len, max_size=pattern_len))
-        repeats = 128 // pattern_len + 1
-        chunk = (pattern * repeats)[:128]
+        repeats = CHUNK_SIZE // pattern_len + 1
+        chunk = (pattern * repeats)[:CHUNK_SIZE]
         # Inject some variation (field values change across records)
         data = bytearray(chunk)
         n_mutations = draw(st.integers(min_value=1, max_value=len(data) // 4))
@@ -237,7 +239,7 @@ def binary_with_strings_strategy():
             # Embedded ASCII string (null-terminated)
             word = draw(st.from_regex(r"[a-z_]{3,15}", fullmatch=True))
             parts.append(word.encode("ascii") + b"\x00")
-        chunk = b"".join(parts)[:128]
+        chunk = b"".join(parts)[:CHUNK_SIZE]
         assume(len(chunk) >= 20)
         return chunk
 
@@ -254,7 +256,7 @@ def binary_compressed_strategy():
     @st.composite
     def strat(draw):
         # Generate bytes spanning the full 0x00-0xFF range
-        data = bytearray(draw(st.binary(min_size=64, max_size=128)))
+        data = bytearray(draw(st.binary(min_size=64, max_size=CHUNK_SIZE)))
         # Ensure invalid UTF-8 sequences by inserting bare continuation bytes
         for i in range(0, len(data) - 1, 7):
             data[i] = draw(st.sampled_from([0x80, 0xBF, 0xFE, 0xFF]))
@@ -298,12 +300,12 @@ def cjk_text_strategy():
             st.text(
                 alphabet=st.characters(whitelist_categories=("Lo", "Zs"), whitelist_characters="，。！？、"),
                 min_size=5,
-                max_size=40,
+                max_size=200,
             )
         )
         enc = draw(st.sampled_from(cjk_encodings))
         try:
-            chunk = chars.encode(enc)[:128]
+            chunk = chars.encode(enc)[:CHUNK_SIZE]
         except (UnicodeEncodeError, UnicodeDecodeError, LookupError):
             assume(False)
         assume(len(chunk) >= 8)
@@ -324,8 +326,8 @@ def text_with_whitespace_strategy():
         words = draw(
             st.lists(
                 st.from_regex(r"[A-Za-z0-9_]{1,12}", fullmatch=True),
-                min_size=5,
-                max_size=20,
+                min_size=10,
+                max_size=60,
             )
         )
         separators = [" ", "\t", "\n", "\r\n", "  "]
@@ -333,7 +335,7 @@ def text_with_whitespace_strategy():
         for word in words:
             parts.append(word)
             parts.append(draw(st.sampled_from(separators)))
-        return "".join(parts).encode("utf-8")[:128]
+        return "".join(parts).encode("utf-8")[:CHUNK_SIZE]
 
     return strat()
 
@@ -344,13 +346,13 @@ def generate_text_samples() -> list[tuple[bytes, int]]:
 
     # Main text generation: Hypothesis text() -> encode in random encoding
     # Full-length chunks
-    samples.extend(collect_samples(encoded_text_strategy(5, 64), label=0, count=800))
+    samples.extend(collect_samples(encoded_text_strategy(5, 256), label=0, count=800))
 
     # Short text for edge cases
     samples.extend(collect_samples(encoded_text_strategy(1, 20), label=0, count=200))
 
     # Near-max-length chunks
-    samples.extend(collect_samples(encoded_text_strategy(30, 64), label=0, count=200))
+    samples.extend(collect_samples(encoded_text_strategy(100, 256), label=0, count=200))
 
     # CJK text (targets the main false positive source)
     samples.extend(collect_samples(cjk_text_strategy(), label=0, count=200))
@@ -507,7 +509,7 @@ def validate_against_test_files(model):
             continue
 
         with open(path, "rb") as f:
-            chunk = f.read(128)
+            chunk = f.read(CHUNK_SIZE)
 
         if len(chunk) == 0:
             predicted_binary = False
@@ -588,7 +590,7 @@ def load_test_file_samples() -> list[tuple[bytes, int]]:
     for path in text_files:
         if os.path.exists(path):
             with open(path, "rb") as f:
-                chunk = f.read(128)
+                chunk = f.read(CHUNK_SIZE)
             if len(chunk) > 0:
                 # Add multiple times to weight real files more heavily
                 for _ in range(10):
@@ -596,7 +598,7 @@ def load_test_file_samples() -> list[tuple[bytes, int]]:
     for path in binary_files:
         if os.path.exists(path):
             with open(path, "rb") as f:
-                chunk = f.read(128)
+                chunk = f.read(CHUNK_SIZE)
             if len(chunk) > 0:
                 for _ in range(10):
                     samples.append((chunk, 1))
