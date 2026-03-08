@@ -8,6 +8,7 @@ Helper utilities used by BinaryOrNot.
 import csv
 import logging
 import math
+import os
 from importlib.resources import files
 from pathlib import Path
 
@@ -58,6 +59,8 @@ def has_binary_extension(filename: str | bytes | Path) -> bool:
     :param filename: File path to check.
     :returns: True if the extension is in the known binary list.
     """
+    if isinstance(filename, bytes):
+        filename = os.fsdecode(filename)
     p = Path(filename) if not isinstance(filename, Path) else filename
     ext = p.suffix.lower().lstrip(".")
     return ext in BINARY_EXTENSIONS
