@@ -214,7 +214,7 @@ class TestErrorHandling(unittest.TestCase):
             with self.assertRaises(OSError):
                 is_binary(path)
         finally:
-            os.chmod(path, 0o644)
+            os.chmod(path, 0o600)
             os.unlink(path)
 
 
