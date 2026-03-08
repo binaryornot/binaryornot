@@ -247,6 +247,31 @@ class TestMagicBytesGuard(unittest.TestCase):
         self.assertFalse(is_binary_string(chunk[:128]))
 
 
+class TestFeatureVector(unittest.TestCase):
+    """Test that the feature vector includes all expected features."""
+
+    def test_feature_count_includes_magic_signature(self):
+        from binaryornot.helpers import _compute_features
+
+        chunk = b"\x89PNG\r\n\x1a\n" + b"\x00" * 504
+        features = _compute_features(chunk)
+        self.assertEqual(len(features), 24)
+
+    def test_magic_signature_feature_set_for_png(self):
+        from binaryornot.helpers import _compute_features
+
+        chunk = b"\x89PNG\r\n\x1a\n" + b"\x00" * 504
+        features = _compute_features(chunk)
+        self.assertEqual(features[23], 1.0)
+
+    def test_magic_signature_feature_unset_for_text(self):
+        from binaryornot.helpers import _compute_features
+
+        chunk = b"Hello, world! This is plain text." * 16
+        features = _compute_features(chunk[:512])
+        self.assertEqual(features[23], 0.0)
+
+
 class TestDetectionProperties(unittest.TestCase):
     @given(binary(max_size=512))
     def test_never_crashes(self, data):

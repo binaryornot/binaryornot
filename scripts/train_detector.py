@@ -23,9 +23,7 @@ from hypothesis.core import given
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier, export_text
 
-from binaryornot.helpers import _compute_features
-
-CHUNK_SIZE = 512
+from binaryornot.helpers import CHUNK_SIZE, _compute_features
 
 FEATURE_NAMES = [
     "null_ratio",
@@ -51,6 +49,7 @@ FEATURE_NAMES = [
     "try_shift_jis",
     "try_euc_jp",
     "try_euc_kr",
+    "has_magic_signature",
 ]
 
 
