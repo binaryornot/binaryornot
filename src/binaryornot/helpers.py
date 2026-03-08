@@ -39,6 +39,30 @@ def _has_known_binary_signature(chunk: bytes) -> bool:
     return False
 
 
+def _load_binary_extensions() -> frozenset[str]:
+    """Load known binary file extensions from binary_extensions.csv."""
+    csv_path = files("binaryornot.data").joinpath("binary_extensions.csv")
+    exts = set()
+    with csv_path.open() as f:
+        for row in csv.DictReader(f):
+            exts.add(row["extension"].strip().lower())
+    return frozenset(exts)
+
+
+BINARY_EXTENSIONS = _load_binary_extensions()
+
+
+def has_binary_extension(filename: str | bytes | Path) -> bool:
+    """Check if a filename has a known binary file extension.
+
+    :param filename: File path to check.
+    :returns: True if the extension is in the known binary list.
+    """
+    p = Path(filename) if not isinstance(filename, Path) else filename
+    ext = p.suffix.lower().lstrip(".")
+    return ext in BINARY_EXTENSIONS
+
+
 def print_as_hex(s: str) -> None:
     """
     Print a string as hex bytes.
