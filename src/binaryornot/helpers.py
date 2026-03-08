@@ -5,13 +5,38 @@ binaryornot.helpers
 Helper utilities used by BinaryOrNot.
 """
 
+import csv
 import logging
 import math
+from importlib.resources import files
 from pathlib import Path
 
 from binaryornot.tree import is_binary as _is_binary_by_features
 
 logger = logging.getLogger(__name__)
+
+
+def _load_binary_signatures() -> tuple[bytes, ...]:
+    """Load known binary file signatures from binary_formats.csv."""
+    csv_path = files("binaryornot.data").joinpath("binary_formats.csv")
+    sigs = []
+    with csv_path.open() as f:
+        for row in csv.DictReader(f):
+            magic_hex = row["magic_hex"].strip()
+            if magic_hex:
+                sigs.append(bytes.fromhex(magic_hex))
+    return tuple(sigs)
+
+
+_BINARY_SIGNATURES = _load_binary_signatures()
+
+
+def _has_known_binary_signature(chunk: bytes) -> bool:
+    """Check if a byte chunk starts with a known binary file signature."""
+    for sig in _BINARY_SIGNATURES:
+        if chunk[:len(sig)] == sig:
+            return True
+    return False
 
 
 def print_as_hex(s: str) -> None:
@@ -191,6 +216,9 @@ def is_binary_string(bytes_to_check: bytes) -> bool:
     """
     if not bytes_to_check:
         return False
+
+    if _has_known_binary_signature(bytes_to_check):
+        return True
 
     features = _compute_features(bytes_to_check)
     result = _is_binary_by_features(features)
