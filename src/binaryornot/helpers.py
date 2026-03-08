@@ -8,6 +8,7 @@ Helper utilities used by BinaryOrNot.
 import csv
 import logging
 import math
+import os
 from importlib.resources import files
 from pathlib import Path
 
@@ -37,6 +38,35 @@ def _has_known_binary_signature(chunk: bytes) -> bool:
         if chunk[: len(sig)] == sig:
             return True
     return False
+
+
+def _load_binary_extensions() -> frozenset[str]:
+    """Load known binary file extensions from binary_extensions.csv."""
+    csv_path = files("binaryornot.data").joinpath("binary_extensions.csv")
+    exts = set()
+    with csv_path.open() as f:
+        for row in csv.DictReader(f):
+            exts.add(row["extension"].strip().lower())
+    return frozenset(exts)
+
+
+BINARY_EXTENSIONS = _load_binary_extensions()
+
+
+def has_binary_extension(filename: str | bytes | Path) -> bool:
+    """Check if a filename has a known binary file extension.
+
+    :param filename: File path to check.
+    :returns: True if the extension is in the known binary list.
+    """
+    # bytes filenames matter for CJK locales (Shift-JIS, GBK, EUC-KR):
+    # files created on Windows with a CJK locale produce non-UTF-8 names
+    # that os.listdir() returns as bytes on Linux/Docker/WSL.
+    if isinstance(filename, bytes):
+        filename = os.fsdecode(filename)
+    p = Path(filename) if not isinstance(filename, Path) else filename
+    ext = p.suffix.lower().lstrip(".")
+    return ext in BINARY_EXTENSIONS
 
 
 def print_as_hex(s: str) -> None:

@@ -11,8 +11,8 @@ import logging
 import os
 import unittest
 from contextlib import contextmanager
+from pathlib import Path
 from tempfile import mkstemp
-from unittest.case import expectedFailure
 
 from hypothesis import given
 from hypothesis.strategies import binary
@@ -52,9 +52,11 @@ class TestIsBinary(unittest.TestCase):
     def test_binary_exe2(self):
         self.assertTrue(is_binary("tests/isBinaryFile/grep"))
 
-    @expectedFailure
     def test_negative_binary(self):
+        # A text file named .pyc is detected as binary by extension.
+        # With check_extensions=False, content detection classifies it as text.
         self.assertTrue(is_binary("tests/isBinaryFile/this_is_not_a_bin.pyc"))
+        self.assertFalse(is_binary("tests/isBinaryFile/this_is_not_a_bin.pyc", check_extensions=False))
 
     def test_binary_sqlite(self):
         self.assertTrue(is_binary("tests/isBinaryFile/test.sqlite"))
@@ -101,7 +103,9 @@ class TestImageFiles(unittest.TestCase):
         self.assertTrue(is_binary("tests/files/pixelstream.rgb"))
 
     def test_binary_gif2(self):
-        self.assertFalse(is_binary("tests/isBinaryFile/null_file.gif"))
+        # Empty file named .gif: extension check says binary, content check says text.
+        self.assertTrue(is_binary("tests/isBinaryFile/null_file.gif"))
+        self.assertFalse(is_binary("tests/isBinaryFile/null_file.gif", check_extensions=False))
 
     def test_binary_gif3(self):
         self.assertTrue(is_binary("tests/isBinaryFile/trunks.gif"))
@@ -270,6 +274,64 @@ class TestFeatureVector(unittest.TestCase):
         chunk = b"Hello, world! This is plain text." * 16
         features = _compute_features(chunk[:512])
         self.assertEqual(features[23], 0.0)
+
+
+class TestExtensionCheck(unittest.TestCase):
+    """Test that known binary extensions are detected without reading the file."""
+
+    def test_pyc_detected_by_extension(self):
+        """A .pyc file is detected as binary by its extension."""
+        with bytes_in_file(b"This is plain text content, not real bytecode.") as f:
+            # Rename to .pyc
+            pyc_path = f + ".pyc"
+            os.rename(f, pyc_path)
+            try:
+                self.assertTrue(is_binary(pyc_path))
+            finally:
+                os.rename(pyc_path, f)
+
+    def test_png_detected_by_extension(self):
+        """A .png file is detected as binary by its extension."""
+        with bytes_in_file(b"Not actually a PNG, just text.") as f:
+            png_path = f + ".png"
+            os.rename(f, png_path)
+            try:
+                self.assertTrue(is_binary(png_path))
+            finally:
+                os.rename(png_path, f)
+
+    def test_extension_check_disabled(self):
+        """With check_extensions=False, a text file with a binary extension is classified by content."""
+        with bytes_in_file(b"This is plain text content, not real bytecode.\n" * 5) as f:
+            pyc_path = f + ".pyc"
+            os.rename(f, pyc_path)
+            try:
+                self.assertFalse(is_binary(pyc_path, check_extensions=False))
+            finally:
+                os.rename(pyc_path, f)
+
+    def test_text_extensions_not_affected(self):
+        """Text file extensions like .txt and .py are not in the binary list."""
+        self.assertFalse(is_binary("tests/files/robots.txt"))
+        self.assertFalse(is_binary("tests/isBinaryFile/index.js"))
+
+    def test_no_extension_falls_through(self):
+        """Files without extensions fall through to content detection."""
+        self.assertTrue(is_binary("tests/isBinaryFile/grep"))
+
+    def test_pathlib_path_works(self):
+        """Extension check works with pathlib.Path objects."""
+        self.assertTrue(is_binary(Path("tests/files/logo.png")))
+
+    def test_extension_case_insensitive(self):
+        """Extension check is case-insensitive (.PNG == .png)."""
+        with bytes_in_file(b"Not actually a PNG.") as f:
+            upper_path = f + ".PNG"
+            os.rename(f, upper_path)
+            try:
+                self.assertTrue(is_binary(upper_path))
+            finally:
+                os.rename(upper_path, f)
 
 
 class TestDetectionProperties(unittest.TestCase):
