@@ -7,26 +7,37 @@ Helper utilities used by BinaryOrNot.
 
 import logging
 import math
+from pathlib import Path
+from string.templatelib import Template
 
 from binaryornot.tree import is_binary as _is_binary_by_features
 
 logger = logging.getLogger(__name__)
 
+type FeatureVector = list[float]
 
-def print_as_hex(s):
+
+def _render_features(template: Template) -> str:
+    """Render a template string of feature values as name=value pairs."""
+    parts = []
+    for interpolation in template.interpolations:
+        parts.append(f"{interpolation.expression}={interpolation.value:.3f}")
+    return ", ".join(parts)
+
+
+def print_as_hex(s: str) -> None:
     """
     Print a string as hex bytes.
     """
     print(":".join(f"{ord(c):x}" for c in s))
 
 
-def get_starting_chunk(filename, length=128):
+def get_starting_chunk(filename: str | bytes | Path, length: int = 128) -> bytes:
     """
     :param filename: File to open and get the first little chunk of.
     :param length: Number of bytes to read, default 128.
     :returns: Starting chunk of bytes.
     """
-    # Ensure we open the file in binary mode
     with open(filename, "rb") as f:
         chunk = f.read(length)
         return chunk
@@ -36,30 +47,8 @@ def get_starting_chunk(filename, length=128):
 _CONTROL_BYTES = frozenset(range(0, 32)) - {9, 10, 13}
 
 
-def _compute_features(chunk):
-    """Compute features for the binary/text decision tree.
-
-    Feature indices:
-      0: null_ratio           - fraction of 0x00 bytes
-      1: control_ratio        - fraction of control chars (0x01-0x08, 0x0E-0x1F)
-      2: printable_ascii_ratio - fraction of 0x20-0x7E
-      3: high_byte_ratio      - fraction of 0x80-0xFF
-      4: utf8_valid           - 1.0 if chunk decodes as UTF-8
-      5: even_null_ratio      - fraction of even-index bytes that are 0x00
-      6: odd_null_ratio       - fraction of odd-index bytes that are 0x00
-      7: byte_entropy         - Shannon entropy of byte distribution
-      8-12: BOM flags         - UTF-32 LE/BE, UTF-16 LE/BE, UTF-8 BOM
-      13: try_utf16le         - 1.0 if chunk decodes as UTF-16-LE
-      14: try_utf16be         - 1.0 if chunk decodes as UTF-16-BE
-      15: try_utf32le         - 1.0 if chunk decodes as UTF-32-LE
-      16: try_utf32be         - 1.0 if chunk decodes as UTF-32-BE
-      17: longest_printable_run - longest run of printable chars / length
-      18: try_gb2312          - 1.0 if chunk decodes as GB2312
-      19: try_big5            - 1.0 if chunk decodes as Big5
-      20: try_shift_jis       - 1.0 if chunk decodes as Shift-JIS
-      21: try_euc_jp          - 1.0 if chunk decodes as EUC-JP
-      22: try_euc_kr          - 1.0 if chunk decodes as EUC-KR
-    """
+def _compute_features(chunk: bytes) -> FeatureVector:
+    """Compute 23 features from a byte chunk for the binary/text decision tree."""
     n = len(chunk)
 
     null_count = chunk.count(0)
@@ -138,7 +127,7 @@ def _compute_features(chunk):
             current_run = 0
     longest_printable_run = max_run / n
 
-    def _try_decode(encoding):
+    def _try_decode(encoding: str) -> float:
         try:
             chunk.decode(encoding)
             return 1.0
@@ -178,7 +167,7 @@ def _compute_features(chunk):
     ]
 
 
-def is_binary_string(bytes_to_check):
+def is_binary_string(bytes_to_check: bytes) -> bool:
     """
     Check if a chunk of bytes appears to be binary or text.
 
@@ -192,40 +181,21 @@ def is_binary_string(bytes_to_check):
         return False
 
     features = _compute_features(bytes_to_check)
+    [
+        null, ctrl, ascii_, high, utf8, even0, odd0, entropy,
+        bom32le, bom32be, bom16le, bom16be, bom8,
+        try16le, try16be, try32le, try32be,
+        run, gb2312, big5, shiftjis, eucjp, euckr,
+    ] = features
     result = _is_binary_by_features(features)
     logger.debug(
-        "is_binary_string: %r (features=%r)",
+        "is_binary_string: %r (%s)",
         result,
-        dict(
-            zip(
-                [
-                    "null",
-                    "ctrl",
-                    "ascii",
-                    "high",
-                    "utf8",
-                    "even0",
-                    "odd0",
-                    "entropy",
-                    "bom32le",
-                    "bom32be",
-                    "bom16le",
-                    "bom16be",
-                    "bom8",
-                    "try16le",
-                    "try16be",
-                    "try32le",
-                    "try32be",
-                    "run",
-                    "gb2312",
-                    "big5",
-                    "shiftjis",
-                    "eucjp",
-                    "euckr",
-                ],
-                [f"{v:.3f}" for v in features],
-                strict=True,
-            )
+        _render_features(
+            t"{null} {ctrl} {ascii_} {high} {utf8} {even0} {odd0} {entropy} "
+            t"{bom32le} {bom32be} {bom16le} {bom16be} {bom8} "
+            t"{try16le} {try16be} {try32le} {try32be} "
+            t"{run} {gb2312} {big5} {shiftjis} {eucjp} {euckr}"
         ),
     )
     return result

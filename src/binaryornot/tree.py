@@ -4,8 +4,13 @@ Do not edit by hand. Regenerate with:
     uv run --with 'scikit-learn,numpy,hypothesis' python scripts/train_detector.py
 """
 
+from typing import TYPE_CHECKING
 
-def is_binary(features):
+if TYPE_CHECKING:
+    from binaryornot.helpers import FeatureVector
+
+
+def is_binary(features: FeatureVector) -> bool:
     """Classify a byte chunk as binary or text.
 
     Takes the feature list from helpers._compute_features().
