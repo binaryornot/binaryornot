@@ -59,6 +59,9 @@ def has_binary_extension(filename: str | bytes | Path) -> bool:
     :param filename: File path to check.
     :returns: True if the extension is in the known binary list.
     """
+    # bytes filenames matter for CJK locales (Shift-JIS, GBK, EUC-KR):
+    # files created on Windows with a CJK locale produce non-UTF-8 names
+    # that os.listdir() returns as bytes on Linux/Docker/WSL.
     if isinstance(filename, bytes):
         filename = os.fsdecode(filename)
     p = Path(filename) if not isinstance(filename, Path) else filename
