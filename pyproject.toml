@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "binaryornot"
-version = "0.5.0"
+version = "0.6.0"
 description = "Ultra-lightweight pure Python package to check if a file is binary or text."
 readme = "README.md"
 authors = [
