@@ -100,6 +100,12 @@ exclude_also = [
     "\\.\\.\\.",
 ]
 
+[tool.hatch.build.targets.sdist.force-include]
+"tests/files/.DS_Store" = "tests/files/.DS_Store"
+"tests/files/empty.pyc" = "tests/files/empty.pyc"
+"tests/files/hello_world.pyc" = "tests/files/hello_world.pyc"
+"tests/files/troublesome.pyc" = "tests/files/troublesome.pyc"
+
 [tool.uv]
 package = true
 default-groups = ["dev"]
