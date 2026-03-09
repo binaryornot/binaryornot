@@ -11,6 +11,7 @@ import os
 import stat
 from pathlib import Path
 
+from binaryornot import NotARegularFileError
 from binaryornot.helpers import get_starting_chunk, has_binary_extension, is_binary_string
 
 logger = logging.getLogger(__name__)
@@ -23,14 +24,14 @@ def is_binary(filename: str | bytes | Path, *, check_extensions: bool = True) ->
         against a list of known binary types before reading the file.
         Set to False to classify purely by file contents.
     :returns: True if it's a binary file, otherwise False.
-    :raises ValueError: If the path is not a regular file (e.g. FIFO,
-        socket, or device node).
+    :raises NotARegularFileError: If the path is not a regular file
+        (e.g. FIFO, socket, or device node).
     """
     logger.debug("is_binary: %(filename)r", locals())
 
     mode = os.stat(filename).st_mode
     if not stat.S_ISREG(mode):
-        raise ValueError(f"Not a regular file: {filename}")
+        raise NotARegularFileError(f"Not a regular file: {filename}")
 
     if check_extensions and has_binary_extension(filename):
         logger.debug("is_binary: True (matched binary extension)")

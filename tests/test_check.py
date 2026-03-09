@@ -17,6 +17,7 @@ from tempfile import mkstemp
 from hypothesis import given
 from hypothesis.strategies import binary
 
+from binaryornot import NotARegularFileError
 from binaryornot.check import is_binary
 
 logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
@@ -337,18 +338,18 @@ class TestExtensionCheck(unittest.TestCase):
 class TestNonRegularFiles(unittest.TestCase):
     """Test is_binary() with non-regular files (FIFOs, etc.)."""
 
-    def test_fifo_raises_valueerror(self):
-        """A FIFO (named pipe) raises ValueError instead of hanging."""
+    def test_fifo_raises(self):
+        """A FIFO (named pipe) raises NotARegularFileError instead of hanging."""
         import tempfile
 
         with tempfile.TemporaryDirectory() as tmp:
             fifo_path = os.path.join(tmp, "test.fifo")
             os.mkfifo(fifo_path)
-            with self.assertRaises(ValueError):
+            with self.assertRaises(NotARegularFileError):
                 is_binary(fifo_path)
 
     def test_fifo_get_starting_chunk_raises(self):
-        """get_starting_chunk raises ValueError for FIFOs."""
+        """get_starting_chunk raises NotARegularFileError for FIFOs."""
         import tempfile
 
         from binaryornot.helpers import get_starting_chunk
@@ -356,7 +357,7 @@ class TestNonRegularFiles(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             fifo_path = os.path.join(tmp, "test.fifo")
             os.mkfifo(fifo_path)
-            with self.assertRaises(ValueError):
+            with self.assertRaises(NotARegularFileError):
                 get_starting_chunk(fifo_path)
 
 

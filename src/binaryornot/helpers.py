@@ -13,6 +13,7 @@ import stat
 from importlib.resources import files
 from pathlib import Path
 
+from binaryornot import NotARegularFileError
 from binaryornot.tree import is_binary as _is_binary_by_features
 
 logger = logging.getLogger(__name__)
@@ -88,7 +89,7 @@ def get_starting_chunk(filename: str | bytes | Path, length: int = CHUNK_SIZE) -
     """
     mode = os.stat(filename).st_mode
     if not stat.S_ISREG(mode):
-        raise ValueError(f"Not a regular file: {filename}")
+        raise NotARegularFileError(f"Not a regular file: {filename}")
     with open(filename, "rb") as f:
         return f.read(length)
 
