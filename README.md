@@ -30,7 +30,7 @@ That's the first thing everyone tries. It works until it doesn't:
 - A Big5 or GB2312 text file has high-ASCII bytes everywhere. Looks binary by byte ratios alone.
 - A font file (.woff, .eot) is clearly binary but might not have null bytes in the first chunk.
 
-BinaryOrNot reads the first 128 bytes and runs them through a trained decision tree that considers byte ratios, Shannon entropy, encoding validity, BOM detection, and more. It handles all the edge cases above correctly, with zero dependencies.
+BinaryOrNot reads the first 512 bytes and runs them through a trained decision tree that considers byte ratios, Shannon entropy, encoding validity, BOM detection, and more. It handles all the edge cases above correctly, with zero dependencies.
 
 Tested against [37 text encodings and 49 binary formats](https://binaryornot.github.io/binaryornot/usage/), verified by parametrized tests driven from coverage CSVs.
 

@@ -30,7 +30,7 @@ Run `binaryornot --help` for usage details.
 
 ## How it works
 
-BinaryOrNot reads the first 128 bytes of a file and classifies them as binary or text using a trained decision tree. The tree operates on 23 features computed from the byte chunk:
+BinaryOrNot reads the first 512 bytes of a file and classifies them as binary or text using a trained decision tree. The tree operates on 24 features computed from the byte chunk:
 
 - **Byte class ratios**: null bytes, control characters, printable ASCII, high bytes (0x80-0xFF)
 - **Encoding validity**: whether the chunk decodes as UTF-8, UTF-16-LE/BE, UTF-32-LE/BE, GB2312, Big5, Shift-JIS, EUC-JP, or EUC-KR
@@ -38,6 +38,7 @@ BinaryOrNot reads the first 128 bytes of a file and classifies them as binary or
 - **BOM flags**: presence of UTF-8, UTF-16, or UTF-32 byte order marks
 - **Shannon entropy**: byte distribution randomness (structured text vs random binary)
 - **Longest printable run**: longest streak of printable ASCII + whitespace relative to chunk length
+- **Magic signature match**: whether the chunk starts with a known binary file signature
 
 The decision tree was trained on Hypothesis-generated data (Unicode text encoded via Python's stdlib codecs, plus synthetic binary patterns) and the project's own test files. The training script lives in `scripts/train_detector.py` and can be re-run to retrain the model.
 
