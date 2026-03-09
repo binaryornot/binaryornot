@@ -56,7 +56,7 @@ FEATURE_NAMES = [
 def _load_encodings_from_csv():
     """Load encoding list from the coverage CSV (single source of truth)."""
     csv_path = files("binaryornot.data").joinpath("encodings.csv")
-    with csv_path.open() as f:
+    with csv_path.open(encoding="utf-8") as f:
         return [row["encoding"] for row in csv.DictReader(f)]
 
 
@@ -64,7 +64,7 @@ def _load_csv_samples():
     """Load per-encoding sample text from the CSV as training data."""
     csv_path = files("binaryornot.data").joinpath("encodings.csv")
     samples = []
-    with csv_path.open() as f:
+    with csv_path.open(encoding="utf-8") as f:
         for row in csv.DictReader(f):
             text = (row["sample_text"] + " ") * 20
             try:
@@ -87,7 +87,7 @@ def _load_binary_headers_from_csv():
     """Load binary format magic bytes from the coverage CSV."""
     csv_path = files("binaryornot.data").joinpath("binary_formats.csv")
     headers = []
-    with csv_path.open() as f:
+    with csv_path.open(encoding="utf-8") as f:
         for row in csv.DictReader(f):
             magic_hex = row["magic_hex"].strip()
             if magic_hex:

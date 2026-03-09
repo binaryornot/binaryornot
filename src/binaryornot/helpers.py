@@ -21,7 +21,7 @@ def _load_binary_signatures() -> tuple[bytes, ...]:
     """Load known binary file signatures from binary_formats.csv."""
     csv_path = files("binaryornot.data").joinpath("binary_formats.csv")
     sigs = []
-    with csv_path.open() as f:
+    with csv_path.open(encoding="utf-8") as f:
         for row in csv.DictReader(f):
             magic_hex = row["magic_hex"].strip()
             if magic_hex:
@@ -44,7 +44,7 @@ def _load_binary_extensions() -> frozenset[str]:
     """Load known binary file extensions from binary_extensions.csv."""
     csv_path = files("binaryornot.data").joinpath("binary_extensions.csv")
     exts = set()
-    with csv_path.open() as f:
+    with csv_path.open(encoding="utf-8") as f:
         for row in csv.DictReader(f):
             exts.add(row["extension"].strip().lower())
     return frozenset(exts)

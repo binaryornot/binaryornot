@@ -17,13 +17,13 @@ from binaryornot.helpers import CHUNK_SIZE, is_binary_string
 
 def load_encoding_rows():
     csv_path = files("binaryornot.data").joinpath("encodings.csv")
-    with csv_path.open() as f:
+    with csv_path.open(encoding="utf-8") as f:
         return list(csv.DictReader(f))
 
 
 def load_binary_format_rows():
     csv_path = files("binaryornot.data").joinpath("binary_formats.csv")
-    with csv_path.open() as f:
+    with csv_path.open(encoding="utf-8") as f:
         return list(csv.DictReader(f))
 
 
