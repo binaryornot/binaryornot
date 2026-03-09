@@ -334,6 +334,32 @@ class TestExtensionCheck(unittest.TestCase):
                 os.rename(upper_path, f)
 
 
+class TestNonRegularFiles(unittest.TestCase):
+    """Test is_binary() with non-regular files (FIFOs, etc.)."""
+
+    def test_fifo_raises_valueerror(self):
+        """A FIFO (named pipe) raises ValueError instead of hanging."""
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            fifo_path = os.path.join(tmp, "test.fifo")
+            os.mkfifo(fifo_path)
+            with self.assertRaises(ValueError):
+                is_binary(fifo_path)
+
+    def test_fifo_get_starting_chunk_raises(self):
+        """get_starting_chunk raises ValueError for FIFOs."""
+        import tempfile
+
+        from binaryornot.helpers import get_starting_chunk
+
+        with tempfile.TemporaryDirectory() as tmp:
+            fifo_path = os.path.join(tmp, "test.fifo")
+            os.mkfifo(fifo_path)
+            with self.assertRaises(ValueError):
+                get_starting_chunk(fifo_path)
+
+
 class TestDetectionProperties(unittest.TestCase):
     @given(binary(max_size=512))
     def test_never_crashes(self, data):

@@ -9,6 +9,7 @@ import csv
 import logging
 import math
 import os
+import stat
 from importlib.resources import files
 from pathlib import Path
 
@@ -85,10 +86,11 @@ def get_starting_chunk(filename: str | bytes | Path, length: int = CHUNK_SIZE) -
     :param length: Number of bytes to read, default 512.
     :returns: Starting chunk of bytes.
     """
-    # Ensure we open the file in binary mode
+    mode = os.stat(filename).st_mode
+    if not stat.S_ISREG(mode):
+        raise ValueError(f"Not a regular file: {filename}")
     with open(filename, "rb") as f:
-        chunk = f.read(length)
-        return chunk
+        return f.read(length)
 
 
 # Bytes considered non-text control characters (excluding \t \n \r)
