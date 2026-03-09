@@ -35,7 +35,7 @@ testall:
     uv run --python=3.10 pytest
     uv run --python=3.11 pytest
     uv run --python=3.12 pytest
-    uv run --python=3.14 pytest
+    uv run --python=3.13 pytest
     uv run --python=3.14 pytest
 
 # Run all the tests, but allow for arguments to be passed
@@ -53,7 +53,7 @@ coverage:
     uv run --python=3.10 coverage run -m pytest
     uv run --python=3.11 coverage run -m pytest
     uv run --python=3.12 coverage run -m pytest
-    uv run --python=3.14 coverage run -m pytest
+    uv run --python=3.13 coverage run -m pytest
     uv run --python=3.14 coverage run -m pytest
     uv run --python=3.14 coverage combine
     uv run --python=3.14 coverage report
