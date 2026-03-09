@@ -65,6 +65,7 @@ binaryornot = "binaryornot.check:main"
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 norecursedirs = ["tests/isBinaryFile"]
+filterwarnings = ["error::EncodingWarning"]
 
 [tool.ty.src]
 exclude = ["scripts/"]
