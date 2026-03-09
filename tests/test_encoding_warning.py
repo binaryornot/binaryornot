@@ -24,9 +24,7 @@ def test_no_encoding_warning_on_import():
         capture_output=True,
         text=True,
     )
-    assert result.returncode == 0, (
-        f"EncodingWarning triggered on import:\n{result.stderr}"
-    )
+    assert result.returncode == 0, f"EncodingWarning triggered on import:\n{result.stderr}"
 
 
 def test_no_encoding_warning_in_tests():
@@ -46,6 +44,4 @@ def test_no_encoding_warning_in_tests():
         capture_output=True,
         text=True,
     )
-    assert result.returncode == 0, (
-        f"EncodingWarning triggered in test suite:\n{result.stderr}"
-    )
+    assert result.returncode == 0, f"EncodingWarning triggered in test suite:\n{result.stderr}"
