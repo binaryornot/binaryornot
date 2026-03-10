@@ -49,8 +49,10 @@ There's also `is_binary_string()` if you already have bytes:
 ```python
 from binaryornot.helpers import is_binary_string
 
-is_binary_string(b"\x00\x01\x02")  # True
-is_binary_string(b"hello world")   # False
+# Read a chunk from a file and classify it
+with open("mystery_file", "rb") as f:
+    chunk = f.read(512)
+is_binary_string(chunk)
 ```
 
 [Full documentation](https://binaryornot.github.io/binaryornot/) covers the detection algorithm in detail.
