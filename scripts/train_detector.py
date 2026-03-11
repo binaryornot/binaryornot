@@ -185,8 +185,6 @@ def binary_mixed_printable_strategy():
         parts = []
         for _ in range(n_parts):
             if draw(st.booleans()):
-                draw(st.binary(min_size=3, max_size=20)).translate(bytes(range(256)), bytes(0 for _ in range(256)))
-                # Map to printable ASCII range
                 parts.append(bytes((b % 95) + 32 for b in draw(st.binary(min_size=3, max_size=20))))
             else:
                 parts.append(draw(st.binary(min_size=10, max_size=100)))
