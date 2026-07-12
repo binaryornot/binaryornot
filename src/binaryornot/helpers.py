@@ -5,6 +5,7 @@ binaryornot.helpers
 Helper utilities used by BinaryOrNot.
 """
 
+import codecs
 import csv
 import logging
 import math
@@ -95,6 +96,16 @@ def get_starting_chunk(filename: str | bytes | Path, length: int = CHUNK_SIZE) -
 _CONTROL_BYTES = frozenset(range(0, 32)) - {9, 10, 13}
 
 
+def _is_valid_utf8_prefix(chunk: bytes) -> bool:
+    """Return whether a chunk is a valid prefix of a UTF-8 byte stream."""
+    try:
+        decoder = codecs.getincrementaldecoder("utf-8")(errors="strict")
+        decoder.decode(chunk, final=False)
+    except UnicodeDecodeError:
+        return False
+    return True
+
+
 def _compute_features(chunk: bytes) -> list[float]:
     """Compute features for the binary/text decision tree.
 
@@ -103,7 +114,7 @@ def _compute_features(chunk: bytes) -> list[float]:
       1: control_ratio        - fraction of control chars (0x01-0x08, 0x0E-0x1F)
       2: printable_ascii_ratio - fraction of 0x20-0x7E
       3: high_byte_ratio      - fraction of 0x80-0xFF
-      4: utf8_valid           - 1.0 if chunk decodes as UTF-8
+      4: utf8_valid           - 1.0 if chunk is a valid UTF-8 stream prefix
       5: even_null_ratio      - fraction of even-index bytes that are 0x00
       6: odd_null_ratio       - fraction of odd-index bytes that are 0x00
       7: byte_entropy         - Shannon entropy of byte distribution
@@ -132,11 +143,7 @@ def _compute_features(chunk: bytes) -> list[float]:
     printable_ascii_ratio = printable_count / n
     high_byte_ratio = high_count / n
 
-    try:
-        chunk.decode("utf-8")
-        utf8_valid = 1.0
-    except (UnicodeDecodeError, ValueError):
-        utf8_valid = 0.0
+    utf8_valid = float(_is_valid_utf8_prefix(chunk))
 
     even_total = (n + 1) // 2
     odd_total = n // 2

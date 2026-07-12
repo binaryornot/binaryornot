@@ -12,7 +12,8 @@ from importlib.resources import files
 
 import pytest
 
-from binaryornot.helpers import CHUNK_SIZE, is_binary_string
+from binaryornot.check import is_binary
+from binaryornot.helpers import CHUNK_SIZE, _compute_features, is_binary_string
 
 
 def load_encoding_rows():
@@ -27,7 +28,7 @@ def load_binary_format_rows():
         return list(csv.DictReader(f))
 
 
-def encode_sample(row, max_bytes=128):
+def encode_sample(row, max_bytes=CHUNK_SIZE):
     # Repeat sample text to produce a chunk well above detection thresholds
     text = (row["sample_text"] + " ") * 20
     return text.encode(row["encoding"])[:max_bytes]
@@ -59,6 +60,47 @@ def test_encoding_detected_as_text(row):
 
 
 # --- Edge-case tests ---
+
+
+@pytest.mark.parametrize(
+    "suffix",
+    [
+        pytest.param(b"\xc3", id="two-byte-one-buffered"),
+        pytest.param(b"\xe2", id="three-byte-one-buffered"),
+        pytest.param(b"\xe2\x82", id="three-byte-two-buffered"),
+        pytest.param(b"\xf0", id="four-byte-one-buffered"),
+        pytest.param(b"\xf0\x9f", id="four-byte-two-buffered"),
+        pytest.param(b"\xf0\x9f\x92", id="four-byte-three-buffered"),
+    ],
+)
+def test_utf8_prefix_accepts_incomplete_trailing_character(suffix):
+    chunk = b"Valid UTF-8 stream prefix: " + suffix
+
+    assert _compute_features(chunk)[4] == 1.0
+
+
+@pytest.mark.parametrize(
+    "chunk",
+    [
+        pytest.param(b"invalid continuation: \x80", id="stray-continuation"),
+        pytest.param(b"invalid byte: \xff", id="invalid-start-byte"),
+        pytest.param(b"invalid continuation: \xc3x", id="invalid-continuation"),
+    ],
+)
+def test_utf8_prefix_rejects_invalid_sequence(chunk):
+    assert _compute_features(chunk)[4] == 0.0
+
+
+def test_utf8_file_split_inside_character_is_text(tmp_path):
+    content = b"a" + ("я " * 400).encode()
+    path = tmp_path / "valid-utf8.txt"
+    path.write_bytes(content)
+
+    with pytest.raises(UnicodeDecodeError, match="unexpected end of data"):
+        content[:CHUNK_SIZE].decode()
+    content.decode()
+
+    assert is_binary(path) is False
 
 
 @pytest.mark.parametrize("row", covered_rows, ids=lambda r: r["encoding"])
