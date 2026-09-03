@@ -29,6 +29,8 @@ otf,font,covered,4f54544f,tests/files/glyphiconshalflings-regular.otf,,OpenType 
 ttf,font,covered,0001000000,tests/files/glyphiconshalflings-regular.ttf,,OpenType/TrueType spec v1.0
 eot,font,covered,,tests/files/glyphiconshalflings-regular.eot,No universal magic; starts with file size,Microsoft EOT spec
 pyc,compiled,covered,,tests/files/hello_world.pyc,Magic varies by Python version,Python importlib source
+mo_le,compiled,covered,de120495,tests/files/hello.mo,,GNU gettext MO file format (little-endian magic)
+mo_be,compiled,covered,950412de,tests/files/hello_be.mo,,GNU gettext MO file format (big-endian magic)
 ds_store,metadata,covered,0000000142756431,tests/files/.DS_Store,,Apple .DS_Store reverse-engineered format
 raw_rgb,image,covered,,tests/files/pixelstream.rgb,No magic; pure pixel data,
 woff2,font,covered,774f4632,tests/files/test.woff2,,W3C WOFF2 spec

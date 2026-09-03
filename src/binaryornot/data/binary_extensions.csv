@@ -41,6 +41,7 @@ step,cad
 stp,cad
 class,compiled
 dll,compiled
+mo,compiled
 o,compiled
 pyc,compiled
 pyo,compiled

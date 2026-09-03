@@ -58,6 +58,13 @@ class TestIsBinary(unittest.TestCase):
         self.assertTrue(is_binary("tests/isBinaryFile/this_is_not_a_bin.pyc"))
         self.assertFalse(is_binary("tests/isBinaryFile/this_is_not_a_bin.pyc", check_extensions=False))
 
+    def test_gettext_mo(self):
+        # Compiled gettext catalogs are detected both by extension and by
+        # their magic number, regardless of which byte order they were built in.
+        self.assertTrue(is_binary("tests/files/hello.mo"))
+        self.assertTrue(is_binary("tests/files/hello.mo", check_extensions=False))
+        self.assertTrue(is_binary("tests/files/hello_be.mo", check_extensions=False))
+
     def test_binary_sqlite(self):
         self.assertTrue(is_binary("tests/isBinaryFile/test.sqlite"))
 
